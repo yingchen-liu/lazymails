@@ -5,9 +5,13 @@
 # https://github.com/novaspirit/rpi_zram
 
 import time
+import base64
 import numpy as np
 import RPi.GPIO as GPIO
 import cv2
+import json
+import paho.mqtt.client as mqtt
+import datetime
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from pyimagesearch.transform import four_point_transform
@@ -20,12 +24,43 @@ LETTER_RESOLUTION = (1440, 1080)
 TIME_TO_WAIT_FOR_CAMERA_READY = 0.1
 FRAMES_TO_WAIT_TO_CAPTURE_LETTER = 10
 MIN_LETTER_AREA = 20000
+MQTT_SERVER = 'localhost'
+MAILBOX_ID = 'a8hfq3ohc9awr823rhdos9d3fasdf'
+TOPIC_SUBSCRIBE = 'server/{}'
+TOPIC_PUBLISH = 'mailbox/{}'
 
 # initialize the motion detector
 GPIO.setmode(GPIO.BCM)
 for pin in MOTION_DETECTOR_PINS:
   GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
+# initialize mqtt
+def onMqttConnect(client, userdata, flags, rc):
+  """
+  on connected to the mqtt broker
+  """
+
+  print('connected to the mqtt broker')
+
+  # https://pypi.python.org/pypi/paho-mqtt/1.1
+
+  # subscribing in on_connect() means that if we lose the connection and
+  # reconnect then subscriptions will be renewed.
+  topic = TOPIC_SUBSCRIBE.format(MAILBOX_ID)
+  client.subscribe(topic)
+  print('subscribed to {}'.format(topic))
+
+def onMqttMessage(client, userdata, msg):
+  """
+  on receive mqtt message
+  """
+
+  print('received mqtt message {}: {}'.format(msg.topic, str(msg.payload)))
+
+client = mqtt.Client()
+client.on_connect = onMqttConnect
+client.on_message = onMqttMessage
+client.connect(MQTT_SERVER, 1883, 60)
 
 hasMotionDetected = False
 numberOfFramesAfterMotionHasDetected = 0
@@ -57,7 +92,9 @@ def analyse():
 
       takePictureOfRecognisedLetter(minAreaBox)
 
-      return
+      print(convertToBase64('letter.jpg'))
+
+      return True
 
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
@@ -67,7 +104,37 @@ def analyse():
     if key == ord('q'):
       break
 
+  camera.close()
   cv2.destroyAllWindows()
+  client.loop_stop()
+  client.disconnect()
+  return False
+
+def convertToBase64(filename):
+  """
+  convert file to base64
+  """
+
+  # https://www.programcreek.com/2013/09/convert-image-to-string-in-python/
+  with open(filename, 'rb') as image:
+    return base64.b64encode(image.read())
+
+def upload(mail, mailbox):
+  
+  # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
+  now = datetime.datetime.now()
+  nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
+
+  payload = {
+    'mail': mail,
+    'mailbox': mailbox,
+    'time': nowStr
+  }
+  topic = TOPIC_PUBLISH.format(MAILBOX_ID)
+
+  # http://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels
+  client.publish(topic, payload=json.dumps(payload), qos=2, retain=False)
+  
 
 def takePictureOfRecognisedLetter(minAreaBox):
   """
@@ -168,5 +235,7 @@ def analyseOneFrame(frame, substractor):
   cv2.imshow('dinoised', mask)
   return None
 
+client.loop_start()
 while True:
-  analyse()
+  if not analyse():
+    break

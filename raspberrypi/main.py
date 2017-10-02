@@ -5,6 +5,7 @@
 # https://github.com/novaspirit/rpi_zram
 
 import time
+import math
 import base64
 import numpy as np
 import RPi.GPIO as GPIO
@@ -80,7 +81,7 @@ client.on_log = onMqttLog
 client.connect(MQTT_SERVER, 1883, 60)
 
 hasMotionDetected = False
-numberOfFramesAfterMotionHasDetected = 0
+lastCenter = None
 
 def analyse():
   """
@@ -90,17 +91,18 @@ def analyse():
   # initialize the camera and grab a reference to the raw camera capture
   camera = PiCamera()
   camera.resolution = FRAME_RESOLUTION
-  camera.framerate = 20
+  camera.framerate = 30
   rawCapture = PiRGBArray(camera, size=FRAME_RESOLUTION)
 
   # allow the camera to warmup
   time.sleep(TIME_TO_WAIT_FOR_CAMERA_READY)
 
   # initialize the background substractor
-  substractor = cv2.bgsegm.createBackgroundSubtractorMOG()
+  substractor = cv2.bgsegm.createBackgroundSubtractorMOG(200, 5, 0.2)
   
   # capture frames from the camera
-  for frame in camera.capture_continuous(rawCapture, format='bgr', use_video_port=True):
+  # https://stackoverflow.com/questions/522563/accessing-the-index-in-python-for-loops
+  for i, frame in enumerate(camera.capture_continuous(rawCapture, format='bgr', use_video_port=True)):
     minAreaBox = analyseOneFrame(frame, substractor)
     if minAreaBox != None:
       # close the camera
@@ -114,6 +116,8 @@ def analyse():
 
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
+
+    print(i)
 
     # if the `q` key was pressed, break from the loop
     key = cv2.waitKey(1) & 0xFF
@@ -198,11 +202,22 @@ def analyseOneFrame(frame, substractor):
   """
 
   global hasMotionDetected
-  global numberOfFramesAfterMotionHasDetected
+  global lastCenter
 
   # grab the raw NumPy array representing the image, then initialize the timestamp
   # and occupied/unoccupied text
   image = frame.array
+
+  # pre-process
+  # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as
+  # https://stackoverflow.com/questions/15100913/color-space-conversion-with-cv2
+  # https://stackoverflow.com/questions/22153271/error-using-cv2-equalizehist
+  image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+  image = cv2.equalizeHist(image)
+  
+  cv2.imshow('sharped', image)
+
   fgmask = substractor.apply(image)
 
   # denoise
@@ -220,12 +235,6 @@ def analyseOneFrame(frame, substractor):
       print('motion detected')
 
   if hasMotionDetected:
-    numberOfFramesAfterMotionHasDetected += 1
-
-  if numberOfFramesAfterMotionHasDetected >= FRAMES_TO_WAIT_TO_CAPTURE_LETTER:
-    hasMotionDetected = False
-    numberOfFramesAfterMotionHasDetected = 0
-
     nonZeroPixels = cv2.findNonZero(mask)
     if nonZeroPixels != None:
       
@@ -239,11 +248,22 @@ def analyseOneFrame(frame, substractor):
       minAreaBox = np.int0(minAreaBox)
       area = cv2.contourArea(minAreaBox)
 
-      # ignore if the letter is too small
+      
       if area > MIN_LETTER_AREA:
-        print('letter recognised', minAreaBox)
-        return minAreaBox
+        center = (
+          (minAreaBox[0][0] + minAreaBox[1][0] + minAreaBox[2][0] + minAreaBox[3][0]) / 4,
+          (minAreaBox[0][1] + minAreaBox[1][1] + minAreaBox[2][1] + minAreaBox[3][1]) / 4,
+        )
+        if lastCenter:
+          move = math.sqrt(math.pow(center[0] - lastCenter[0], 2) + math.pow(center[1] - lastCenter[1], 2))
+          if move <= 0.01:
+            # wait until it is static
+            print('letter recognised', minAreaBox)
+            return minAreaBox
+
+        lastCenter = center
       else:
+        # ignore if the letter is too small
         print('ignored, area of the letter ({}) is too small'.format(area))
 
   # live view

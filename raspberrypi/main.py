@@ -1,7 +1,7 @@
 # http://www.pyimagesearch.com/2015/02/23/install-opencv-and-python-on-your-raspberry-pi-2-and-b/
 # http://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/
 # http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
-
+# https://www.youtube.com/watch?v=u6VhRVH3Z6Y
 # https://github.com/novaspirit/rpi_zram
 
 import time
@@ -47,7 +47,7 @@ def onMqttConnect(client, userdata, flags, rc):
   # subscribing in on_connect() means that if we lose the connection and
   # reconnect then subscriptions will be renewed.
   topic = TOPIC_SUBSCRIBE.format(MAILBOX_ID)
-  client.subscribe(topic)
+  client.subscribe(topic, qos=2)
   print('subscribed to {}'.format(topic))
 
 def onMqttMessage(client, userdata, msg):
@@ -57,9 +57,26 @@ def onMqttMessage(client, userdata, msg):
 
   print('received mqtt message {}: {}'.format(msg.topic, str(msg.payload)))
 
-client = mqtt.Client()
+def onMqttDisconnect(client, userdata, rc):
+  """
+  on disconnected to mqtt
+  """
+
+  if rc != 0:
+    print('unexpected disconnected to the mqtt broker')
+
+def onMqttLog(client, userdata, level, buf):
+  """
+  on mqtt log
+  """
+
+  print('{}: {}'.format(level, buf))
+
+client = mqtt.Client(client_id=MAILBOX_ID, clean_session=False)
 client.on_connect = onMqttConnect
 client.on_message = onMqttMessage
+client.on_disconnect = onMqttDisconnect
+client.on_log = onMqttLog
 client.connect(MQTT_SERVER, 1883, 60)
 
 hasMotionDetected = False
@@ -91,8 +108,7 @@ def analyse():
       time.sleep(TIME_TO_WAIT_FOR_CAMERA_READY)
 
       takePictureOfRecognisedLetter(minAreaBox)
-
-      print(convertToBase64('letter.jpg'))
+      upload(convertToBase64('letter.jpg'), convertToBase64('letterbox.jpg'))
 
       return True
 
@@ -125,9 +141,10 @@ def upload(mail, mailbox):
   now = datetime.datetime.now()
   nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
 
+  # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
   payload = {
-    'mail': mail,
-    'mailbox': mailbox,
+    'mail': mail.decode('utf-8'),
+    'mailbox': mailbox.decode('utf-8'),
     'time': nowStr
   }
   topic = TOPIC_PUBLISH.format(MAILBOX_ID)

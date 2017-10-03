@@ -6,6 +6,7 @@
 # https://pymotw.com/2/socket/tcp.html
 
 import time
+import sys
 import math
 import base64
 import numpy as np
@@ -42,7 +43,16 @@ for pin in MOTION_DETECTOR_PINS:
 
 # initialize socket connection
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((SOCKET_HOST, SOCKET_PORT))
+
+def connect():
+  while True:
+    try:
+      sock.connect((SOCKET_HOST, SOCKET_PORT))
+      print('Connected to the server')
+      break
+    except Exception as e:
+      print('Failed to connenct to the server, retry after 3 seconds', e)
+      time.sleep(3)
 
 def sendConnectMessage():
   message = {
@@ -61,28 +71,23 @@ def receiveMessage():
         data += sock.recv(16)
       
       message = json.loads(data)
-      print('received message from the server', message)
-    
+      print('Received message from the server', message)
     except KeyboardInterrupt:
-      # https://stackoverflow.com/questions/34871191/cant-close-socket-on-keyboardinterrupt-python
-
-      try:
-        if sock:
-          sock.close()
-      except: 
-        pass
+      sock.close()
       break
-    except:
-      print('failed to receive message from the server')
-      continue
+    except Exception as e:
+      # https://stackoverflow.com/questions/17386487/python-detect-when-a-socket-disconnects-for-any-reason
+      print('Failed to receive message from the server:', e)
+      connect()
 
+connect()
 sendConnectMessage()
 try:
   # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
-  _thread.start(receiveMessage, ())
-except:
-  print('unable to start thread for receiving message')
+  _thread.start_new_thread(receiveMessage, ())
+except Exception as e:
+  print('Unable to start thread for receiving message:', e)
 
 hasMotionDetected = False
 lastCenter = None
@@ -120,8 +125,6 @@ def analyse():
 
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
-
-    print(i)
 
     # if the `q` key was pressed, break from the loop
     key = cv2.waitKey(1) & 0xFF
@@ -167,7 +170,7 @@ def takePictureOfRecognisedLetter(minAreaBox):
   camera = PiCamera()
   camera.resolution = LETTER_RESOLUTION
   camera.capture('letterbox.jpg')
-  print('a picture of the letterbox has been taken')
+  print('A picture of the letterbox has been taken')
   
   letterBox = cv2.imread('letterbox.jpg')
 
@@ -180,7 +183,7 @@ def takePictureOfRecognisedLetter(minAreaBox):
     [minAreaBox[2][0] * ratioX, minAreaBox[2][1] * ratioY],
     [minAreaBox[3][0] * ratioX, minAreaBox[3][1] * ratioY]
   ]
-  print('letter croped', points)
+  print('Letter croped', points)
 
   points = np.array(points, dtype = 'float32')
 
@@ -193,7 +196,7 @@ def takePictureOfRecognisedLetter(minAreaBox):
   # save the letter
   # http://docs.opencv.org/2.4/doc/tutorials/introduction/load_save_image/load_save_image.html
   cv2.imwrite('letter.jpg', letter);
-  print('letter saved')
+  print('Letter saved')
 
   camera.close()
 
@@ -233,7 +236,7 @@ def analyseOneFrame(frame, substractor):
   for pin in MOTION_DETECTOR_PINS:
     if GPIO.input(pin) == 0:
       hasMotionDetected = True
-      print('motion detected')
+      print('Motion detected')
 
   if hasMotionDetected:
     nonZeroPixels = cv2.findNonZero(mask)
@@ -259,13 +262,13 @@ def analyseOneFrame(frame, substractor):
           move = math.sqrt(math.pow(center[0] - lastCenter[0], 2) + math.pow(center[1] - lastCenter[1], 2))
           if move <= 0.01:
             # wait until it is static
-            print('letter recognised', minAreaBox)
+            print('Letter recognised', minAreaBox)
             return minAreaBox
 
         lastCenter = center
       else:
         # ignore if the letter is too small
-        print('ignored, area of the letter ({}) is too small'.format(area))
+        print('Ignored, area of the letter ({}) is too small'.format(area))
 
   # live view
   # cv2.imshow('frame', image)

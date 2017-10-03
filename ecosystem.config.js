@@ -6,7 +6,7 @@ module.exports = {
   apps : [
     {
       name      : 'Lazy Mails',
-      script    : 'bin/www',
+      script    : 'server/bin/www',
       env: {
         COMMON_VARIABLE: 'true'
       },

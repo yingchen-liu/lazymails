@@ -12,8 +12,9 @@ const mqtt = require('mqtt')
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const mailboxes = require('./routes/mailboxes');
 
-const google = require('./apis/google');
+const socket = require('./socket');
 
 const app = express();
 
@@ -31,23 +32,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/mailboxes', mailboxes);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  if (req.xhr) {
+    res.render('error');
+  } else {
+    res.json({
+      error: err
+    });
+  }
 });
 
 
@@ -71,7 +79,8 @@ client.on('connect', () => {
 
 client.on('message', (topic, message) => {
   const info = JSON.parse(message.toString());
-  console.log(`received message ${topic}: ${info}`);
+  const mailbox = topic.replace('mailbox/', '');
+  console.log(`received message from ${mailbox}: ${info}`);
 
   if (topic.indexOf('mailbox') === 0) {
     google.request(info.mail, 

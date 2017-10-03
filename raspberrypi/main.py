@@ -3,6 +3,7 @@
 # http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
 # https://www.youtube.com/watch?v=u6VhRVH3Z6Y
 # https://github.com/novaspirit/rpi_zram
+# https://pymotw.com/2/socket/tcp.html
 
 import time
 import math
@@ -11,7 +12,8 @@ import numpy as np
 import RPi.GPIO as GPIO
 import cv2
 import json
-import paho.mqtt.client as mqtt
+import socket
+import _thread
 import datetime
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -25,60 +27,62 @@ LETTER_RESOLUTION = (1440, 1080)
 TIME_TO_WAIT_FOR_CAMERA_READY = 0.1
 FRAMES_TO_WAIT_TO_CAPTURE_LETTER = 10
 MIN_LETTER_AREA = 20000
-MQTT_SERVER = 'mqtt.lazymails.com'
-MAILBOX_ID = 'a8hfq3ohc9awr823rhdos9d3fasdf'
-TOPIC_SUBSCRIBE = 'server/{}'
-TOPIC_PUBLISH = 'mailbox/{}'
+# SOCKET_HOST = 'socket.lazymails.com'
+SOCKET_HOST = '192.168.0.3'
+SOCKET_PORT = 6969
+SOCKET_END_SYMBOL = '[^END^]'
+
+MAILBOX_ID = '59d34df2b114a0423bcfc7a6'
+
 
 # initialize the motion detector
 GPIO.setmode(GPIO.BCM)
 for pin in MOTION_DETECTOR_PINS:
   GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-# initialize mqtt
-def onMqttConnect(client, userdata, flags, rc):
-  """
-  on connected to the mqtt broker
-  """
+# initialize socket connection
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect((SOCKET_HOST, SOCKET_PORT))
 
-  print('connected to the mqtt broker')
+def sendConnectMessage():
+  message = {
+    'id': MAILBOX_ID,
+    'client': 'mailbox'
+  }
 
-  # https://pypi.python.org/pypi/paho-mqtt/1.1
+  # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
 
-  # subscribing in on_connect() means that if we lose the connection and
-  # reconnect then subscriptions will be renewed.
-  topic = TOPIC_SUBSCRIBE.format(MAILBOX_ID)
-  client.subscribe(topic, qos=2)
-  print('subscribed to {}'.format(topic))
+def receiveMessage():
+  while True:
+    try:
+      data = ''
+      while not data.endswith(SOCKET_END_SYMBOL):
+        data += sock.recv(16)
+      
+      message = json.loads(data)
+      print('received message from the server', message)
+    
+    except KeyboardInterrupt:
+      # https://stackoverflow.com/questions/34871191/cant-close-socket-on-keyboardinterrupt-python
 
-def onMqttMessage(client, userdata, msg):
-  """
-  on receive mqtt message
-  """
+      try:
+        if sock:
+          sock.close()
+      except: 
+        pass
+      break
+    except:
+      print('failed to receive message from the server')
+      continue
 
-  print('received mqtt message {}: {}'.format(msg.topic, str(msg.payload)))
+sendConnectMessage()
+try:
+  # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
-def onMqttDisconnect(client, userdata, rc):
-  """
-  on disconnected to mqtt
-  """
-
-  if rc != 0:
-    print('unexpected disconnected to the mqtt broker')
-
-def onMqttLog(client, userdata, level, buf):
-  """
-  on mqtt log
-  """
-
-  print('{}: {}'.format(level, buf))
-
-client = mqtt.Client(client_id=MAILBOX_ID, clean_session=False)
-client.on_connect = onMqttConnect
-client.on_message = onMqttMessage
-client.on_disconnect = onMqttDisconnect
-client.on_log = onMqttLog
-client.connect(MQTT_SERVER, 1883, 60)
+  _thread.start(receiveMessage, ())
+except:
+  print('unable to start thread for receiving message')
 
 hasMotionDetected = False
 lastCenter = None
@@ -125,9 +129,7 @@ def analyse():
       break
 
   camera.close()
-  cv2.destroyAllWindows()
-  client.loop_stop()
-  client.disconnect()
+  # cv2.destroyAllWindows()
   return False
 
 def convertToBase64(filename):
@@ -146,15 +148,14 @@ def upload(mail, mailbox):
   nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
 
   # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
-  payload = {
+  message = {
     'mail': mail.decode('utf-8'),
     'mailbox': mailbox.decode('utf-8'),
+    'id': MAILBOX_ID,
     'time': nowStr
   }
-  topic = TOPIC_PUBLISH.format(MAILBOX_ID)
 
-  # http://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels
-  client.publish(topic, payload=json.dumps(payload), qos=2, retain=False)
+  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
   
 
 def takePictureOfRecognisedLetter(minAreaBox):
@@ -187,7 +188,7 @@ def takePictureOfRecognisedLetter(minAreaBox):
   # http://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
   letter = four_point_transform(letterBox, points)
 
-  cv2.imshow('Cropped Letter', letter)
+  # cv2.imshow('Cropped Letter', letter)
 
   # save the letter
   # http://docs.opencv.org/2.4/doc/tutorials/introduction/load_save_image/load_save_image.html
@@ -216,7 +217,7 @@ def analyseOneFrame(frame, substractor):
 
   image = cv2.equalizeHist(image)
   
-  cv2.imshow('sharped', image)
+  # cv2.imshow('sharped', image)
 
   fgmask = substractor.apply(image)
 
@@ -267,12 +268,12 @@ def analyseOneFrame(frame, substractor):
         print('ignored, area of the letter ({}) is too small'.format(area))
 
   # live view
-  cv2.imshow('frame', image)
-  cv2.imshow('mask', fgmask)
-  cv2.imshow('dinoised', mask)
+  # cv2.imshow('frame', image)
+  # cv2.imshow('mask', fgmask)
+  # cv2.imshow('dinoised', mask)
+
   return None
 
-client.loop_start()
 while True:
   if not analyse():
     break

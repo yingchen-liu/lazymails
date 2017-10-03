@@ -1,3 +1,7 @@
+// https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+// http://pm2.keymetrics.io/
+// https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');

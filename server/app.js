@@ -53,7 +53,7 @@ app.use(function(err, req, res, next) {
 
 // https://github.com/mqttjs/MQTT.js
 
-const client = mqtt.connect('mqtt://192.168.43.154', {
+const client = mqtt.connect('mqtt://mqtt.lazymails.com', {
   options: {
     clientId: 'server',
     // set to false to receive QoS 1 and 2 messages while offline

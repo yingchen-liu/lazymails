@@ -8,7 +8,7 @@ module.exports = {
       name      : 'Lazy Mails',
       script    : 'server/bin/www',
       env: {
-        COMMON_VARIABLE: 'true'
+        PORT: '80'
       },
       env_production : {
         NODE_ENV: 'production'

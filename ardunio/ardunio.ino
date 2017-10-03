@@ -14,7 +14,7 @@ void setup() {
 }
 
 void loop() {
-  uint32_t color = 0x111111;
+  uint32_t color = 0x333333;
   
   // Set color to each pixel
   for (int i = 0; i < NUMPIXELS; i++) {

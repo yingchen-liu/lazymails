@@ -36,52 +36,77 @@ SOCKET_END_SYMBOL = '[^END^]'
 MAILBOX_ID = '59d34df2b114a0423bcfc7a6'
 
 
+settings = {
+  'isEnergySavingOn': False
+}
+
+
 # initialize the motion detector
 GPIO.setmode(GPIO.BCM)
 for pin in MOTION_DETECTOR_PINS:
   GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # initialize socket connection
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = None
+
+def sendConnectMessage():
+  message = {
+    'type': 'connect',
+    'id': MAILBOX_ID,
+    'end': 'mailbox'
+  }
+
+  # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
 
 def connect():
+  global sock
+
   while True:
     try:
+      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       sock.connect((SOCKET_HOST, SOCKET_PORT))
+
+      sendConnectMessage()
       print('Connected to the server')
       break
     except Exception as e:
       print('Failed to connenct to the server, retry after 3 seconds', e)
       time.sleep(3)
 
-def sendConnectMessage():
-  message = {
-    'id': MAILBOX_ID,
-    'client': 'mailbox'
-  }
-
-  # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
+def processMessage(message):
+  if message['type'] == 'update_settings':
+    global settings
+    settings = message['settings']
+    print('Setting updated', settings)
 
 def receiveMessage():
   while True:
+    data = ''
     try:
-      data = ''
       while not data.endswith(SOCKET_END_SYMBOL):
-        data += sock.recv(16)
-      
-      message = json.loads(data)
-      print('Received message from the server', message)
+        buffer = sock.recv(16)
+        if buffer:
+          data += buffer.decode('utf-8')
+        else:
+          print('Disconnected')
+          sock.close()
+          connect()
+
     except KeyboardInterrupt:
       sock.close()
       break
     except Exception as e:
       # https://stackoverflow.com/questions/17386487/python-detect-when-a-socket-disconnects-for-any-reason
-      print('Failed to receive message from the server:', e)
+      print('Error occurs when receiving message', e)
+      sock.close()
       connect()
 
+    message = json.loads(data.replace(SOCKET_END_SYMBOL, ''))
+    print('Received message from the server', message)
+    processMessage(message)
+
 connect()
-sendConnectMessage()
 try:
   # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
@@ -152,6 +177,8 @@ def upload(mail, mailbox):
 
   # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
   message = {
+    'type': 'mail',
+    'end': 'mailbox',
     'mail': mail.decode('utf-8'),
     'mailbox': mailbox.decode('utf-8'),
     'id': MAILBOX_ID,

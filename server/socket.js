@@ -69,7 +69,7 @@ net.createServer((sock) => {
     if (buffer.endsWith(SOCKET_END_SYMBOL)) {
       try {
         const message = JSON.parse(buffer.replace(SOCKET_END_SYMBOL, ''));
-        console.log(`Received message from ${message.end} [${message.id}], type ${message.type}`);
+        console.log(`Received message from ${message.end} [${message.id}]`);
       
         processMessage(sock, message);
 

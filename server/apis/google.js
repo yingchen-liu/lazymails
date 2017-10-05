@@ -115,6 +115,9 @@ const request = (mail, names, address, callback) => {
       image: {
         content: mail
       },
+      imageContext: {
+        languageHints: ['en']
+      },
       features: [{
         type: 'LABEL_DETECTION'
       }, {
@@ -126,6 +129,7 @@ const request = (mail, names, address, callback) => {
   })
   .then((response) => {
     const _result = response.data.responses[0];
+    console.log(JSON.stringify(_result, null, 2))
     const result = {
       mainText: [],
       text: '',
@@ -181,6 +185,7 @@ const request = (mail, names, address, callback) => {
             nameSimilarity <= 0.5 &&  // remove name
             addressSimilarity <= 0.5) { // remove address
 
+            console.log(text);
             result.text += text + '\n'
 
             // http://alexcorvi.github.io/anchorme.js/

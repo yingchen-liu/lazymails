@@ -57,7 +57,7 @@ def sendConnectMessage():
   }
 
   # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
+  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
 
 def connect():
   global sock
@@ -187,7 +187,7 @@ def upload(mail, mailbox):
     'time': nowStr
   }
 
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
+  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
   
 
 def takePictureOfRecognisedLetter(minAreaBox):
@@ -245,11 +245,11 @@ def analyseOneFrame(frame, substractor):
   # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as
   # https://stackoverflow.com/questions/15100913/color-space-conversion-with-cv2
   # https://stackoverflow.com/questions/22153271/error-using-cv2-equalizehist
-  image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+  #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-  image = cv2.equalizeHist(image)
+  #image = cv2.equalizeHist(image)
   
-  # cv2.imshow('sharped', image)
+  #cv2.imshow('sharped', image)
 
   fgmask = substractor.apply(image)
 
@@ -300,9 +300,9 @@ def analyseOneFrame(frame, substractor):
         print('Ignored, area of the letter ({}) is too small'.format(area))
 
   # live view
-  # cv2.imshow('frame', image)
-  # cv2.imshow('mask', fgmask)
-  # cv2.imshow('dinoised', mask)
+  cv2.imshow('frame', image)
+  cv2.imshow('mask', fgmask)
+  cv2.imshow('dinoised', mask)
 
   return None
 

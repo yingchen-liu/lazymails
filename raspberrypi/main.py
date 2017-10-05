@@ -89,6 +89,8 @@ def receiveMessage():
         if buffer:
           data += buffer.decode('utf-8')
         else:
+          # http://www.programmingforums.org/post143163.html
+          
           print('Disconnected')
           sock.close()
           connect()

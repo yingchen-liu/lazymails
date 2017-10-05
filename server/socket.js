@@ -47,7 +47,10 @@ const processMessage = (sock, message) => {
           // get similar road type
           mailbox.address.roadType = ROAD_TYPES[mailbox.address.roadType];
 
-          google.request(message.mail, mailbox.names, mailbox.address);
+          google.request(message.mail, mailbox.names, mailbox.address, (err, result) => {
+            if (err) return console.error(err);
+            console.log(JSON.stringify(result, null, 2));
+          });
         })
         .catch((err) => {
           console.err('Failed to get mailbox settings', err);

@@ -106,7 +106,7 @@ const calculateAddressSimilarity = (query, address) => {
   }
 };
 
-const request = (mail, names, address) => {
+const request = (mail, names, address, callback) => {
   
   // https://cloud.google.com/vision/docs/request
   // https://github.com/mzabriskie/axios
@@ -125,32 +125,32 @@ const request = (mail, names, address) => {
     }]
   })
   .then((response) => {
-    const result = response.data.responses[0];
+    const _result = response.data.responses[0];
+    const result = {
+      mainText: [],
+      text: '',
+      urls: [],
+      labels: [],
+      logo: null
+    };
 
-    if (result.hasOwnProperty('labelAnnotations')) {
-      console.log('labels')
-      labels = result.labelAnnotations;
-      labels.map((label) => {
-        console.log(label);
-      });
+    if (_result.hasOwnProperty('labelAnnotations')) {
+      labels = _result.labelAnnotations;
+      result.labels = labels;
     }
 
-    if (result.hasOwnProperty('logoAnnotations')) {
-      console.log('logos')
-      logos = result.logoAnnotations;
-      console.log(logos[0].description)
+    if (_result.hasOwnProperty('logoAnnotations')) {
+      logos = _result.logoAnnotations;
+      result.logo = logos[0];
     }
 
-    if (result.hasOwnProperty('fullTextAnnotation')) {
-      console.log('fullText')
-      fullText = result.fullTextAnnotation;
-      console.log(fullText);
+    if (_result.hasOwnProperty('fullTextAnnotation')) {
+      fullText = _result.fullTextAnnotation;
 
       var nameSimilarity = 0.0;
       var addressSimilarity = 0.0;
       var paragraphRates = [];
 
-      console.log('blocks')
       blocks = fullText.pages[0].blocks
       blocks.map((block) => {
         // console.log(block)
@@ -181,12 +181,12 @@ const request = (mail, names, address) => {
             nameSimilarity <= 0.5 &&  // remove name
             addressSimilarity <= 0.5) { // remove address
 
-            console.log(text);
+            result.text += text + '\n'
 
             // http://alexcorvi.github.io/anchorme.js/
-            const links = anchorme(text);
-            if (links !== text) {
-              console.log('> url', links)
+            const link = anchorme(text);
+            if (link !== text) {
+              result.urls.push(link)
             }
 
             paragraphRates.push({
@@ -194,7 +194,7 @@ const request = (mail, names, address) => {
               rate: calculateArea(paragraph.boundingBox.vertices) / text.length
             })
           } else {
-            console.log('> ignored ', text)
+            // console.log('> ignored ', text)
           }
         });
       });
@@ -204,15 +204,17 @@ const request = (mail, names, address) => {
         return b.rate - a.rate; // desc
       });
       for (let i = 0; i < Math.min(3, paragraphRates.length); i++) {
-        console.log('> main text', paragraphRates[i].text);
+        result.mainText.push(paragraphRates[i]);
       }
 
-      console.log('> address', addressSimilarity, 'name', nameSimilarity);
+      result.addressSimilarity = addressSimilarity;
+      result.nameSimilarity = nameSimilarity
     }
     
+    callback(null, result);
   })
   .catch((error) => {
-    console.error(error);
+    callback(error);
   });
 };
 

@@ -2,4 +2,4 @@ raspberrypi/letter.jpg
 raspberrypi/letterbox.jpg
 server/node_modules
 server/data
-server/mails/*.jpg
+server/mails/*.png

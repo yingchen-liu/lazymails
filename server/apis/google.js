@@ -306,7 +306,11 @@ const request = (mailBase64, names, address, callback) => {
     return callback(null, result);
   })
   .catch((error) => {
-    return callback(error);
+    if (error.response) {
+      return callback(error.response.data.error);
+    } else {
+      return callback(rror.message);
+    }
   });
 };
 
@@ -408,7 +412,11 @@ const requestOrientation = (mailBase64, callback) => {
     return callback(null, 0);
   })
   .catch((error) => {
-    return callback(error);
+    if (error.response) {
+      return callback(error.response.data.error);
+    } else {
+      return callback(rror.message);
+    }
   });
 };
 

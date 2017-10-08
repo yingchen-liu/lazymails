@@ -12,6 +12,7 @@ const config = require('./config');
 const db = require('./db');
 const mailboxes = db.get('mailboxes');
 const mails = db.get('mails');
+const users = db.get('users');
 
 const SOCKET_END_SYMBOL = '[^END^]';
 const ROAD_TYPES = {
@@ -56,8 +57,8 @@ const processMessage = (sock, message) => {
           mailbox.address.roadType = ROAD_TYPES[mailbox.address.roadType];
 
           const code = md5(message.mail.content);
-          const mailFilename = path.join(__dirname, 'mails', code + '-mail.jpg');
-          const mailboxFilename = path.join(__dirname, 'mails', code + '-mailbox.jpg');
+          const mailFilename = path.join(__dirname, 'mails', code + '-mail.png');
+          const mailboxFilename = path.join(__dirname, 'mails', code + '-mailbox.png');
 
           // save images
           // https://stackoverflow.com/questions/6926016/nodejs-saving-a-base64-encoded-image-to-disk
@@ -85,14 +86,21 @@ const processMessage = (sock, message) => {
                     console.log(JSON.stringify(result, null, 2));
 
                     // save to db
-                    result.mailbox = mailbox._id;
+                    result.mailbox = mailbox._id.toString();
                     result.serverReceivedAt = new Date();
                     result.mailboxReceivedAt = new Date(message.receivedAt);
                     result.sentTo = [];
 
                     mails.insert(result)
                       .then((mail) => {
-
+                        users.find({ mailbox: result.mailbox })
+                          .then((users) => {
+                            // TODO: notify user for a new mail
+                            console.log('Notify new mail', users);
+                          })
+                          .catch((err) => {
+                            console.error(err);
+                          });
                       })
                       .catch((err) => {
                         console.error(err);

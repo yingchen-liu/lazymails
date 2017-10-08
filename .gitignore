@@ -1,5 +1,5 @@
 raspberrypi/letter.jpg
 raspberrypi/letterbox.jpg
 server/node_modules
-data
+server/data
 server/mails/*.jpg

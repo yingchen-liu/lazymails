@@ -58,6 +58,8 @@ app.use((err, req, res, next) => {
   }
 });
 
+socket.connect();
+
 
 // https://github.com/mqttjs/MQTT.js
 
@@ -82,23 +84,6 @@ client.on('message', (topic, message) => {
   const mailbox = topic.replace('mailbox/', '');
   console.log(`received message from ${mailbox}: ${info}`);
 
-  if (topic.indexOf('mailbox') === 0) {
-    google.request(info.mail, 
-      [{
-        title: 'mr',
-        firstname: 'yingchen',
-        lastname: 'liu'
-      }], 
-      {
-        unit: '11',
-        number: '919',
-        road: 'dandenong',
-        roadType: ['rd', 'road'],
-        suburb: 'malvern east',
-        state: 'vic',
-        postalCode: '3145'
-      });
-  }
 });
 
 

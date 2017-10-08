@@ -186,7 +186,7 @@ def upload(mail, mailSize, mailbox, mailboxSize):
   
   # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
   now = datetime.datetime.now()
-  nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
+  nowStr = now.strftime("%Y-%m-%dT%H:%M:%S")
 
   # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
   message = {
@@ -201,7 +201,7 @@ def upload(mail, mailSize, mailbox, mailboxSize):
       'size': mailboxSize
     },
     'id': MAILBOX_ID,
-    'time': nowStr
+    'receivedAt': nowStr
   }
 
   sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))

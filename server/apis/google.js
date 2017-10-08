@@ -8,6 +8,7 @@ const config = require('../config');
 
 
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
+// const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
 const categories = {
   ads: {
     food: ['dish', 'cuisine', 'food', 'fast food'],
@@ -17,6 +18,23 @@ const categories = {
   letters: {
 
   }
+};
+
+const extractPoBox = (fullText) => {
+  fullText = fullText.split('\n').join(' ');
+  const reg = /po\s*?box.*?(NSW|QLD|SA|TAS|VIC|WA|ACT|JBT|NT)\w*?\s*?\d\d\d\d/gi;
+  const match = reg.exec(fullText);
+  
+  return match ? match[0] : null;
+};
+
+const extractStamp = (fullText) => {
+  fullText = fullText.split('\n').join(' ');
+  const reg = /po\s*box.*(NSW|QLD|SA|TAS|VIC|WA|ACT|JBT|NT)\s*\d\d\d\d/gi;
+  const match = reg.exec(fullText);
+  
+  console.log(match);
+  return match ? match[0] : null;
 };
 
 const calculateArea = (vertices) => {
@@ -56,6 +74,7 @@ const calculatePostageSimilarity = (query) => {
   a = FuzzySet([], false);
 
   a.add('postage paid australia');
+  a.add('postage paid australia priority');
 
   const result = a.get(query.toLowerCase());
 
@@ -115,21 +134,17 @@ const request = (mail, names, address, callback) => {
       image: {
         content: mail
       },
-      imageContext: {
-        languageHints: ['en']
-      },
-      features: [{
-        type: 'LABEL_DETECTION'
-      }, {
-        type: 'LOGO_DETECTION'
-      }, {
-        type: 'DOCUMENT_TEXT_DETECTION'
-      }]
+      features: [
+        {type: 'TYPE_UNSPECIFIED', maxResults: 50},
+        {type: 'LOGO_DETECTION', maxResults: 50},
+        {type: 'LABEL_DETECTION', maxResults: 50},
+        {type: 'TEXT_DETECTION', maxResults: 50},
+        {type: 'IMAGE_PROPERTIES', maxResults: 50}
+      ],
     }]
   })
   .then((response) => {
     const _result = response.data.responses[0];
-    console.log(JSON.stringify(_result, null, 2))
     const result = {
       mainText: [],
       text: '',
@@ -186,6 +201,7 @@ const request = (mail, names, address, callback) => {
             addressSimilarity <= 0.5) { // remove address
 
             console.log(text);
+            console.log(paragraph.boundingBox.vertices);
             result.text += text + '\n'
 
             // http://alexcorvi.github.io/anchorme.js/
@@ -213,7 +229,8 @@ const request = (mail, names, address, callback) => {
       }
 
       result.addressSimilarity = addressSimilarity;
-      result.nameSimilarity = nameSimilarity
+      result.nameSimilarity = nameSimilarity;
+      result.poBox = extractPoBox(result.text);
     }
     
     callback(null, result);

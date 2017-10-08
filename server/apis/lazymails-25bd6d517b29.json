@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lazymails-181110",
+  "private_key_id": "25bd6d517b294525c475186a29318784bd6d0be4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqWJctZfmOeTxw\nqcXYkZBe1X3S9ocOf799fUMtm+jtrJHtmr1oDLZ3vc5A/XWM/jfUneESUd0x1A7B\ndb/nQcsE4lRJnWlQVd9KWG4knj3AK9Mb5rBfXr3+rVWLIFE7t6Y99UZvUb5/fF9v\nvwPrEZ3UBVUyUS8LwCDOHuAijLLQlg4S8UrpXF6ZYWu9OupPwiQo8faApk4XRxCW\nheXFHaf3jFIWHsxXsrbjSXXGstMxcE2uJ/7vDce5pQt6EtdFFKaasATUIaL+iDY8\n9DncSbcop/ebAjbBEi9utScCEe75lIOOBQzMkn4o9Zy6swJRO9abkVgB7o/6oPxl\nS8gsgDeLAgMBAAECggEAH2m92y/acPUXebk9FF5njq11ChHPPxO8xtHyMPd24Vl5\nAaWO9yCdB4DXh7GV213IAuvoZP32uekenXtu26EM5MYt//NIx/lF94pOKW+K+KS8\nRgFpFfU9OTlStJjNkiMgQ323MvESnaTcXpmNiexSPBaNqv1AnTydcBVOhOCIWyF7\nyopzUxALHEl9mbB3tWYLR0XxpdUST2yOpE2TvLOYu2s5oV3RyfZE0kg2vC9nAEfH\nMJvXLX+g+tHwFzTZhdk8y2mKOksdMBjYKRKsyhAxZayWub6iCEDKo+cRgtw0H8bl\nQfF7x8yJFEd2lf8IXis8Qg+k3DEnH/WOWjIEFjuDTQKBgQDSKgLY3jSSRC29vgAN\nRUgaGuiXB9LSbdd+L2d86S3Jzh/e3H33HP4dm88+B3OKKBPT8XCw9SzxmMAf8JY8\n7FJQTguX/scpm80e3/+rMk4azPLcwKU0iG4aTdN6HDzf6YUIEyTAFtXuwBCzpUhx\n+Qv60YYc81HvI15GvGfGgg17lwKBgQDPf3AbGaA3bJBdndTvlA/Lj1xxAVImnVU4\nNgjVn/kdh1Y1IH8TUdBylqVa+b1REkig1OqSD0w7UWShdYi/BRVGF3ekfmRzk8R1\ngpQot/avy8CI8QVZmeHtRQZgL+x8pnyn3wLKW6QeR0bcXU6NkLh53gVdZbFDimLD\nOMOtGbIyLQKBgEGQI5U+NM5QgKiJxoBdVbH3JQpAwY8t/yT5auJ35/Xl3OFsjcty\newAHpG5oaq319MGQt6QsyFmSWpVcO7JD0yYEQu+m5sDfPu1b2emxZtZLi5Q8cQ1j\nZl3EW63jc0YzFnI/bp6SQSkbN9qjPGd51zfm91y+t5fPw9BzZDh0R/p/AoGAEfoq\njk6EEQk44MOB5VfgnnRHQAsrQOk0rvAPh+KaRLKrB2NPXy8hbiwbG2yzuEhrPnPz\n9r+YjTMaEtsKA/K+yxnRZdEFhvXweXXcvEJj/wsaHUM0gXTRnCr0yHSeepY6CplJ\ntpqF95GZVBJJcf5t3TEdKeBboUxmDh/m5CJry+kCgYAhW6W2ztwj/E3bicDPaAfu\nnjXAcfyxSD0bUmMUfT+Dbfru010dxOQEXe4C7u7gpd/bducWGLwVm6pZQr/WXkEd\nIIrSg9QUIZziF1YGuNkA/wXJs8oeP2eNCClNrsM6rjJaV2+bufiqf1cdfBVU9oEE\necZ3n/aXvuz/agVYH7OnnQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "lazymails-181110@appspot.gserviceaccount.com",
+  "client_id": "117682110520305228041",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lazymails-181110%40appspot.gserviceaccount.com"
+}

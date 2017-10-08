@@ -1,6 +1,11 @@
 // https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
 
 const net = require('net');
+const fs = require("fs");
+const md5 = require('md5');
+const path = require('path');
+const imageSize = require('image-size');
+const jimp = require('jimp');
 
 const google = require('./apis/google');
 const config = require('./config');
@@ -38,7 +43,7 @@ const processMessage = (sock, message) => {
           });
         })
         .catch((err) => {
-          console.err('Failed to get mailbox settings', err);
+          console.error('Failed to get mailbox settings', err);
         });
 
     } else if (message.type === 'mail') {
@@ -47,13 +52,41 @@ const processMessage = (sock, message) => {
           // get similar road type
           mailbox.address.roadType = ROAD_TYPES[mailbox.address.roadType];
 
-          google.request(message.mail, mailbox.names, mailbox.address, (err, result) => {
+          const code = md5(message.mail.content);
+          const mailFilename = path.join(__dirname, 'mails', code + '-mail.png');
+          const mailboxFilename = path.join(__dirname, 'mails', code + '-mailbox.png');
+
+          // save images
+          // https://stackoverflow.com/questions/6926016/nodejs-saving-a-base64-encoded-image-to-disk
+          fs.writeFile(mailFilename, message.mail.content, 'base64', function(err) {
             if (err) return console.error(err);
-            console.log(JSON.stringify(result, null, 2));
+
+            fs.writeFile(mailboxFilename, message.mailbox.content, 'base64', function(err) {
+              if (err) return console.error(err);
+              
+              google.requestOrientation(message.mail.content, (err, rotateDeg) => {
+                if (err) return console.error(err);
+                console.log('rotateDeg', rotateDeg);
+
+                // https://github.com/oliver-moran/jimp
+                jimp.read(mailFilename).then((lenna) => {
+                  lenna.rotate(rotateDeg)
+                    .write(mailFilename);
+
+                  mailBase64 = fs.readFileSync(mailFilename).toString('base64');
+                  google.request(mailBase64, mailbox.names, mailbox.address, (err, result) => {
+                    if (err) return console.error(err);
+                    console.log(JSON.stringify(result, null, 2));
+                  });
+                }).catch((err) => {
+                  console.error(err);
+                });
+              });
+            });
           });
         })
         .catch((err) => {
-          console.err('Failed to get mailbox settings', err);
+          console.error('Failed to get mailbox settings', err);
         });
     }
   }

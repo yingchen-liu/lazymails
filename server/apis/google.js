@@ -9,16 +9,13 @@ const config = require('../config');
 
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
 // const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
-const categories = {
-  ads: {
-    food: ['dish', 'cuisine', 'food', 'fast food'],
-    property: ['house', 'home'],
-
-  },
-  letters: {
-
-  }
-};
+const categories = [{
+  name: 'food',
+  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza']
+}, {
+  name: 'property',
+  labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
+}];
 
 const extractPoBox = (fullText) => {
   fullText = fullText.split('\n').join(' ');
@@ -125,52 +122,89 @@ const calculateAddressSimilarity = (query, address) => {
   }
 };
 
-const request = (mail, names, address, callback) => {
-  
-  // https://cloud.google.com/vision/docs/request
-  // https://github.com/mzabriskie/axios
+const request = (mailBase64, names, address, callback) => {
   axios.post(url, {
     requests: [{
       image: {
-        content: mail
+        content: mailBase64
       },
       features: [
         {type: 'TYPE_UNSPECIFIED', maxResults: 50},
         {type: 'LOGO_DETECTION', maxResults: 50},
         {type: 'LABEL_DETECTION', maxResults: 50},
-        {type: 'TEXT_DETECTION', maxResults: 50},
-        {type: 'IMAGE_PROPERTIES', maxResults: 50}
+        {type: 'IMAGE_PROPERTIES', maxResults: 50},
+        {type: 'TEXT_DETECTION'}
       ],
+      imageContext: {
+        languageHints: ['en']
+      }
     }]
   })
   .then((response) => {
     const _result = response.data.responses[0];
     const result = {
+      labels: [],
+      logos: [],
+      category: {},
       mainText: [],
       text: '',
-      urls: [],
-      labels: [],
-      logo: null
+      urls: []
     };
 
     if (_result.hasOwnProperty('labelAnnotations')) {
-      labels = _result.labelAnnotations;
-      result.labels = labels;
+      const labels = _result.labelAnnotations;
+      labels.map((label) => {
+        result.labels.push({
+          desc: label.description,
+          score: label.score
+        });
+
+        categories.map((category) => {
+          if (category.labels.indexOf(label.description) >= 0) {
+            if (!result.category[category.name]) {
+              result.category[category.name] = 0;
+            }
+            result.category[category.name] += label.score;
+          }
+        });
+      });
     }
 
     if (_result.hasOwnProperty('logoAnnotations')) {
-      logos = _result.logoAnnotations;
-      result.logo = logos[0];
+      const logos = _result.logoAnnotations;
+      logos.map((logo) => {
+        result.logos.push({
+          desc: logo.description,
+          score: logo.score
+        });
+      });
     }
 
     if (_result.hasOwnProperty('fullTextAnnotation')) {
-      fullText = _result.fullTextAnnotation;
+      const fullText = _result.fullTextAnnotation;
 
       var nameSimilarity = 0.0;
       var addressSimilarity = 0.0;
       var paragraphRates = [];
 
-      blocks = fullText.pages[0].blocks
+      // for detecting image orientation
+      var lastX = [];
+      var lastY = [];
+      const orientationInfo = [{
+        type: 'xIncrease',
+        n: 0
+      }, {
+        type: 'xDecrease',
+        n: 0
+      }, {
+        type: 'yIncrease',
+        n: 0
+      }, {
+        type: 'yDecrease',
+        n: 0
+      }];
+
+      const blocks = fullText.pages[0].blocks
       blocks.map((block) => {
         // console.log(block)
         block.paragraphs.map((paragraph) => {
@@ -196,18 +230,51 @@ const request = (mail, names, address, callback) => {
 
           // filter useless text
           if (postageSimilarity <= 0.5 && // remove postage paid australia
-            text.length >= 3 && // remove too short text
+            text.length >= 3 /*&& // remove too short text
             nameSimilarity <= 0.5 &&  // remove name
-            addressSimilarity <= 0.5) { // remove address
+            addressSimilarity <= 0.5*/) { // remove address
 
             console.log(text);
-            console.log(paragraph.boundingBox.vertices);
-            result.text += text + '\n'
+            const box = paragraph.boundingBox.vertices;
+            const center = {
+              x: (box[0].x + box[1].x + box[2].x + box[3].x) / 4,
+              y: (box[0].y + box[1].y + box[2].y + box[3].y) / 4
+            };
+            
+            // for detecting image orientation
+            if (lastX.length !== 0) {
+              box.map((box, i) => {
+                if (box.x - lastX[i] >= 0) {
+                  orientationInfo[0].n++;
+                } else {
+                  orientationInfo[1].n++;
+                }
+
+                if (box.y - lastY[i] >= 0) {
+                  orientationInfo[2].n++;
+                } else {
+                  orientationInfo[3].n++;
+                }
+              });
+            }
+            box.map((box, i) => {
+              lastX[i] = box.x;
+              lastY[i] = box.y;
+            });
+            
+
+            result.text += text + '\n';
 
             // http://alexcorvi.github.io/anchorme.js/
             const link = anchorme(text);
             if (link !== text) {
-              result.urls.push(link)
+              const reg = /href="(.*?)"/g
+
+              var match = reg.exec(link);
+              while (match != null) {
+                result.urls.push(match[1]);
+                match = reg.exec(link);
+              }
             }
 
             paragraphRates.push({
@@ -228,19 +295,125 @@ const request = (mail, names, address, callback) => {
         result.mainText.push(paragraphRates[i]);
       }
 
+      // name and address
       result.addressSimilarity = addressSimilarity;
       result.nameSimilarity = nameSimilarity;
+
+      // po box
       result.poBox = extractPoBox(result.text);
     }
-    
-    callback(null, result);
+
+    return callback(null, result);
   })
   .catch((error) => {
-    callback(error);
+    return callback(error);
+  });
+};
+
+const requestOrientation = (mailBase64, callback) => {
+
+  // https://cloud.google.com/vision/docs/request
+  // https://github.com/mzabriskie/axios
+  axios.post(url, {
+    requests: [{
+      image: {
+        content: mailBase64
+      },
+      features: [
+        {type: 'TEXT_DETECTION'}
+      ],
+      imageContext: {
+        languageHints: ['en']
+      }
+    }]
+  })
+  .then((response) => {
+    const _result = response.data.responses[0];
+
+    if (_result.hasOwnProperty('fullTextAnnotation')) {
+      const fullText = _result.fullTextAnnotation;
+
+      // for detecting image orientation
+      var lastX = [];
+      var lastY = [];
+      const orientationInfo = [{
+        type: 'xIncrease',
+        n: 0
+      }, {
+        type: 'xDecrease',
+        n: 0
+      }, {
+        type: 'yIncrease',
+        n: 0
+      }, {
+        type: 'yDecrease',
+        n: 0
+      }];
+
+      const blocks = fullText.pages[0].blocks
+      blocks.map((block) => {
+        block.paragraphs.map((paragraph) => {
+          const box = paragraph.boundingBox.vertices;
+          
+          // for detecting image orientation
+          if (lastX.length !== 0) {
+            box.map((box, i) => {
+              if (box.x - lastX[i] >= 0) {
+                orientationInfo[0].n++;
+              } else {
+                orientationInfo[1].n++;
+              }
+
+              if (box.y - lastY[i] >= 0) {
+                orientationInfo[2].n++;
+              } else {
+                orientationInfo[3].n++;
+              }
+            });
+          }
+          box.map((box, i) => {
+            lastX[i] = box.x;
+            lastY[i] = box.y;
+          });
+        });
+      });
+
+      // orientation
+      var rotateDeg = 0;
+      orientationInfo.sort((a, b) => {
+        return b.n - a.n;
+      });
+
+      switch (orientationInfo[0].type) {
+        case 'yIncrease':
+          rotateDeg = 0;
+          break;
+        case 'xIncrease':
+          rotateDeg = 90;
+          break;
+        case 'yDecrease':
+          rotateDeg = 180;
+          break;
+        case 'xDecrease':
+          rotateDeg = 270;
+          break;
+        default:
+          rotateDeg = 0;
+          break;
+      }
+
+      return callback(null, rotateDeg);
+    }
+    
+    return callback(null, 0);
+  })
+  .catch((error) => {
+    return callback(error);
   });
 };
 
 
 module.exports = {
+  requestOrientation,
   request
 };

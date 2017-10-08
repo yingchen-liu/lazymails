@@ -16,6 +16,7 @@ import json
 import socket
 import _thread
 import datetime
+from PIL import Image
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from pyimagesearch.transform import four_point_transform
@@ -28,6 +29,7 @@ LETTER_RESOLUTION = (1440, 1080)
 TIME_TO_WAIT_FOR_CAMERA_READY = 0.1
 FRAMES_TO_WAIT_TO_CAPTURE_LETTER = 10
 MIN_LETTER_AREA = 20000
+MAX_LETTER_AREA = 250000
 # SOCKET_HOST = 'socket.lazymails.com'
 SOCKET_HOST = '192.168.0.3'
 SOCKET_PORT = 6969
@@ -128,6 +130,11 @@ def analyse():
   camera = PiCamera()
   camera.resolution = FRAME_RESOLUTION
   camera.framerate = 30
+  camera.iso = 200
+  camera.brightness = 50
+  camera.sharpness = 100
+  camera.shutter_speed = 13000
+
   rawCapture = PiRGBArray(camera, size=FRAME_RESOLUTION)
 
   # allow the camera to warmup
@@ -139,6 +146,7 @@ def analyse():
   # capture frames from the camera
   # https://stackoverflow.com/questions/522563/accessing-the-index-in-python-for-loops
   for i, frame in enumerate(camera.capture_continuous(rawCapture, format='bgr', use_video_port=True)):
+
     minAreaBox = analyseOneFrame(frame, substractor)
     if minAreaBox != None:
       # close the camera
@@ -146,7 +154,10 @@ def analyse():
       time.sleep(TIME_TO_WAIT_FOR_CAMERA_READY)
 
       takePictureOfRecognisedLetter(minAreaBox)
-      upload(convertToBase64('letter.jpg'), convertToBase64('letterbox.jpg'))
+
+      with Image.open('letter.jpg') as letter:
+        with Image.open('letterbox.jpg') as letterbox:
+          upload(convertToBase64('letter.jpg'), letter.size, convertToBase64('letterbox.jpg'), letterbox.size)
 
       return True
 
@@ -171,7 +182,7 @@ def convertToBase64(filename):
   with open(filename, 'rb') as image:
     return base64.b64encode(image.read())
 
-def upload(mail, mailbox):
+def upload(mail, mailSize, mailbox, mailboxSize):
   
   # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
   now = datetime.datetime.now()
@@ -181,8 +192,14 @@ def upload(mail, mailbox):
   message = {
     'type': 'mail',
     'end': 'mailbox',
-    'mail': mail.decode('utf-8'),
-    'mailbox': mailbox.decode('utf-8'),
+    'mail': {
+      'content': mail.decode('utf-8'),
+      'size': mailSize
+    },
+    'mailbox': {
+      'content': mailbox.decode('utf-8'),
+      'size': mailboxSize
+    },
     'id': MAILBOX_ID,
     'time': nowStr
   }
@@ -233,7 +250,7 @@ def analyseOneFrame(frame, substractor):
   """
   analyse one frame
   """
-
+  
   global hasMotionDetected
   global lastCenter
 
@@ -245,11 +262,10 @@ def analyseOneFrame(frame, substractor):
   # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as
   # https://stackoverflow.com/questions/15100913/color-space-conversion-with-cv2
   # https://stackoverflow.com/questions/22153271/error-using-cv2-equalizehist
-  #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-  #image = cv2.equalizeHist(image)
+  # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+  # image = cv2.equalizeHist(image)
   
-  #cv2.imshow('sharped', image)
+  cv2.imshow('sharped', image)
 
   fgmask = substractor.apply(image)
 
@@ -280,24 +296,25 @@ def analyseOneFrame(frame, substractor):
       minAreaBox = cv2.boxPoints(minAreaRect)
       minAreaBox = np.int0(minAreaBox)
       area = cv2.contourArea(minAreaBox)
-
       
-      if area > MIN_LETTER_AREA:
+      if area > MIN_LETTER_AREA and area < MAX_LETTER_AREA:
         center = (
           (minAreaBox[0][0] + minAreaBox[1][0] + minAreaBox[2][0] + minAreaBox[3][0]) / 4,
           (minAreaBox[0][1] + minAreaBox[1][1] + minAreaBox[2][1] + minAreaBox[3][1]) / 4,
         )
         if lastCenter:
           move = math.sqrt(math.pow(center[0] - lastCenter[0], 2) + math.pow(center[1] - lastCenter[1], 2))
+          print('area', area, 'move', move)
           if move <= 0.01:
             # wait until it is static
             print('Letter recognised', minAreaBox)
+            hasMotionDetected = False
             return minAreaBox
 
         lastCenter = center
       else:
         # ignore if the letter is too small
-        print('Ignored, area of the letter ({}) is too small'.format(area))
+        print('Ignored, area of the letter ({}) is too small/large'.format(area))
 
   # live view
   cv2.imshow('frame', image)

@@ -12,11 +12,46 @@ const users = db.get('users');
 const SOCKET_END_SYMBOL = '[^END^]';
 
 const clients = {
-  mailboxes: {},
-  mailboxSocksById: {},
-  apps: {},
-  appSocksByEmail: {}
+  idsByKey: {},
+  socksByKey: {},
+  socksById: {},
+  mailboxKeys: [],
+  appKeys: [],
+
+  addClient: (sock, id, type) => {
+    clients.idsByKey[sock.getClientKey()] = id;
+    clients.socksByKey[sock.getClientKey()] = sock;
+    clients.socksById[id] = sock;
+    if (type === 'mailbox') {
+      clients.mailboxKeys.push(sock.getClientKey());
+    } else if (type === 'app') {
+      clients.appKeys.push(sock.getClientKey());
+    }
+  },
+  getClientIdByKey: (key) => {
+    return clients.idsByKey[key];
+  },
+  getSockByClientKey: (key) => {
+    return clients.socksByKey[key];
+  },
+  getSockByClientId: (id) => {
+    return clients.socksById[id];
+  },
+  isMailbox: (key) => {
+    return clients.mailboxKeys.indexOf(key) >= 0;
+  },
+  isApp: (key) => {
+    return clients.appKeys.indexOf(key) >= 0;
+  },
+  removeClient: (key) => {
+    delete clients.socksById[clients.idsByKey[key]];
+    delete clients.idsByKey[key];
+    delete clients.socksByKey[key];
+    delete clients.mailboxKeys[key];
+    delete clients.appKeys[key];
+  }
 };
+
 
 
 const processMessage = (sock, message) => {
@@ -40,11 +75,11 @@ const processMessage = (sock, message) => {
       case 'check_mails':
         app.checkMails(sock, message, clients);
         break;
-      case 'update_mailbox_settings':
-        app.updateMailboxSettings(sock, message, clients);
+      case 'update_mailbox':
+        app.updateMailbox(sock, message, clients);
         break;
-      case 'update_user_settings':
-        app.updateUserSettings(sock, message, clients);
+      case 'update_user':
+        app.updateUser(sock, message, clients);
         break;
       case 'start_live':
         app.startLive(sock, message, clients);
@@ -73,7 +108,7 @@ const connect = () => {
       if (buffer.endsWith(SOCKET_END_SYMBOL)) {
         try {
           const message = JSON.parse(buffer.replace(SOCKET_END_SYMBOL, ''));
-          console.log(`Received message from ${message.end} [${message.id}]`);
+          console.log(`Received message from ${message.end} [${clients.getClientIdByKey(sock.getClientKey())}]`);
         
           processMessage(sock, message);
 
@@ -85,6 +120,10 @@ const connect = () => {
         buffer = '';
       }
     });
+
+    sock.getClientKey = () => {
+      return sock.remoteAddress + ':' + sock.remotePort;
+    },
     
     sock.sendMessage = (type, message) => {
       message.type = type;
@@ -102,14 +141,16 @@ const connect = () => {
     };
 
     sock.on('close', (data) => {
+      var clientId = clients.getClientIdByKey(sock.getClientKey());
+
       console.log(`Socket client disconnected: ${sock.remoteAddress}:${sock.remotePort}`);
-      if (clients.mailboxes[sock]) {
+      if (clients.isMailbox(sock.getClientKey())) {
         // notify users their that mailbox is offline
-        users.find({ mailbox: clients.mailboxes[sock].id })
+        users.find({ mailbox: clientId })
           .then((users) => {
             users.map((user) => {
-              if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
-                clients.appSocksByEmail[user.email].sendMessage('mailbox_offline', {});
+              if (clients.getSockByClientId(user.email)) {
+                clients.getSockByClientId(user.email).sendMessage('mailbox_offline', {});
               }
             });
           })
@@ -117,13 +158,12 @@ const connect = () => {
             sock.sendError(err);
           });
 
-        console.log('Mailbox disconnected', clients.mailboxes[sock].id)
-        delete clients.mailboxSocksById[clients.mailboxes[sock].id];
-        delete clients.mailboxes[sock];
+        console.log('Mailbox disconnected', clientId)
+        clients.removeClient(sock.getClientKey());
 
-      }
-      if (clients.apps[sock]) {
-        delete clients.apps[sock];
+      } else if (clients.isApp(sock.getClientKey())) {
+        console.log('App disconnected', clientId)
+        clients.removeClient(sock.getClientKey());
       }
     });
     

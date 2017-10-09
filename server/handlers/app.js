@@ -19,11 +19,10 @@ const connect = (sock, message, clients) => {
           mailboxes.findOne({ _id: user.mailbox })
             .then((mailbox) => {
               // save the connection
-              clients.apps[sock] = { email: message.email };
-              clients.appSocksByEmail[message.email] = sock;
+              clients.addClient(sock, message.email, 'app');
 
               // get mailbox online status
-              if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
+              if (clients.getSockByClientId(user.mailbox)) {
                 mailbox.isOnline = true;
               } else {
                 mailbox.isOnline = false;
@@ -84,10 +83,11 @@ const checkMails = (sock, message, clients) => {
 };
 
 // TODO: to be tested
-const updateUserSettings = (sock, message, clients) => {
+const updateUser = (sock, message, clients) => {
   delete req.body.email;
   
-  users.findOneAndUpdate({ email: clients.apps[sock].email }, { $set: req.body })
+  
+  users.findOneAndUpdate({ email: clients.getClientIdByKey(sock.getClientKey()) }, { $set: message.user })
     .then((user) => {
       delete user.password;
 
@@ -101,17 +101,18 @@ const updateUserSettings = (sock, message, clients) => {
 };
 
 // TODO: to be tested
-const updateMailboxSettings = (sock, message, clients) => {
+const updateMailbox = (sock, message, clients) => {
   // get the mailbox id by user email
-  users.findOne({ email: clients.apps[sock].email })
+  users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
       // update mailbox
-      mailboxes.findOneAndUpdate({ _id: user.mailbox }, { $set: req.body })
+      mailboxes.findOneAndUpdate({ _id: user.mailbox }, { $set: message.mailbox })
         .then((mailbox) => {
           // notify mailbox settings have been updated if the mailbox is online
-          if (clients.mailboxSocksById.hasOwnProperty(mailbox._id)) {
-            clients.mailboxSocksById[mailbox._id].sendMessage('update_settings', {
-              mailbox
+          if (clients.getSockByClientId(user.mailbox)) {
+            console.log('update')
+            clients.getSockByClientId(user.mailbox).sendMessage('update_settings', {
+              settings: mailbox.settings
             });
           }
     
@@ -123,8 +124,8 @@ const updateMailboxSettings = (sock, message, clients) => {
           users.find({ mailbox: user.mailbox })
             .then((users) => {
               user.map((user) => {
-                if (clients.userSocksByEmail.hasOwnProperty(user.email)) {
-                  clients.userSocksByEmail[user.email].sendMessage('update_settings', {
+                if (clients.getSockByClientId(user.email)) {
+                  clients.getSockByClientId(user.email).sendMessage('update_mailbox', {
                     mailbox
                   });
                 }
@@ -134,7 +135,9 @@ const updateMailboxSettings = (sock, message, clients) => {
               sock.sendError(message.type, err);
             });
         })
-        .catch(next);
+        .catch((err) => {
+          sock.sendError(message.type, err);
+        });
     })
     .catch((err) => {
       sock.sendError(message.type, err);
@@ -145,8 +148,8 @@ const updateMailboxSettings = (sock, message, clients) => {
 const startLive = (sock, message, clients) => {
   users.findOne({ email: clients.apps[sock].email })
     .then((user) => {
-      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
-        clients.mailboxSocksById[user.mailbox].sendMessage('start_live', {
+      if (clients.getSockByClientId(user.mailbox)) {
+        clients.getSockByClientId(user.mailbox).sendMessage('start_live', {
           email: clients.apps[sock].email
         });
       }
@@ -160,8 +163,8 @@ const startLive = (sock, message, clients) => {
 const stopLive = (sock, message, clients) => {
   users.findOne({ email: clients.apps[sock].email })
     .then((user) => {
-      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
-        clients.mailboxSocksById[user.mailbox].sendMessage('stop_live', {
+      if (clients.getSockByClientId(user.mailbox)) {
+        clients.getSockByClientId(user.mailbox).sendMessage('stop_live', {
           email: clients.apps[sock].email
         });
       }
@@ -175,8 +178,8 @@ const stopLive = (sock, message, clients) => {
 const liveHeartbeat = (sock, message, clients) => {
   users.findOne({ email: clients.apps[sock].email })
     .then((user) => {
-      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
-        clients.mailboxSocksById[user.mailbox].sendMessage('live_heartbeat', {
+      if (clients.getSockByClientId(user.mailbox)) {
+        clients.getSockByClientId(user.mailbox).sendMessage('live_heartbeat', {
           email: clients.apps[sock].email
         });
       }
@@ -190,8 +193,8 @@ const liveHeartbeat = (sock, message, clients) => {
 module.exports = {
   connect,
   checkMails,
-  updateUserSettings,
-  updateMailboxSettings,
+  updateUser,
+  updateMailbox,
   startLive,
   stopLive,
   liveHeartbeat

@@ -20,10 +20,7 @@ const ROAD_TYPES = {
 const connect = (sock, message, clients) => {
   console.log('Mailbox connected', message.id);
   
-  clients.mailboxes[sock] = {
-    id: message.id
-  };
-  clients.mailboxSocksById[message.id] = sock;
+  clients.addClient(sock, message.id, 'mailbox');
 
   // update settings
   mailboxes.findOne({ _id: message.id })
@@ -40,8 +37,8 @@ const connect = (sock, message, clients) => {
   users.find({ mailbox: message.id })
     .then((users) => {
       users.map((user) => {
-        if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
-          clients.appSocksByEmail[user.email].sendMessage('mailbox_online', {});
+        if (clients.getSockByClientId(user.email)) {
+          clients.getSockByClientId(user.email).sendMessage('mailbox_online', {});
         }
       });
     })
@@ -100,8 +97,8 @@ const receiveMail = (sock, message, clients) => {
                     users.find({ mailbox: result.mailbox })
                       .then((users) => {
                         users.map((user) => {
-                          if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
-                            clients.appSocksByEmail[user.email].sendMessage('mail', {
+                          if (clients.getSockByClientId(user.email)) {
+                            clients.getSockByClientId(user.email).sendMessage('mail', {
                               info: mail,
                               mail: {
                                 content: mailBase64,
@@ -136,8 +133,8 @@ const receiveMail = (sock, message, clients) => {
 };
 
 const live = (sock, message, clients) => {
-  if (clients.appSocksByEmail.hasOwnProperty(message.email)) {
-    clients.appSocksByEmail[message.email].sendMessage('live', {
+  if (clients.getSockByClientId(message.email)) {
+    clients.getSockByClientId(message.email).sendMessage('live', {
       mailbox: message.mailbox
     });
   } else {

@@ -1,4 +1,8 @@
 const md5 = require('md5');
+const moment = require('moment');
+const fs = require('fs');
+const path = require('path');
+const imageSize = require('image-size');
 
 const db = require('../db');
 const mailboxes = db.get('mailboxes');
@@ -48,8 +52,28 @@ const connect = (sock, message, clients) => {
 };
 
 const checkMails = (sock, message, clients) => {
-  mails.find({ serverReceivedAt: { $gte: new Date(message.after) } })
+  mails.find({ serverReceivedAt: { $gte: new Date(moment(message.after).toISOString()) } })
     .then((mails) => {
+      mails = mails.map((mail) => {
+        delete mail.sentTo;
+
+        const mailFilename = path.join(__dirname, '../mails', mail.code + '-mail.png');
+        const mailboxFilename = path.join(__dirname, '../mails', mail.code + '-mailbox.png');
+        const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
+        const mailboxBase64 = fs.readFileSync(mailFilename).toString('base64');
+
+        return {
+          info: mail,
+          mail: {
+            content: mailBase64,
+            size: imageSize(mailFilename)
+          },
+          mailbox: {
+            content: mailboxBase64,
+            size: imageSize(mailboxFilename)
+          }
+        };
+      });
       sock.sendMessage(message.type, {
         mails
       });

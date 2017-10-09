@@ -4,6 +4,7 @@ const path = require('path');
 const imageSize = require('image-size');
 const jimp = require('jimp');
 const google = require('../apis/google');
+const moment = require('moment');
 
 const socket = require('../socket');
 const db = require('../db');
@@ -78,24 +79,41 @@ const receiveMail = (sock, message, clients) => {
                 .write(mailFilename);
 
               // request mail info
-              mailBase64 = fs.readFileSync(mailFilename).toString('base64');
+              const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
               google.request(mailBase64, mailbox.names, mailbox.address, (err, result) => {
                 if (err) return console.error(err);
 
                 console.log(JSON.stringify(result, null, 2));
 
                 // save to db
+                result.code = code;
                 result.mailbox = mailbox._id.toString();
-                result.serverReceivedAt = new Date();
-                result.mailboxReceivedAt = new Date(message.receivedAt);
+                result.serverReceivedAt = moment();
+                result.mailboxReceivedAt = moment(message.receivedAt);
                 result.sentTo = [];
 
                 mails.insert(result)
                   .then((mail) => {
+                    // notify users
+                    delete mail.sentTo
+
                     users.find({ mailbox: result.mailbox })
                       .then((users) => {
-                        // TODO: notify user for a new mail
-                        console.log('Notify new mail', users);
+                        users.map((user) => {
+                          if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
+                            clients.appSocksByEmail[user.email].sendMessage('mail', {
+                              info: mail,
+                              mail: {
+                                content: mailBase64,
+                                size: imageSize(mailFilename)
+                              },
+                              mailbox: {
+                                content: message.mailbox.content,
+                                size: imageSize(mailboxFilename)
+                              }
+                            });
+                          }
+                        });
                       })
                       .catch((err) => {
                         console.error(err);

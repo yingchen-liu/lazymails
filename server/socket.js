@@ -6,6 +6,8 @@ const serializeError = require('serialize-error');
 const config = require('./config');
 const mailbox = require('./handlers/mailbox');
 const app = require('./handlers/app');
+const db = require('./db');
+const users = db.get('users');
 
 const SOCKET_END_SYMBOL = '[^END^]';
 
@@ -19,12 +21,16 @@ const clients = {
 
 const processMessage = (sock, message) => {
   if (message.end === 'mailbox') {
-    if (message.type === 'connect') {
-      mailbox.connect(sock, message, clients);
-
-    } else if (message.type === 'mail') {
-      mailbox.receiveMail(sock, message, clients);
-
+    switch (message.type) {
+      case 'connect':
+        mailbox.connect(sock, message, clients);
+        break;
+      case 'mail':
+        mailbox.receiveMail(sock, message, clients);
+        break;
+      case 'live':
+        mailbox.live(sock, message, clients);
+        break;
     }
   } else if (message.end === 'app') {
     switch (message.type) {
@@ -33,6 +39,21 @@ const processMessage = (sock, message) => {
         break;
       case 'check_mails':
         app.checkMails(sock, message, clients);
+        break;
+      case 'update_mailbox_settings':
+        app.updateMailboxSettings(sock, message, clients);
+        break;
+      case 'update_user_settings':
+        app.updateUserSettings(sock, message, clients);
+        break;
+      case 'start_live':
+        app.startLive(sock, message, clients);
+        break;
+      case 'stop_live':
+        app.startLive(sock, message, clients);
+        break;
+      case 'live_heartbeat':
+        app.liveHeartbeat(sock, message, clients);
         break;
       default:
         sock.sendError(new Error('Cannot understand the message'));
@@ -65,18 +86,6 @@ const connect = () => {
       }
     });
     
-    sock.on('close', (data) => {
-      console.log(`Socket client disconnected: ${sock.remoteAddress}:${sock.remotePort}`);
-      if (clients.mailboxes[sock]) {
-        console.log('Mailbox disconnected', clients.mailboxes[sock].id)
-        delete clients.mailboxSocksById[clients.mailboxes[sock].id];
-        delete clients.mailboxes[sock];
-      }
-      if (clients.users[sock]) {
-        delete clients.users[sock];
-      }
-    });
-
     sock.sendMessage = (type, message) => {
       message.type = type;
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
@@ -91,6 +100,32 @@ const connect = () => {
       };
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
+
+    sock.on('close', (data) => {
+      console.log(`Socket client disconnected: ${sock.remoteAddress}:${sock.remotePort}`);
+      if (clients.mailboxes[sock]) {
+        // notify users their that mailbox is offline
+        users.find({ mailbox: clients.mailboxes[sock].id })
+          .then((users) => {
+            users.map((user) => {
+              if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
+                clients.appSocksByEmail[user.email].sendMessage('mailbox_offline', {});
+              }
+            });
+          })
+          .catch((err) => {
+            sock.sendError(err);
+          });
+
+        console.log('Mailbox disconnected', clients.mailboxes[sock].id)
+        delete clients.mailboxSocksById[clients.mailboxes[sock].id];
+        delete clients.mailboxes[sock];
+
+      }
+      if (clients.apps[sock]) {
+        delete clients.apps[sock];
+      }
+    });
     
   })
     .listen(config.socket.port, config.socket.host);

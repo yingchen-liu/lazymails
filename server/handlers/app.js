@@ -18,6 +18,13 @@ const connect = (sock, message, clients) => {
               clients.apps[sock] = { email: message.email };
               clients.appSocksByEmail[message.email] = sock;
 
+              // get mailbox online status
+              if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
+                mailbox.isOnline = true;
+              } else {
+                mailbox.isOnline = false;
+              }
+
               sock.sendMessage(message.type, {
                 user,
                 mailbox
@@ -110,11 +117,58 @@ const updateMailboxSettings = (sock, message, clients) => {
     });
 };
 
+// TODO: to be tested
+const startLive = (sock, message, clients) => {
+  users.findOne({ email: clients.apps[sock].email })
+    .then((user) => {
+      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
+        clients.mailboxSocksById[user.mailbox].sendMessage('start_live', {
+          email: clients.apps[sock].email
+        });
+      }
+    })
+    .catch((err) => {
+      sock.sendError(message.type, err);
+    });
+};
+
+// TODO: to be tested
+const stopLive = (sock, message, clients) => {
+  users.findOne({ email: clients.apps[sock].email })
+    .then((user) => {
+      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
+        clients.mailboxSocksById[user.mailbox].sendMessage('stop_live', {
+          email: clients.apps[sock].email
+        });
+      }
+    })
+    .catch((err) => {
+      sock.sendError(message.type, err);
+    });
+};
+
+// TODO: to be tested
+const liveHeartbeat = (sock, message, clients) => {
+  users.findOne({ email: clients.apps[sock].email })
+    .then((user) => {
+      if (clients.mailboxSocksById.hasOwnProperty(user.mailbox)) {
+        clients.mailboxSocksById[user.mailbox].sendMessage('live_heartbeat', {
+          email: clients.apps[sock].email
+        });
+      }
+    })
+    .catch((err) => {
+      sock.sendError(message.type, err);
+    });
+};
 
 
 module.exports = {
   connect,
   checkMails,
   updateUserSettings,
-  updateMailboxSettings
+  updateMailboxSettings,
+  startLive,
+  stopLive,
+  liveHeartbeat
 };

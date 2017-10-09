@@ -34,6 +34,19 @@ const connect = (sock, message, clients) => {
     .catch((err) => {
       console.error('Failed to get mailbox settings', err);
     });
+
+  // notify users their that mailbox is online
+  users.find({ mailbox: message.id })
+    .then((users) => {
+      users.map((user) => {
+        if (clients.appSocksByEmail.hasOwnProperty(user.email)) {
+          clients.appSocksByEmail[user.email].sendMessage('mailbox_online', {});
+        }
+      });
+    })
+    .catch((err) => {
+      sock.sendError(err);
+    });
 };
 
 const receiveMail = (sock, message, clients) => {
@@ -104,7 +117,20 @@ const receiveMail = (sock, message, clients) => {
     });
 };
 
+const live = (sock, message, clients) => {
+  if (clients.appSocksByEmail.hasOwnProperty(message.email)) {
+    clients.appSocksByEmail[message.email].sendMessage('live', {
+      mailbox: message.mailbox
+    });
+  } else {
+    // app is offline, stop live
+    sock.sendMessage('stop_live');
+  }
+};
+
+
 module.exports = {
   connect,
-  receiveMail
+  receiveMail,
+  live
 };

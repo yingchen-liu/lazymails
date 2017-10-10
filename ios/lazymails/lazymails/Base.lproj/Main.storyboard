@@ -117,7 +117,7 @@
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="firstCell" id="khU-eJ-0fR" customClass="LazyMailIconViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="khU-eJ-0fR" id="IKt-IO-21j" customClass="CategoryImgViewCell" customModule="lazymails" customModuleProvider="target">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="khU-eJ-0fR" id="IKt-IO-21j">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -140,7 +140,7 @@
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondCell" id="5Al-DL-NS2" customClass="CategoryListViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Al-DL-NS2" id="CaG-6Y-ztO" customClass="CategoryListViewCell" customModule="lazymails" customModuleProvider="target">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Al-DL-NS2" id="CaG-6Y-ztO">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -184,12 +184,13 @@
                                     <outlet property="cateIconImgView" destination="Xna-VL-Izy" id="VOb-F8-IE2"/>
                                     <outlet property="cateNameLabel" destination="FFk-w1-1Aq" id="W8N-m4-ezT"/>
                                     <outlet property="cateUnreadNoLabel" destination="lyz-P8-s2t" id="IWa-OV-K5E"/>
+                                    <segue destination="Jc7-xO-vLp" kind="show" id="yzj-D4-3B9"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="thirdCell" id="rCP-ad-LsR" customClass="CategoryViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="116" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rCP-ad-LsR" id="7Pf-dB-B1K" customClass="CategoryViewCell" customModule="lazymails" customModuleProvider="target">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rCP-ad-LsR" id="7Pf-dB-B1K">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -517,7 +518,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eH6-TP-qPR">
-                                <rect key="frame" x="0.0" y="170" width="375" height="250"/>
+                                <rect key="frame" x="0.0" y="214" width="375" height="250"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="250" id="cOL-OT-fZq"/>
                                 </constraints>
@@ -686,13 +687,13 @@
         <!--MailboxCategory-->
         <scene sceneID="40g-cN-wFz">
             <objects>
-                <tableViewController title="MailboxCategory" id="Jc7-xO-vLp" sceneMemberID="viewController">
+                <tableViewController title="MailboxCategory" id="Jc7-xO-vLp" customClass="OneCategoryViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4fZ-rQ-HyV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="144" id="r7y-QZ-irP">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="oneCategoryCell" rowHeight="144" id="r7y-QZ-irP" customClass="OneCategoryViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="144"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r7y-QZ-irP" id="UoT-qZ-udn">
@@ -701,6 +702,7 @@
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFc-6z-rLS">
                                             <rect key="frame" x="18" y="33" width="50" height="50"/>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="9aZ-JP-DqL"/>
                                                 <constraint firstAttribute="height" constant="50" id="tr9-i9-NnZ"/>
@@ -743,6 +745,7 @@
                                         </imageView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="6vY-Sq-Kvz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UoT-qZ-udn" secondAttribute="leading" constant="20" symbolic="YES" id="1Cv-Fc-UMT"/>
                                         <constraint firstItem="ECa-wg-uma" firstAttribute="top" secondItem="UoT-qZ-udn" secondAttribute="topMargin" constant="8" id="85Y-LB-Zic"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="FSS-rS-R5U" secondAttribute="trailing" constant="10" id="9Lu-cV-7KN"/>
                                         <constraint firstItem="Cm5-r7-8bz" firstAttribute="top" secondItem="FSS-rS-R5U" secondAttribute="bottom" constant="3" id="Ezk-IZ-dZ4"/>
@@ -753,12 +756,17 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="Cm5-r7-8bz" secondAttribute="trailing" constant="10" id="cK6-il-9Iu"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="PJ1-EM-Ckw" secondAttribute="trailing" constant="10" id="eJk-fJ-qE9"/>
                                         <constraint firstItem="ECa-wg-uma" firstAttribute="leading" secondItem="bFc-6z-rLS" secondAttribute="trailing" constant="20" id="eiH-Rr-hji"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ECa-wg-uma" secondAttribute="trailing" constant="20" symbolic="YES" id="jr7-RR-zp5"/>
                                         <constraint firstItem="PJ1-EM-Ckw" firstAttribute="leading" secondItem="6vY-Sq-Kvz" secondAttribute="trailing" constant="10" id="qY7-fe-qSU"/>
                                         <constraint firstItem="PJ1-EM-Ckw" firstAttribute="centerY" secondItem="ECa-wg-uma" secondAttribute="centerY" id="uwX-XY-cbN"/>
                                         <constraint firstItem="FSS-rS-R5U" firstAttribute="leading" secondItem="ECa-wg-uma" secondAttribute="leading" id="yoB-TT-ZMD"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="letterDescription" destination="FSS-rS-R5U" id="eFZ-BM-h4Q"/>
+                                    <outlet property="letterMarkImgView" destination="Cm5-r7-8bz" id="aRa-dF-niS"/>
+                                    <outlet property="letterTitleLabel" destination="ECa-wg-uma" id="8V1-5Y-dWl"/>
+                                    <outlet property="receiveDateLabel" destination="6vY-Sq-Kvz" id="O7H-F7-n3a"/>
                                     <segue destination="nqa-gW-yaq" kind="show" id="FZy-8M-usD"/>
                                 </connections>
                             </tableViewCell>

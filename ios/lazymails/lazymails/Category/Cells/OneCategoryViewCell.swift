@@ -1,5 +1,5 @@
 //
-//  LazyMailIconViewCell.swift
+//  OneCategoryViewCell.swift
 //  lazymails
 //
 //  Created by QIUXIAN CAI on 10/10/17.
@@ -8,8 +8,13 @@
 
 import UIKit
 
-class LazyMailIconViewCell: UITableViewCell {
+class OneCategoryViewCell: UITableViewCell {
 
+    @IBOutlet weak var letterTitleLabel: UILabel!
+    @IBOutlet weak var receiveDateLabel: UILabel!
+    @IBOutlet weak var letterDescription: UILabel!
+    @IBOutlet weak var letterMarkImgView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,5 +25,6 @@ class LazyMailIconViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
 
 }

@@ -1,5 +1,5 @@
 //
-//  CategoryViewController.swift
+//  OneCategoryViewController.swift
 //  lazymails
 //
 //  Created by QIUXIAN CAI on 10/10/17.
@@ -8,10 +8,9 @@
 
 import UIKit
 
-class CategoryViewController: UITableViewController {
+class OneCategoryViewController: UITableViewController {
+
     
-    var readAndImportantList = ["Unread","Important"]
-    var categoryList = ["card","bills","statements"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,55 +30,28 @@ class CategoryViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }else if section == 1 {
-            return readAndImportantList.count
-        }else {
-            return categoryList.count
-            
-        }
+        // #warning Incomplete implementation, return the number of rows
+        return 2
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCell", for: indexPath)
-            //set the data here
-            //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
-           return cell
-        }
-        else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCell", for: indexPath) as! CategoryListViewCell
-            //set the data here
-            cell.cateNameLabel.text = readAndImportantList[indexPath.row]
-        
-            return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "thirdCell", for: indexPath) as! CategoryViewCell
-            //set the data here
-            cell.cateNameLabel.text = categoryList[indexPath.row]
-            return cell
-        }
-       
+        let cell = tableView.dequeueReusableCell(withIdentifier: "oneCategoryCell", for: indexPath) as! OneCategoryViewCell
+
+        // Configure the cell...
+        cell.letterTitleLabel.text = "Myer"
+        cell.receiveDateLabel.text = "9.00am"
+        cell.letterDescription.text = "this is a description of each letters"
+        cell.letterMarkImgView.image =  UIImage(named:"star-outline")
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 140
-        }
-        else if indexPath.section == 1 {
-            return 77
-        }
-        else {
-            return 77
-        }
+        return 120
     }
     
 

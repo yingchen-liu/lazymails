@@ -246,12 +246,12 @@
         <!--MailBoxDetails-->
         <scene sceneID="Bhz-DB-g69">
             <objects>
-                <viewController id="nqa-gW-yaq" userLabel="MailBoxDetails" sceneMemberID="viewController">
+                <viewController id="nqa-gW-yaq" userLabel="MailBoxDetails" customClass="OneCategoryDetailsViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SbZ-Jz-r91">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gHE-e4-N9W">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gHE-e4-N9W">
                                 <rect key="frame" x="0.0" y="44" width="375" height="225"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -360,26 +360,34 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="categoryNameLabel" destination="9lr-Rb-cg5" id="sps-bY-2b6"/>
+                        <outlet property="letterFromLabel" destination="5q9-aX-5Pm" id="EY6-BK-iHe"/>
+                        <outlet property="letterPhotoImgView" destination="gHE-e4-N9W" id="3z6-ya-A4W"/>
+                        <outlet property="letterToLabel" destination="J3G-QM-Re0" id="Be1-kk-i2p"/>
+                        <outlet property="receiveTimeLabel" destination="heF-GW-BjX" id="oRD-So-6OA"/>
+                        <outlet property="websiteAddreLabel" destination="8tj-Pk-t0J" id="GT1-Rp-hA0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5RW-6L-isd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="DMh-lj-QmO">
                     <connections>
-                        <segue destination="tUn-eH-6CA" kind="show" id="rpH-8N-Veh"/>
+                        <segue destination="tUn-eH-6CA" kind="show" id="VFw-gJ-zFC"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-450" y="-28"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Report Issues View Controller-->
         <scene sceneID="DGz-uq-Ucf">
             <objects>
-                <tableViewController id="XmF-YZ-iyx" sceneMemberID="viewController">
+                <tableViewController id="XmF-YZ-iyx" customClass="ReportIssuesViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="s4m-U7-4hx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="72" id="wrg-ee-dMy">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="issuesCell" rowHeight="72" id="wrg-ee-dMy" customClass="IssuesListViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wrg-ee-dMy" id="SrG-pQ-i9U">
@@ -408,6 +416,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="issueTitleLabel" destination="LEB-N0-MKz" id="ZmO-Ug-65D"/>
                                     <segue destination="bof-vz-c7p" kind="show" id="5mQ-dm-Dab"/>
                                 </connections>
                             </tableViewCell>
@@ -439,6 +448,9 @@
                                         <constraint firstItem="sbx-IP-UET" firstAttribute="top" secondItem="va0-hD-LfO" secondAttribute="topMargin" constant="20" id="vTu-ro-Icu"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="vbz-SS-IMM" kind="show" id="jei-5i-6fi"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="72" id="fb9-iV-tb6">
                                 <rect key="frame" x="0.0" y="172" width="375" height="72"/>
@@ -507,12 +519,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ys-xU-ZH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1193" y="-700"/>
+            <point key="canvasLocation" x="1473" y="-988"/>
         </scene>
-        <!--View Controller-->
+        <!--Letter Photo View Controller-->
         <scene sceneID="e8E-iW-AAk">
             <objects>
-                <viewController id="tUn-eH-6CA" sceneMemberID="viewController">
+                <viewController id="tUn-eH-6CA" customClass="LetterPhotoViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4qU-2v-gUi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -536,6 +548,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P23-d4-moS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="354" y="-28"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="5wy-yp-4Qf">
+            <objects>
+                <viewController id="vbz-SS-IMM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sxQ-pY-k8t">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5FV-95-bc5">
+                                <rect key="frame" x="0.0" y="114" width="375" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="A8y-ZY-pwg"/>
+                                    <constraint firstAttribute="width" constant="375" id="U6T-Ov-rlf"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5FV-95-bc5" firstAttribute="trailing" secondItem="pBP-hz-wXe" secondAttribute="trailing" id="2yJ-gq-JqO"/>
+                            <constraint firstItem="5FV-95-bc5" firstAttribute="top" secondItem="pBP-hz-wXe" secondAttribute="top" constant="50" id="Doz-qT-cBN"/>
+                            <constraint firstItem="5FV-95-bc5" firstAttribute="leading" secondItem="pBP-hz-wXe" secondAttribute="leading" id="Njg-UX-xk6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="pBP-hz-wXe"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uFM-mw-2EK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1473" y="-276"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="4Bc-QN-N2G">

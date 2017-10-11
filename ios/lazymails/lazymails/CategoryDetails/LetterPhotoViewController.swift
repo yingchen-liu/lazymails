@@ -1,23 +1,15 @@
 //
-//  OneCategoryDetailsViewController.swift
+//  LetterPhotoViewController.swift
 //  lazymails
 //
-//  Created by QIUXIAN CAI on 10/10/17.
+//  Created by QIUXIAN CAI on 11/10/17.
 //  Copyright © 2017 YINGCHEN LIU. All rights reserved.
 //
 
 import UIKit
 
-class OneCategoryDetailsViewController: UIViewController {
+class LetterPhotoViewController: UIViewController {
 
-    
-    @IBOutlet weak var letterPhotoImgView: UIImageView!
-    @IBOutlet weak var receiveTimeLabel: UILabel!
-    @IBOutlet weak var categoryNameLabel: UILabel!
-    @IBOutlet weak var letterFromLabel: UILabel!
-    @IBOutlet weak var letterToLabel: UILabel!
-    @IBOutlet weak var websiteAddreLabel: UILabel!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 

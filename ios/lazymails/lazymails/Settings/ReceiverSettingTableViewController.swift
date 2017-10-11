@@ -9,15 +9,14 @@
 import UIKit
 
 class ReceiverSettingTableViewController: UITableViewController {
+    
+    var receivers = [["firstname": "Yingchen", "lastname": "Liu", "title": "Mr"]]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+//        tableView.allowsSelectionDuringEditing = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,43 +28,74 @@ class ReceiverSettingTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return receivers.count + (isEditing ? 1 : 0)
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "receiverCell", for: indexPath) as! ReceiverSettingTableViewCell
+        
+        if indexPath.row < receivers.count {
+            let receiver = receivers[indexPath.row]
+            cell.nameLabel.text = "\(receiver["firstname"] as! String) \(receiver["lastname"] as! String)"
+            
+            cell.editButton.isHidden = !isEditing
+        } else {
+            cell.nameLabel.text = "Add Receiver"
+            cell.editButton.isHidden = true
+        }
+        
         return cell
     }
-    */
 
-    /*
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        let indexPath = IndexPath(row: receivers.count, section: 0)
+            if indexPath.row < tableView.numberOfRows(inSection: 0) {
+            if editing {
+                tableView.insertRows(at: [indexPath], with: .automatic)
+            } else {
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+        }
+        
+        // Update the view so that it can toggle the edit button
+        tableView.reloadData()
+    }
+    
+    // http://www.ryanwright.me/cookbook/ios/objc/uitableview/add-table-row
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if isEditing {
+            if indexPath.row < receivers.count {
+                return .delete
+            } else {
+                return .insert
+            }
+        } else {
+            return .none
+        }
+    }
 
-    /*
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
+            receivers.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            let controller = storyboard?.instantiateViewController(withIdentifier: "editReceiverTableViewController") as! EditReceiverTableViewController
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
-    */
 
     /*
     // Override to support rearranging the table view.

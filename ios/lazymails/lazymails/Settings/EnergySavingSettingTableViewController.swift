@@ -10,6 +10,8 @@ import UIKit
 
 class EnergySavingSettingTableViewController: UITableViewController {
 
+    @IBOutlet weak var energySavingSwitch: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,7 +23,11 @@ class EnergySavingSettingTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBAction func energySavingSwitchChanged(_ sender: Any) {
+        // TODO: save
+        // energySavingSwitch.isOn
+    }
+    
     /*
     // MARK: - Navigation
 

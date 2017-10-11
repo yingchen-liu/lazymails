@@ -1,5 +1,5 @@
 //
-//  ReceiverSettingTableViewCell.swift
+//  AddressSettingTableViewCell.swift
 //  lazymails
 //
 //  Created by YINGCHEN LIU on 11/10/17.
@@ -8,12 +8,13 @@
 
 import UIKit
 
-class ReceiverSettingTableViewCell: UITableViewCell {
+class AddressSettingTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var addressLine1Label: UILabel!
+    
+    @IBOutlet weak var addressLine2Label: UILabel!
+    
 
-    @IBOutlet weak var nameLabel: UILabel!
-    
-    @IBOutlet weak var editButton: UIButton!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

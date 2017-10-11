@@ -9,6 +9,8 @@
 import UIKit
 
 class NotificationSettingTableViewController: UITableViewController {
+    
+    var notifications = [["name": "Parcel Collection Cards", "notification": true], ["name": "ADs", "notification": false]]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,23 +31,26 @@ class NotificationSettingTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return notifications.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "notificationCell", for: indexPath) as! NotificationSettingTableViewCell
 
-        // Configure the cell...
+        cell.categoryNameLabel.text = notifications[indexPath.row]["name"] as? String
+        cell.categoryNotificationSwitch.isOn = notifications[indexPath.row]["notification"] as! Bool
 
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
+    }
 
     /*
     // Override to support conditional editing of the table view.

@@ -9,7 +9,14 @@
 import UIKit
 
 class NotificationSettingTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var categoryIconImage: UIImageView!
+    
+    @IBOutlet weak var categoryNameLabel: UILabel!
+    
+    @IBOutlet weak var categoryNotificationSwitch: UISwitch!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

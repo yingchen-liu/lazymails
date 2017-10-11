@@ -10,8 +10,7 @@ import UIKit
 
 class ReportIssuesViewController: UITableViewController {
 
-    var issuesList = ["Incorrect Category","Photo Incorrect Display","Incorrect Recognition"]
-    override func viewDidLoad() {
+        override func viewDidLoad() {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
@@ -35,21 +34,26 @@ class ReportIssuesViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return issuesList.count
+        return 3
     }
 
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "issuesCell", for: indexPath) as! IssuesListViewCell
-
-        // set cell data
-        cell.issueTitleLabel.text = issuesList[indexPath.row]
-        
-        return cell
-    }
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 0 {
+            
+        }
+        if indexPath.row == 1 {
+           
+        }
+        if indexPath.row == 2 {
+            
+        }
     }
     
 

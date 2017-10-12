@@ -17,9 +17,9 @@ extension Receiver {
         return NSFetchRequest<Receiver>(entityName: "Receiver")
     }
 
-    @NSManaged public var firstname: String?
-    @NSManaged public var id: String?
-    @NSManaged public var lastname: String?
-    @NSManaged public var title: String?
+    @NSManaged public var firstname: String
+    @NSManaged public var id: String
+    @NSManaged public var lastname: String
+    @NSManaged public var title: String
 
 }

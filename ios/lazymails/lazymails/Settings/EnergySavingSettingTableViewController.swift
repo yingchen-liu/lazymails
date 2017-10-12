@@ -12,10 +12,15 @@ class EnergySavingSettingTableViewController: UITableViewController {
 
     @IBOutlet weak var energySavingSwitch: UISwitch!
     
+    let setting = Setting.shared
+    
+    var settingTableDelegate: SettingTableDelegate?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        energySavingSwitch.isOn = setting.isEnergySavingOn
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,8 +29,9 @@ class EnergySavingSettingTableViewController: UITableViewController {
     }
     
     @IBAction func energySavingSwitchChanged(_ sender: Any) {
-        // TODO: save
-        // energySavingSwitch.isOn
+        setting.isEnergySavingOn = energySavingSwitch.isOn
+        setting.save()
+        settingTableDelegate?.editEnergySaving()
     }
     
     /*

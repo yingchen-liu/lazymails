@@ -7,7 +7,21 @@
 //
 
 import UIKit
+import CoreData
 
+/**
+ Help easy access to CoreData managed object context
+ */
 class Data: NSObject {
-
+    
+    static let shared = Data()
+    
+    let managedObjectContext: NSManagedObjectContext
+    
+    override init() {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        self.managedObjectContext = (appDelegate?.persistentContainer.viewContext)!
+    }
+    
 }
+

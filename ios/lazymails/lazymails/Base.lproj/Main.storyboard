@@ -542,7 +542,7 @@
         <!--Settings-->
         <scene sceneID="4Bc-QN-N2G">
             <objects>
-                <tableViewController id="KfI-xL-ehO" sceneMemberID="viewController">
+                <tableViewController id="KfI-xL-ehO" customClass="SettingTableViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="zVt-Sz-ied">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -600,7 +600,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="8nQ-rX-qXG" kind="show" id="Icf-1U-lJF"/>
+                                            <segue destination="8nQ-rX-qXG" kind="show" identifier="showEditAddressSegue" id="Icf-1U-lJF"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -642,11 +642,19 @@
                                                         <constraint firstAttribute="width" secondItem="AU6-x2-ShP" secondAttribute="height" multiplier="1:1" id="q9c-hx-CwX"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tb1-w6-gsA">
+                                                    <rect key="frame" x="98" y="46" width="13" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="AU6-x2-ShP" secondAttribute="trailing" constant="8" id="0zl-Y7-fNa"/>
+                                                <constraint firstItem="Tb1-w6-gsA" firstAttribute="top" secondItem="N60-5u-fpn" secondAttribute="bottom" constant="2" id="HAC-L3-VMb"/>
                                                 <constraint firstItem="5fU-lD-ZwD" firstAttribute="top" secondItem="zeb-Zf-8GZ" secondAttribute="topMargin" id="MwS-Ei-sDb"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5fU-lD-ZwD" secondAttribute="trailing" constant="40" id="Q55-T6-3gV"/>
+                                                <constraint firstItem="Tb1-w6-gsA" firstAttribute="leading" secondItem="N60-5u-fpn" secondAttribute="leading" id="VTx-eD-So9"/>
                                                 <constraint firstItem="AU6-x2-ShP" firstAttribute="centerY" secondItem="zeb-Zf-8GZ" secondAttribute="centerY" id="e5K-WE-vCA"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="N60-5u-fpn" secondAttribute="trailing" constant="40" id="f0d-sp-AZU"/>
                                                 <constraint firstItem="5fU-lD-ZwD" firstAttribute="leading" secondItem="nyQ-vl-JFS" secondAttribute="trailing" constant="16" id="h3b-iP-YVC"/>
@@ -657,7 +665,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="OR8-oO-5NR" kind="show" id="QqK-bV-3cV"/>
+                                            <segue destination="OR8-oO-5NR" kind="show" identifier="showReceiverSettingSegue" id="QqK-bV-3cV"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -672,14 +680,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="notification" translatesAutoresizingMaskIntoConstraints="NO" id="nlv-uE-d87">
-                                                    <rect key="frame" x="8" y="8" width="28" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="27.5" height="27.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="nlv-uE-d87" secondAttribute="height" multiplier="1:1" id="5Wv-XM-djq"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNu-w6-Tr7">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNu-w6-Tr7">
                                                     <rect key="frame" x="44" y="12" width="97" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -693,11 +700,13 @@
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="nlv-uE-d87" firstAttribute="leading" secondItem="dII-ew-0qs" secondAttribute="leading" constant="8" id="Dub-rq-1Xb"/>
-                                                <constraint firstAttribute="bottom" secondItem="nlv-uE-d87" secondAttribute="bottom" constant="8" id="JcF-Pl-MYN"/>
-                                                <constraint firstItem="nlv-uE-d87" firstAttribute="top" secondItem="dII-ew-0qs" secondAttribute="top" constant="8" id="iJc-Uj-ftU"/>
+                                                <constraint firstItem="jNu-w6-Tr7" firstAttribute="leading" secondItem="nlv-uE-d87" secondAttribute="trailing" constant="8" id="AKa-fP-FRa"/>
+                                                <constraint firstItem="jNu-w6-Tr7" firstAttribute="centerY" secondItem="dII-ew-0qs" secondAttribute="centerY" id="XCb-s3-9uM"/>
+                                                <constraint firstItem="nlv-uE-d87" firstAttribute="top" secondItem="dII-ew-0qs" secondAttribute="topMargin" id="gzy-mT-WQJ"/>
+                                                <constraint firstItem="nlv-uE-d87" firstAttribute="leading" secondItem="dII-ew-0qs" secondAttribute="leadingMargin" id="k29-9Z-rUe"/>
                                                 <constraint firstItem="zIx-Ln-AUH" firstAttribute="centerY" secondItem="dII-ew-0qs" secondAttribute="centerY" id="old-7m-ydY"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="zIx-Ln-AUH" secondAttribute="trailing" constant="8" id="srA-v5-PNJ"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="nlv-uE-d87" secondAttribute="bottom" id="xq1-cP-GN3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -717,9 +726,8 @@
                                                         <constraint firstAttribute="width" secondItem="9sv-tC-sKD" secondAttribute="height" multiplier="1:1" id="SfV-hP-3fl"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Energy Saving" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Txg-XD-Lgt">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Energy Saving" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Txg-XD-Lgt">
                                                     <rect key="frame" x="43" y="11" width="109" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -731,17 +739,27 @@
                                                         <constraint firstAttribute="width" secondItem="1P7-BJ-pBY" secondAttribute="height" multiplier="1:1" id="u0a-1F-uk4"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vWx-UY-J3e">
+                                                    <rect key="frame" x="312" y="11.5" width="23" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="1P7-BJ-pBY" secondAttribute="trailing" constant="8" id="1gD-7b-Co8"/>
-                                                <constraint firstAttribute="bottom" secondItem="9sv-tC-sKD" secondAttribute="bottom" constant="8" id="Nyo-2T-tt9"/>
+                                                <constraint firstItem="9sv-tC-sKD" firstAttribute="top" secondItem="wJ4-wn-it5" secondAttribute="topMargin" id="5Hz-QF-drI"/>
+                                                <constraint firstItem="Txg-XD-Lgt" firstAttribute="leading" secondItem="9sv-tC-sKD" secondAttribute="trailing" constant="8" id="7PJ-rj-0ol"/>
+                                                <constraint firstItem="Txg-XD-Lgt" firstAttribute="centerY" secondItem="wJ4-wn-it5" secondAttribute="centerY" id="Epo-ht-qBS"/>
+                                                <constraint firstItem="1P7-BJ-pBY" firstAttribute="leading" secondItem="vWx-UY-J3e" secondAttribute="trailing" constant="8" id="F0w-em-8Zx"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="9sv-tC-sKD" secondAttribute="bottom" id="NVd-Eo-Ghm"/>
                                                 <constraint firstItem="1P7-BJ-pBY" firstAttribute="centerY" secondItem="wJ4-wn-it5" secondAttribute="centerY" id="Qsk-Cr-4Kq"/>
-                                                <constraint firstItem="9sv-tC-sKD" firstAttribute="top" secondItem="wJ4-wn-it5" secondAttribute="top" constant="8" id="ZOg-AD-JLe"/>
-                                                <constraint firstItem="9sv-tC-sKD" firstAttribute="leading" secondItem="wJ4-wn-it5" secondAttribute="leading" constant="8" id="yxC-CX-Ga9"/>
+                                                <constraint firstItem="vWx-UY-J3e" firstAttribute="centerY" secondItem="wJ4-wn-it5" secondAttribute="centerY" id="XdX-69-35L"/>
+                                                <constraint firstItem="9sv-tC-sKD" firstAttribute="leading" secondItem="wJ4-wn-it5" secondAttribute="leadingMargin" id="ikf-Ia-zVB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="7Xb-4i-WfV" kind="show" id="w4z-YQ-2cQ"/>
+                                            <segue destination="7Xb-4i-WfV" kind="show" identifier="showEnergySavingSegue" id="w4z-YQ-2cQ"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -753,6 +771,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="Eii-Jx-IeB"/>
+                    <connections>
+                        <outlet property="addressLine1Label" destination="UsB-yG-1DR" id="3hX-iW-nc6"/>
+                        <outlet property="addressLine2Label" destination="6Kf-UG-Fpc" id="dEL-32-6K6"/>
+                        <outlet property="energySavingStatusLabel" destination="vWx-UY-J3e" id="qXD-oV-x1A"/>
+                        <outlet property="receiver1Label" destination="5fU-lD-ZwD" id="iNg-We-Y7M"/>
+                        <outlet property="receiver2Label" destination="N60-5u-fpn" id="Eso-ui-7yX"/>
+                        <outlet property="receiverMoreLabel" destination="Tb1-w6-gsA" id="obT-4B-Ahh"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="twv-fW-mYb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -849,7 +875,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Edit"/>
                                             <connections>
-                                                <segue destination="k2P-0D-OUy" kind="show" id="1vQ-pe-K5R"/>
+                                                <segue destination="k2P-0D-OUy" kind="show" identifier="editReceiverSegue" id="1vQ-pe-K5R"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -990,6 +1016,9 @@
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="firstnameEditingChanged:" destination="k2P-0D-OUy" eventType="editingChanged" id="BQk-tz-Y2u"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -1015,6 +1044,9 @@
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="lastnameEditingChanged:" destination="k2P-0D-OUy" eventType="editingChanged" id="FGa-Z4-DI2"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>

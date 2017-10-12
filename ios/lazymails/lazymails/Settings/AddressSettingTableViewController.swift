@@ -20,6 +20,8 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     var unit: String?
     
     var addresses: [Dictionary<String, String>] = []
+    
+    var settingTableDelegate: SettingTableDelegate?
 
     
     override func viewDidLoad() {
@@ -127,8 +129,12 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
                     
                     let address = Address(unit: self.unit, streetNo: streetNo, streetName: streetName, streetType: streetType, suburb: suburb, state: state, postalCode: postalCode)
                     
-                    // TODO: save
-                    print(address)
+                    let setting = Setting.shared
+                    setting.address = address
+                    setting.save()
+                    
+                    self.settingTableDelegate?.editAddress(address: address)
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
         }

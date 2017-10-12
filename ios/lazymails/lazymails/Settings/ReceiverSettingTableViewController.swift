@@ -8,9 +8,22 @@
 
 import UIKit
 
-class ReceiverSettingTableViewController: UITableViewController {
+protocol ReceiverSettingTableDelegate {
+
+    func addReceiver(receiver: Receiver)
+
+    func editReceiver(receiver: Receiver)
     
-    var receivers = [["firstname": "Yingchen", "lastname": "Liu", "title": "Mr"]]
+}
+
+class ReceiverSettingTableViewController: UITableViewController, ReceiverSettingTableDelegate {
+    
+    var receiverEditIndexPath: IndexPath?
+    
+    var receivers: [Receiver] = []
+    
+    var settingTableDelegate: SettingTableDelegate?
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +54,7 @@ class ReceiverSettingTableViewController: UITableViewController {
         
         if indexPath.row < receivers.count {
             let receiver = receivers[indexPath.row]
-            cell.nameLabel.text = "\(receiver["firstname"] as! String) \(receiver["lastname"] as! String)"
+            cell.nameLabel.text = "\(receiver.firstname) \(receiver.lastname)"
             
             cell.editButton.isHidden = !isEditing
         } else {
@@ -88,11 +101,16 @@ class ReceiverSettingTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            settingTableDelegate?.deleteReceiver(receiver: receivers[indexPath.row])
             receivers.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
         } else if editingStyle == .insert {
             let controller = storyboard?.instantiateViewController(withIdentifier: "editReceiverTableViewController") as! EditReceiverTableViewController
+            
+            controller.isEdit = false
+            controller.receiverSettingTableDelegate = self
+            
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }
@@ -112,14 +130,34 @@ class ReceiverSettingTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "editReceiverSegue" {
+            let button = sender
+            let cell = (button as AnyObject).superview?!.superview! as! ReceiverSettingTableViewCell
+            receiverEditIndexPath = tableView.indexPath(for: cell)
+            
+            let controller = segue.destination as! EditReceiverTableViewController
+            
+            controller.isEdit = true
+            controller.receiver = receivers[receiverEditIndexPath!.row]
+            controller.receiverSettingTableDelegate = self
+        }
     }
-    */
+    
+    func addReceiver(receiver: Receiver) {
+        receivers.append(receiver)
+        tableView.reloadData()
+        settingTableDelegate?.addReceiver(receiver: receiver)
+    }
+    
+    func editReceiver(receiver: Receiver) {
+        tableView.reloadData()
+        settingTableDelegate?.editReceiver(receiver: receiver)
+    }
+    
 
 }

@@ -488,7 +488,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="aIj-nH-iOH" kind="show" id="ofJ-Hl-Cd5"/>
+                                            <segue destination="rrD-uh-lXd" kind="show" id="Xsr-vC-RNt"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -512,14 +512,95 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="IMk-ST-vYD">
+                            <rect key="frame" x="0.0" y="161.5" width="375" height="185"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report issues to us for improvement" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLG-dK-hgT">
+                                    <rect key="frame" x="71" y="25" width="274" height="20"/>
+                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
+                                    <color key="textColor" red="0.2666666667" green="0.34509803919999998" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information, including name and address, in order to improve our app." textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eyq-kB-hA0">
+                                    <rect key="frame" x="30" y="55" width="315" height="45"/>
+                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
+                                    <color key="textColor" red="0.2666666667" green="0.34509803919999998" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ti0-GG-6cY">
+                                    <rect key="frame" x="163" y="137" width="49" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Submit"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="Ln0-qk-HT2" firstAttribute="trailing" secondItem="Eyq-kB-hA0" secondAttribute="trailing" constant="30" id="FtB-gq-gFS"/>
+                                <constraint firstItem="Eyq-kB-hA0" firstAttribute="leading" secondItem="Ln0-qk-HT2" secondAttribute="leading" constant="30" id="IkG-pC-gOO"/>
+                                <constraint firstItem="Ln0-qk-HT2" firstAttribute="trailing" secondItem="aLG-dK-hgT" secondAttribute="trailing" constant="30" id="M2u-4f-HD5"/>
+                                <constraint firstItem="Eyq-kB-hA0" firstAttribute="top" secondItem="aLG-dK-hgT" secondAttribute="bottom" constant="10" id="Qld-vx-PGK"/>
+                                <constraint firstItem="aLG-dK-hgT" firstAttribute="top" secondItem="Ln0-qk-HT2" secondAttribute="top" constant="25" id="nRa-6R-rbT"/>
+                            </constraints>
+                            <viewLayoutGuide key="safeArea" id="Ln0-qk-HT2"/>
+                        </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="hmJ-JS-g5U">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="firstCustomCell" id="hmJ-JS-g5U" customClass="CurrentCategoryViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hmJ-JS-g5U" id="27g-HY-TXi">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TB3-mW-IxP">
+                                            <rect key="frame" x="28" y="18" width="319" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="TB3-mW-IxP" firstAttribute="leading" secondItem="27g-HY-TXi" secondAttribute="leadingMargin" constant="20" id="98t-IC-fYc"/>
+                                        <constraint firstItem="TB3-mW-IxP" firstAttribute="top" secondItem="27g-HY-TXi" secondAttribute="topMargin" constant="10" id="mAD-e7-sgv"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="TB3-mW-IxP" secondAttribute="trailing" constant="20" id="ohE-Zk-mYo"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="currentCategoryLabel" destination="TB3-mW-IxP" id="Qba-CO-R7U"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondCustomCell" id="yxe-dV-ESf" customClass="MoveToCagetoryViewCell" customModule="lazymails" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yxe-dV-ESf" id="ldD-By-dQG">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IhV-fY-BLm">
+                                            <rect key="frame" x="28" y="13" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox" translatesAutoresizingMaskIntoConstraints="NO" id="dhy-Qk-yvr">
+                                            <rect key="frame" x="320" y="8.5" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="Lxo-x1-Y7K"/>
+                                                <constraint firstAttribute="height" constant="30" id="XnG-JQ-Lcm"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="IhV-fY-BLm" firstAttribute="leading" secondItem="ldD-By-dQG" secondAttribute="leadingMargin" constant="20" id="Iwc-RT-5y8"/>
+                                        <constraint firstItem="IhV-fY-BLm" firstAttribute="top" secondItem="ldD-By-dQG" secondAttribute="topMargin" constant="5" id="LrX-a4-dzh"/>
+                                        <constraint firstAttribute="trailing" secondItem="dhy-Qk-yvr" secondAttribute="trailing" constant="25" id="mbn-Df-jFR"/>
+                                        <constraint firstItem="dhy-Qk-yvr" firstAttribute="centerY" secondItem="IhV-fY-BLm" secondAttribute="centerY" id="s2e-Yd-fH1"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="categoryNameLabel" destination="IhV-fY-BLm" id="2Y5-H4-4Jr"/>
+                                    <outlet property="moveCheckBoxImgView" destination="dhy-Qk-yvr" id="j6d-Ha-RGe"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -531,7 +612,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ys-xU-ZH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1535" y="-1374"/>
+            <point key="canvasLocation" x="1533.5999999999999" y="-1374.9625187406298"/>
         </scene>
         <!--Letter Photo View Controller-->
         <scene sceneID="e8E-iW-AAk">
@@ -560,6 +641,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P23-d4-moS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="407" y="81"/>
+        </scene>
+        <!--Incorrect Recognition View Controller-->
+        <scene sceneID="MXK-Gn-BJM">
+            <objects>
+                <tableViewController id="rrD-uh-lXd" customClass="IncorrectRecognitionViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="L1x-uf-cTW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="recognitionCell" rowHeight="69" id="Bo6-Oa-9v1" customClass="IncorrectRecognitionViewCell" customModule="lazymails" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="69"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Bo6-Oa-9v1" id="C0x-cN-ljD">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hq9-F9-XxA">
+                                            <rect key="frame" x="8" y="18" width="44" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="WHERE THE LETTER COMES FROM????" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="30Q-y9-yYl">
+                                            <rect key="frame" x="121.5" y="15" width="253.5" height="37"/>
+                                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
+                                            <color key="textColor" red="0.2666666667" green="0.34509803919999998" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="30Q-y9-yYl" firstAttribute="top" secondItem="C0x-cN-ljD" secondAttribute="topMargin" constant="7" id="2Bj-ED-qMf"/>
+                                        <constraint firstItem="hq9-F9-XxA" firstAttribute="top" secondItem="C0x-cN-ljD" secondAttribute="topMargin" constant="10" id="3Lx-nF-osg"/>
+                                        <constraint firstItem="30Q-y9-yYl" firstAttribute="centerY" secondItem="C0x-cN-ljD" secondAttribute="centerY" id="HPH-hK-lDW"/>
+                                        <constraint firstAttribute="trailing" secondItem="30Q-y9-yYl" secondAttribute="trailing" id="a1M-nf-whG"/>
+                                        <constraint firstItem="hq9-F9-XxA" firstAttribute="leading" secondItem="C0x-cN-ljD" secondAttribute="leadingMargin" id="hsl-Bw-nls"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="rrD-uh-lXd" id="Wq0-E8-cH7"/>
+                            <outlet property="delegate" destination="rrD-uh-lXd" id="QcH-rS-Hj5"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pkD-tS-XI3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1487.2" y="80.50974512743629"/>
         </scene>
         <!--Photo Incorrect View Controller-->
         <scene sceneID="5wy-yp-4Qf">
@@ -633,21 +763,6 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1533.5999999999999" y="-677.81109445277366"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="rSI-q9-Bme">
-            <objects>
-                <viewController id="aIj-nH-iOH" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="asY-CV-Dbx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <viewLayoutGuide key="safeArea" id="tuO-GQ-cpO"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lur-Qe-vfj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1534" y="54"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="4Bc-QN-N2G">
@@ -800,13 +915,13 @@
         <scene sceneID="40g-cN-wFz">
             <objects>
                 <tableViewController title="MailboxCategory" id="Jc7-xO-vLp" customClass="OneCategoryViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4fZ-rQ-HyV">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="4fZ-rQ-HyV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="oneCategoryCell" rowHeight="144" id="r7y-QZ-irP" customClass="OneCategoryViewCell" customModule="lazymails" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="144"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="144"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r7y-QZ-irP" id="UoT-qZ-udn">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="143.5"/>

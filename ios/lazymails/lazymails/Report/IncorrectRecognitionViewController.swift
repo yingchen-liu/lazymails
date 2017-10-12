@@ -1,24 +1,18 @@
 //
-//  MoveCategoryController.swift
+//  IncorrectRecognitionViewController.swift
 //  lazymails
 //
-//  Created by QIUXIAN CAI on 8/10/17.
+//  Created by QIUXIAN CAI on 12/10/17.
 //  Copyright © 2017 YINGCHEN LIU. All rights reserved.
 //
 
 import UIKit
 
-class MoveCategoryController: UITableViewController {
+class IncorrectRecognitionViewController: UITableViewController {
 
-    
-    
-    var categoryList = ["Parcel Collection Card","Normal Letters","Bank Statements","Utility Bills","Others","Ads"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-       
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -34,40 +28,24 @@ class MoveCategoryController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        // #warning Incomplete implementation, return the number of sections
+        return 1
     }
-    
-    
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-    {
-    
-        return "Section \(section)"
-       
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return categoryList.count - 1
-        }else {
-            return 1
-            
-        }
+        // #warning Incomplete implementation, return the number of rows
+        return 3
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "recognitionCell", for: indexPath)
 
         // Configure the cell...
-
+        
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -113,39 +91,5 @@ class MoveCategoryController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    var checked: Int? = nil
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCustomCell", for: indexPath) as! CurrentCategoryViewCell
-            //set the data here
-            //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
-            cell.currentCategoryLabel.text = categoryList[0]
-            return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCustomCell", for: indexPath) as! MoveToCagetoryViewCell
-            //set the data here
-            cell.categoryNameLabel.text = categoryList[indexPath.row]
-            if checked != nil {
-                cell.moveCheckBoxImgView.image = UIImage(named: checked == indexPath.row ? "checkbox-checked" : "checkbox")
-            }
-            return cell
-        }
-        
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if indexPath.section == 1 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCustomCell", for: indexPath) as! MoveToCagetoryViewCell
-//            checked = !checked
-//            cell.moveCheckBoxImgView.image = UIImage(named: checked ? "checkbox-checked" : "checkbox" )
-//        }
-        checked = indexPath.row
-        tableView.reloadData()
-    }
-    
-    
-    
 
 }

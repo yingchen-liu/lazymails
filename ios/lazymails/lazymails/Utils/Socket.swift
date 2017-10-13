@@ -24,7 +24,7 @@ class Socket: NSObject, StreamDelegate {
     
     let maxReadLength = 1024
     
-    let buffer = ""
+    var buffer = ""
     
     let data = Data.shared
     
@@ -121,15 +121,23 @@ class Socket: NSObject, StreamDelegate {
             }
             
             let string = String(bytesNoCopy: buffer, length: bytesRead, encoding: .ascii, freeWhenDone: true)
-            if let string = string?.replacingOccurrences(of: endSymbol, with: "") {
-                if let data = string.data(using: .utf8) {
-                    do {
-                        print("received", string)
-                        let message = try JSONSerialization.jsonObject(with: data, options: []) as! NSDictionary as! Dictionary<String, Any>
-                        print("received message", message)
-                        processMessage(message: message)
-                    } catch {
-                        print("Error occurs when parsing json", error)
+            if let string = string {
+                self.buffer += string
+            }
+            
+            if self.buffer.contains(endSymbol) {
+                let strings = self.buffer.components(separatedBy: endSymbol)
+                self.buffer = strings[strings.count - 1]
+                for i in 0..<strings.count - 1 {
+                    if let data = strings[i].data(using: .utf8) {
+                        do {
+                            print("received", strings[i])
+                            let message = try JSONSerialization.jsonObject(with: data, options: []) as! NSDictionary as! Dictionary<String, Any>
+                            print("received message", message)
+                            processMessage(message: message)
+                        } catch {
+                            print("Error occurs when parsing json", error)
+                        }
                     }
                 }
             }

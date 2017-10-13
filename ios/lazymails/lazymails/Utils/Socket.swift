@@ -124,8 +124,9 @@ class Socket: NSObject, StreamDelegate {
             if let string = string?.replacingOccurrences(of: endSymbol, with: "") {
                 if let data = string.data(using: .utf8) {
                     do {
+                        print("received", string)
                         let message = try JSONSerialization.jsonObject(with: data, options: []) as! NSDictionary as! Dictionary<String, Any>
-                        print("received", message)
+                        print("received message", message)
                         processMessage(message: message)
                     } catch {
                         print("Error occurs when parsing json", error)
@@ -164,16 +165,16 @@ class Socket: NSObject, StreamDelegate {
         }
         
         
-        let addressObject = mailbox["address"] as! NSDictionary as! Dictionary<String, String>
-        let addressUnit = addressObject["unit"]
-        let addressStreetNo = addressObject["number"]
-        let addressStreetName = addressObject["road"]
-        let addressStreetType = addressObject["roadType"]
-        let addressSuburb = addressObject["suburb"]
-        let addressState = addressObject["state"]
-        let addressPostalCode = addressObject["postalCode"]
+        let addressObject = mailbox["address"] as! NSDictionary as! Dictionary<String, Any>
+        let addressUnit = addressObject["unit"] is NSNull ? nil : addressObject["unit"] as? String
+        let addressStreetNo = addressObject["number"] as! String
+        let addressStreetName = addressObject["road"] as! String
+        let addressStreetType = addressObject["roadType"] as! String
+        let addressSuburb = addressObject["suburb"] as! String
+        let addressState = addressObject["state"] as! String
+        let addressPostalCode = addressObject["postalCode"] as! String
         
-        let address = Address(unit: addressUnit, streetNo: addressStreetNo!, streetName: addressStreetName!, streetType: addressStreetType!, suburb: addressSuburb!, state: addressState!, postalCode: addressPostalCode!)
+        let address = Address(unit: addressUnit, streetNo: addressStreetNo, streetName: addressStreetName, streetType: addressStreetType, suburb: addressSuburb, state: addressState, postalCode: addressPostalCode)
         
         setting.address = address
         

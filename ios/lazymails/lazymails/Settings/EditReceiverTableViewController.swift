@@ -27,6 +27,8 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
     
     let data = Data.shared
     
+    let socket = Socket.shared
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +116,13 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
                 try data.save()
             } catch {
                 self.showError(message: "Could not save receiver: \(error)")
+                return
+            }
+        }
+        
+        socket.sendUpdateMailboxMessage { (error, message) in
+            guard error == nil else {
+                self.showError(message: "Error occurs when updating mailbox setting to server: \(error!)")
                 return
             }
         }

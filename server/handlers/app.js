@@ -123,8 +123,9 @@ const updateMailbox = (sock, message, clients) => {
           // also notify other users who own this mailbox
           users.find({ mailbox: user.mailbox })
             .then((users) => {
-              user.map((user) => {
-                if (clients.getSockByClientId(user.email)) {
+              users.map((user) => {
+                // online, not me
+                if (clients.getSockByClientId(user.email) && clients.getClientIdByKey(sock.getClientKey()) !== user.email) {
                   clients.getSockByClientId(user.email).sendMessage('update_mailbox', {
                     mailbox
                   });

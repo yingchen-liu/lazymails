@@ -22,6 +22,8 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     var addresses: [Dictionary<String, String>] = []
     
     var settingTableDelegate: SettingTableDelegate?
+    
+    let socket = Socket.shared
 
     
     override func viewDidLoad() {
@@ -52,7 +54,11 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "addressCell", for: indexPath) as! AddressSettingTableViewCell
-
+        
+        guard indexPath.row < addresses.count else {
+            return cell
+        }
+        
         let address = addresses[indexPath.row]
 
         cell.addressLine1Label.text = address["title"]
@@ -91,6 +97,7 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
                 print("error")
             }
         }
+        tableView.reloadData()
     }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
@@ -112,7 +119,7 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
         geocoder.geocodeAddressString("\(address["title"]!), \(address["subtitle"]!)") { (placemark, error) in
             guard error == nil else {
                 // TODO: show error
-                print("Error occurs when geocode address \(error)")
+                self.showError(message: "Error occurs when geocode address: \(error!)")
                 return
             }
             
@@ -129,6 +136,13 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
                     let setting = Setting.shared
                     setting.address = address
                     setting.save()
+                    
+                    self.socket.sendUpdateMailboxMessage { (error, message) in
+                        guard error == nil else {
+                            self.showError(message: "Error occurs when updating mailbox setting to server: \(error!)")
+                            return
+                        }
+                    }
                     
                     self.settingTableDelegate?.editAddress(address: address)
                     self.navigationController?.popViewController(animated: true)

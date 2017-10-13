@@ -127,6 +127,7 @@ const connect = () => {
     
     sock.sendMessage = (type, message) => {
       message.type = type;
+      console.log('sent', JSON.stringify(message))
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
 

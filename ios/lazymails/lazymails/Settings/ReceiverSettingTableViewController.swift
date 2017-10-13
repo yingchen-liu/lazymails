@@ -26,6 +26,8 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
     
     let data = Data.shared
     
+    let socket = Socket.shared
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,18 +105,24 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            settingTableDelegate?.deleteReceiver(receiver: receivers[indexPath.row])
-            
-            data.delete(object: receivers[indexPath.row])
+            self.data.delete(object: self.receivers[indexPath.row])
             do {
-                try data.save()
+                try self.data.save()
             } catch {
                 self.showError(message: "Could not save receiver: \(error)")
                 return
             }
             
-            receivers.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            self.settingTableDelegate?.deleteReceiver(receiver: self.receivers[indexPath.row])
+            self.receivers.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            socket.sendUpdateMailboxMessage { (error, message) in
+                guard error == nil else {
+                    self.showError(message: "Error occurs when updating mailbox setting to server: \(error!)")
+                    return
+                }
+            }
         } else if editingStyle == .insert {
             let controller = storyboard?.instantiateViewController(withIdentifier: "editReceiverTableViewController") as! EditReceiverTableViewController
             

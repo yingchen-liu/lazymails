@@ -8,25 +8,40 @@
 
 import UIKit
 
-class OneCategoryDetailsViewController: UIViewController {
-
+class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var letterPhotoImgView: UIImageView!
-    @IBOutlet weak var receiveTimeLabel: UILabel!
-    @IBOutlet weak var categoryNameLabel: UILabel!
-    @IBOutlet weak var letterFromLabel: UILabel!
-    @IBOutlet weak var letterToLabel: UILabel!
-    @IBOutlet weak var websiteAddreLabel: UILabel!
-    
+    @IBOutlet weak var categoryDetailsTableView: UITableView!
+    var categoryDetailsList = ["Category:" : "Bills","From:" : "Po Box 6324 WETHERILL PARK NSW 1851","To:" : "MISS QIUXIAN CAI"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        categoryDetailsTableView.dataSource = self
+        categoryDetailsTableView.delegate = self
+        categoryDetailsTableView.estimatedRowHeight = 44
+        categoryDetailsTableView.rowHeight = UITableViewAutomaticDimension
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categoryDetailsList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryDetailsCell")! as! OneCategoryDetailsViewCell
+        
+        var keys = Array(categoryDetailsList.keys)
+        cell.detailsTitleLabel.text = keys[indexPath.row]
+        var values = Array(categoryDetailsList.values)
+        cell.detailsValueLabel.text = values[indexPath.row]
+       return cell
     }
     
 

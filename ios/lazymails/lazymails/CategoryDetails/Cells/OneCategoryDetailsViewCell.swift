@@ -1,18 +1,17 @@
 //
-//  IncorrectRecognitionViewCell.swift
+//  OneCategoryDetailsViewCell.swift
 //  lazymails
 //
-//  Created by QIUXIAN CAI on 12/10/17.
+//  Created by QIUXIAN CAI on 13/10/17.
 //  Copyright © 2017 YINGCHEN LIU. All rights reserved.
 //
 
 import UIKit
 
-class IncorrectRecognitionViewCell: UITableViewCell {
+class OneCategoryDetailsViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    
-    @IBOutlet weak var valueLabel: UILabel!
+    @IBOutlet weak var detailsTitleLabel: UILabel!
+    @IBOutlet weak var detailsValueLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

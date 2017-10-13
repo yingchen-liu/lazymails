@@ -45,7 +45,7 @@ class OneCategoryViewController: UITableViewController {
         // Configure the cell...
         cell.letterTitleLabel.text = "Myer"
         cell.receiveDateLabel.text = "9.00am"
-        cell.letterDescription.text = "this is a description of each letters"
+        cell.letterDescriptionLabel.text = "this is a description of each letters"
         cell.letterMarkImgView.image =  UIImage(named:"star-outline")
         return cell
     }

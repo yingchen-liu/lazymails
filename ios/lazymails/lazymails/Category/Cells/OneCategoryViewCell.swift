@@ -10,9 +10,11 @@ import UIKit
 
 class OneCategoryViewCell: UITableViewCell {
 
+   
+    @IBOutlet weak var letterPhotoImgView: UIImageView!
     @IBOutlet weak var letterTitleLabel: UILabel!
     @IBOutlet weak var receiveDateLabel: UILabel!
-    @IBOutlet weak var letterDescription: UILabel!
+    @IBOutlet weak var letterDescriptionLabel: UILabel!
     @IBOutlet weak var letterMarkImgView: UIImageView!
     
     override func awakeFromNib() {

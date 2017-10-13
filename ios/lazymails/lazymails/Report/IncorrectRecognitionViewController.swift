@@ -10,6 +10,7 @@ import UIKit
 
 class IncorrectRecognitionViewController: UITableViewController {
 
+    var contentList = ["From:": "Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street","To:": "Monash University ","Websites:": "http://www.coolmelb.ml"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,14 +35,18 @@ class IncorrectRecognitionViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return contentList.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "recognitionCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "recognitionCell", for: indexPath) as! IncorrectRecognitionViewCell
 
         // Configure the cell...
+        var keys = Array(contentList.keys)
+        cell.titleLabel.text = keys[indexPath.row]
+        var values = Array(contentList.values)
+        cell.valueLabel.text = values[indexPath.row]
         
         return cell
     }

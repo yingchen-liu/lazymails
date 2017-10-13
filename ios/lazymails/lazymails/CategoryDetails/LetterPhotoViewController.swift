@@ -10,6 +10,7 @@ import UIKit
 
 class LetterPhotoViewController: UIViewController {
 
+    @IBOutlet weak var photoImgView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -34,6 +34,7 @@
 		657663461F8F7C020022EAD2 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657663451F8F7C020022EAD2 /* Data.swift */; };
 		657663481F8F84B60022EAD2 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657663471F8F84B60022EAD2 /* SettingTableViewController.swift */; };
 		6576634A1F8F85EC0022EAD2 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657663491F8F85EC0022EAD2 /* Setting.swift */; };
+		658C84441F8F95E700964B4B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C84431F8F95E700964B4B /* Socket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		657663451F8F7C020022EAD2 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		657663471F8F84B60022EAD2 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		657663491F8F85EC0022EAD2 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		658C84431F8F95E700964B4B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 				6576633D1F8F631A0022EAD2 /* UITextFieldExtension.swift */,
 				6576633F1F8F63E30022EAD2 /* UIViewControllerExtension.swift */,
 				657663451F8F7C020022EAD2 /* Data.swift */,
+				658C84431F8F95E700964B4B /* Socket.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				6526EAD31F83395700CEF2FD /* PageTwoViewController.swift in Sources */,
 				6576634A1F8F85EC0022EAD2 /* Setting.swift in Sources */,
 				6541AD6B1F81E1C6003A28E2 /* AppDelegate.swift in Sources */,
+				658C84441F8F95E700964B4B /* Socket.swift in Sources */,
 				657663461F8F7C020022EAD2 /* Data.swift in Sources */,
 				6576633E1F8F631A0022EAD2 /* UITextFieldExtension.swift in Sources */,
 				6526EAD51F83396A00CEF2FD /* PageThreeViewController.swift in Sources */,

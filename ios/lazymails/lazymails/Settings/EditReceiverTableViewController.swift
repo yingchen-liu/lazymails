@@ -19,7 +19,7 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
     
     var receiver: Receiver?
     
-    let titles = ["Mr", "Miss", "Mrs", "Ms", "Mx"]
+    let titles = ["MR", "MISS", "MRS", "MS", "MX"]
     
     var isEdit = false
     
@@ -39,6 +39,7 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             disableRightButton()
         } else {
             // for editing
+            
             titlePicker.selectRow(titles.index(of: receiver!.title)!, inComponent: 0, animated: false)
             firstnameText.text = receiver?.firstname
             lastnameText.text = receiver?.lastname
@@ -87,13 +88,13 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             // For adding
             
             let uuid = UUID().uuidString
-            let receiver = Receiver.insertNewObject(id: uuid, title: titles[titlePicker.selectedRow(inComponent: 0)], firstname: firstnameText.text!, lastname: lastnameText.text!)
+            let receiver = Receiver.insertNewObject(id: uuid, title: titles[titlePicker.selectedRow(inComponent: 0)], firstname: firstnameText.text!.uppercased(), lastname: lastnameText.text!.uppercased())
                 
             do {
                 try data.save()
                 receiverSettingTableDelegate?.addReceiver(receiver: receiver)
             } catch {
-                if (error.localizedDescription.contains("NSConstraintConflict")) {
+                if (error.localizedDescription.contains("133021")) {
                     self.showError(message: "You already have a receiver with the same name.")
                 } else {
                     self.showError(message: "Could not save receiver: \(error)")
@@ -104,8 +105,8 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             // For editing
             
             receiver?.title = titles[titlePicker.selectedRow(inComponent: 0)]
-            receiver?.firstname = firstnameText.text!
-            receiver?.lastname = lastnameText.text!
+            receiver?.firstname = firstnameText.text!.uppercased()
+            receiver?.lastname = lastnameText.text!.uppercased()
             
             receiverSettingTableDelegate?.editReceiver(receiver: receiver!)
             

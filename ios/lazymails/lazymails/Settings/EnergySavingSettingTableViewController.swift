@@ -16,6 +16,8 @@ class EnergySavingSettingTableViewController: UITableViewController {
     
     var settingTableDelegate: SettingTableDelegate?
     
+    let socket = Socket.shared
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +32,16 @@ class EnergySavingSettingTableViewController: UITableViewController {
     
     @IBAction func energySavingSwitchChanged(_ sender: Any) {
         setting.isEnergySavingOn = energySavingSwitch.isOn
-        setting.save()
-        settingTableDelegate?.editEnergySaving()
+        
+        socket.sendUpdateMailboxMessage { (error, message) in
+            guard error == nil else {
+                self.showError(message: "Error occurs when updating mailbox message to server: \(error!)")
+                return
+            }
+
+            self.setting.save()
+            self.settingTableDelegate?.editEnergySaving()
+        }
     }
     
     /*

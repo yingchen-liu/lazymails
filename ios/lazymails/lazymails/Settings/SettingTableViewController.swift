@@ -147,7 +147,7 @@ class SettingTableViewController: UITableViewController, SettingTableDelegate {
     func showAddress() {
         address = setting.address
         if let address = address {
-            addressLine1Label.text = "\(address.unit != nil ? "Unit \(address.unit!) " : "")\(address.streetNo) \(address.streetName) \(address.streetType)"
+            addressLine1Label.text = "\(address.unit != nil ? "UNIT \(address.unit!) " : "")\(address.streetNo) \(address.streetName) \(address.streetType)"
             addressLine2Label.text = "\(address.suburb), \(address.state) \(address.postalCode)"
         }
     }

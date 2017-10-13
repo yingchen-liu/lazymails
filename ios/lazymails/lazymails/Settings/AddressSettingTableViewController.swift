@@ -55,9 +55,6 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
 
         let address = addresses[indexPath.row]
 
-//        cell.addressLine1Label.text = "\(address.unit != nil ? "Unit \(address.unit!) " : "")\(address.streetNo) \(address.streetName) \(address.streetType)"
-//        cell.addressLine2Label.text = "\(address.suburb) \(address.state), \(address.postalCode)"
-
         cell.addressLine1Label.text = address["title"]
         cell.addressLine2Label.text = address["subtitle"]
         
@@ -98,7 +95,7 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         for result in completer.results {
-            let title = "\(unit != nil ? "Unit \(unit!) " : "")\(result.title)"
+            let title = "\(unit != nil ? "UNIT \(unit!) " : "")\(result.title)"
             addresses.append(["title": title, "subtitle": result.subtitle])
         }
         self.tableView.reloadData()
@@ -122,12 +119,12 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
             if let placemark = placemark {
                 let place = placemark[0]
                 
-                if let streetNo = place.subThoroughfare, let street = place.thoroughfare, let suburb = place.locality, let state = place.administrativeArea, let postalCode = place.postalCode {
+                if let streetNo = place.subThoroughfare, let street = place.thoroughfare?.uppercased(), let suburb = place.locality?.uppercased(), let state = place.administrativeArea?.uppercased(), let postalCode = place.postalCode {
                     
                     let streetName = street.components(separatedBy: " ")[0]
                     let streetType = street.components(separatedBy: " ")[1]
                     
-                    let address = Address(unit: self.unit, streetNo: streetNo, streetName: streetName, streetType: streetType, suburb: suburb, state: state, postalCode: postalCode)
+                    let address = Address(unit: self.unit?.uppercased(), streetNo: streetNo, streetName: streetName, streetType: streetType, suburb: suburb, state: state, postalCode: postalCode)
                     
                     let setting = Setting.shared
                     setting.address = address

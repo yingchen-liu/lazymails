@@ -31,7 +31,7 @@ class Socket: NSObject, StreamDelegate {
     let setting = Setting.shared
     
     var responseCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
-    
+
     
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
@@ -51,6 +51,14 @@ class Socket: NSObject, StreamDelegate {
         outputStream.open()
         
         sendConnectMessage()
+    }
+    
+    func reconnect() {
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (timer) in
+            self.connect()
+            
+            print("Cannot connect to server, reconnect after 3 seconds")
+        })
     }
     
     func sendConnectMessage() {
@@ -76,6 +84,11 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    func sendStartLiveMessage() {
+        let message = ["end": "app", "type": "start_live"]
+        sendMessage(message: message)
+    }
+    
     func sendMessage(message: Dictionary<String, Any>) {
         
         //  https://stackoverflow.com/questions/29625133/convert-dictionary-to-json-in-swift
@@ -98,13 +111,20 @@ class Socket: NSObject, StreamDelegate {
         switch eventCode {
         case Stream.Event.hasBytesAvailable:
             readBytes(stream: aStream as! InputStream)
-            break;
+            break
         case Stream.Event.endEncountered:
-            close();
-            break;
+            print("disconnected")
+            close()
+            reconnect()
+            break
+        case Stream.Event.errorOccurred:
+            print("error")
+            close()
+            reconnect()
+            break
         default:
-            print ("Unspecified event occured")
-            break;
+            print ("Unspecified event occured", eventCode)
+            break
         }
     }
     
@@ -114,13 +134,13 @@ class Socket: NSObject, StreamDelegate {
         while (stream.hasBytesAvailable) {
             let bytesRead = inputStream.read(buffer, maxLength: maxReadLength)
             
-            if (bytesRead < 0) {
+            if (bytesRead <= 0) {
                 if let _ = inputStream.streamError {
                     break
                 }
             }
             
-            let string = String(bytesNoCopy: buffer, length: bytesRead, encoding: .ascii, freeWhenDone: true)
+            let string =  String(bytesNoCopy: buffer, length: bytesRead, encoding: .ascii, freeWhenDone: true)
             if let string = string {
                 self.buffer += string
             }

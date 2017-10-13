@@ -24,6 +24,8 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
     
     var settingTableDelegate: SettingTableDelegate?
     
+    let data = Data.shared
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,9 +104,17 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             settingTableDelegate?.deleteReceiver(receiver: receivers[indexPath.row])
+            
+            data.delete(object: receivers[indexPath.row])
+            do {
+                try data.save()
+            } catch {
+                self.showError(message: "Could not save receiver: \(error)")
+                return
+            }
+            
             receivers.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            
         } else if editingStyle == .insert {
             let controller = storyboard?.instantiateViewController(withIdentifier: "editReceiverTableViewController") as! EditReceiverTableViewController
             

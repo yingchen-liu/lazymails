@@ -25,6 +25,8 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
     
     var receiverSettingTableDelegate: ReceiverSettingTableDelegate?
     
+    let data = Data.shared
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,10 +90,8 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             let receiver = Receiver.insertNewObject(id: uuid, title: titles[titlePicker.selectedRow(inComponent: 0)], firstname: firstnameText.text!, lastname: lastnameText.text!)
                 
             do {
-                try Data.shared.managedObjectContext.save()
-                    
+                try data.save()
                 receiverSettingTableDelegate?.addReceiver(receiver: receiver)
-                
             } catch {
                 if (error.localizedDescription.contains("NSConstraintConflict")) {
                     self.showError(message: "You already have a receiver with the same name.")
@@ -110,7 +110,7 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             receiverSettingTableDelegate?.editReceiver(receiver: receiver!)
             
             do {
-                try Data.shared.managedObjectContext.save()
+                try data.save()
             } catch {
                 self.showError(message: "Could not save receiver: \(error)")
                 return

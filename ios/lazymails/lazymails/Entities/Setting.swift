@@ -28,6 +28,8 @@ class Setting: NSObject {
     
     let preferences = UserDefaults.standard
     
+    var inited = false
+    
     var address: Address?
     
     var isEnergySavingOn = false
@@ -40,12 +42,15 @@ class Setting: NSObject {
             // first time, init default settings
             preferences.set(true, forKey: keys.inited)
             
+            inited = false
             address = Address(unit: "11", streetNo: "919", streetName: "Dandenong", streetType: "Road", suburb: "Malvern East", state: "VIC", postalCode: "3145")
             isEnergySavingOn = false
             
             self.save()
         } else {
             // otherwise, retrieve settings
+            inited = preferences.bool(forKey: keys.inited)
+            
             let addressUnit = preferences.string(forKey: keys.addressUnit)
             let addressStreetNo = preferences.string(forKey: keys.addressStreetNo)!
             let addressStreetName = preferences.string(forKey: keys.addressStreetName)!
@@ -64,6 +69,8 @@ class Setting: NSObject {
      Persistent the settings
      */
     func save() {
+        preferences.set(inited, forKey: keys.inited)
+        
         preferences.set(address?.unit, forKey: keys.addressUnit)
         preferences.set(address?.streetNo, forKey: keys.addressStreetNo)
         preferences.set(address?.streetName, forKey: keys.addressStreetName)

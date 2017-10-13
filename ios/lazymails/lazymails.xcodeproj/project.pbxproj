@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		651EA8BE1F908E1A00FC43BB /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651EA8BD1F908E1A00FC43BB /* MainTabBarViewController.swift */; };
 		6526EACC1F832B8C00CEF2FD /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6526EACB1F832B8C00CEF2FD /* LiveViewController.swift */; };
 		6526EACF1F83337F00CEF2FD /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6526EACE1F83337F00CEF2FD /* OnboardingPageViewController.swift */; };
 		6526EAD11F83394600CEF2FD /* PageOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6526EAD01F83394600CEF2FD /* PageOneViewController.swift */; };
@@ -35,6 +36,7 @@
 		657663481F8F84B60022EAD2 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657663471F8F84B60022EAD2 /* SettingTableViewController.swift */; };
 		6576634A1F8F85EC0022EAD2 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657663491F8F85EC0022EAD2 /* Setting.swift */; };
 		658C84441F8F95E700964B4B /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C84431F8F95E700964B4B /* Socket.swift */; };
+		78AC01E3D4A229A565ECBC9D /* Pods_lazymails.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5579E463D2DCC7F88BF47BD7 /* Pods_lazymails.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lazymails.release.xcconfig"; path = "Pods/Target Support Files/Pods-lazymails/Pods-lazymails.release.xcconfig"; sourceTree = "<group>"; };
+		5579E463D2DCC7F88BF47BD7 /* Pods_lazymails.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lazymails.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		651EA8BD1F908E1A00FC43BB /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		6526EACB1F832B8C00CEF2FD /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		6526EACE1F83337F00CEF2FD /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		6526EAD01F83394600CEF2FD /* PageOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOneViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +85,7 @@
 		657663471F8F84B60022EAD2 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		657663491F8F85EC0022EAD2 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		658C84431F8F95E700964B4B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lazymails.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lazymails/Pods-lazymails.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78AC01E3D4A229A565ECBC9D /* Pods_lazymails.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +107,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27FE5329F9F80FE4DDEFD0F1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5579E463D2DCC7F88BF47BD7 /* Pods_lazymails.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6526EACA1F832B6300CEF2FD /* Live */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +140,8 @@
 				6541AD691F81E1C6003A28E2 /* lazymails */,
 				6541AD831F81E1C6003A28E2 /* lazymailsTests */,
 				6541AD681F81E1C6003A28E2 /* Products */,
+				EE066915E1F2B33EAEECEDF9 /* Pods */,
+				27FE5329F9F80FE4DDEFD0F1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,6 +168,7 @@
 				6541AD781F81E1C6003A28E2 /* LaunchScreen.storyboard */,
 				6541AD7B1F81E1C6003A28E2 /* Info.plist */,
 				6541AD6C1F81E1C6003A28E2 /* lazymails.xcdatamodeld */,
+				651EA8BD1F908E1A00FC43BB /* MainTabBarViewController.swift */,
 			);
 			path = lazymails;
 			sourceTree = "<group>";
@@ -210,6 +228,15 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		EE066915E1F2B33EAEECEDF9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */,
+				3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -217,9 +244,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6541AD891F81E1C6003A28E2 /* Build configuration list for PBXNativeTarget "lazymails" */;
 			buildPhases = (
+				53468EA552E45BF6AA2C6031 /* [CP] Check Pods Manifest.lock */,
 				6541AD631F81E1C6003A28E2 /* Sources */,
 				6541AD641F81E1C6003A28E2 /* Frameworks */,
 				6541AD651F81E1C6003A28E2 /* Resources */,
+				BEE2A05D974FAD00A2F35C7F /* [CP] Embed Pods Frameworks */,
+				E4F279DA7C84233D489EDA78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -308,6 +338,60 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		53468EA552E45BF6AA2C6031 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-lazymails-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BEE2A05D974FAD00A2F35C7F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-lazymails/Pods-lazymails-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSocket.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-lazymails/Pods-lazymails-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4F279DA7C84233D489EDA78 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-lazymails/Pods-lazymails-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6541AD631F81E1C6003A28E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -318,6 +402,7 @@
 				657663401F8F63E30022EAD2 /* UIViewControllerExtension.swift in Sources */,
 				65579FBE1F8D936C00B3F148 /* NotificationSettingTableViewCell.swift in Sources */,
 				657663441F8F789A0022EAD2 /* Receiver+CoreDataProperties.swift in Sources */,
+				651EA8BE1F908E1A00FC43BB /* MainTabBarViewController.swift in Sources */,
 				6526EAD31F83395700CEF2FD /* PageTwoViewController.swift in Sources */,
 				6576634A1F8F85EC0022EAD2 /* Setting.swift in Sources */,
 				6541AD6B1F81E1C6003A28E2 /* AppDelegate.swift in Sources */,
@@ -487,6 +572,7 @@
 		};
 		6541AD8A1F81E1C6003A28E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -502,6 +588,7 @@
 		};
 		6541AD8B1F81E1C6003A28E2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

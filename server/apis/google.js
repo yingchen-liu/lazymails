@@ -134,7 +134,10 @@ const request = (mailBase64, names, address, callback) => {
         {type: 'LABEL_DETECTION', maxResults: 50},
         {type: 'IMAGE_PROPERTIES', maxResults: 50},
         {type: 'TEXT_DETECTION'}
-      ]
+      ],
+      imageContext: {
+        languageHints: ['en']
+      }
     }]
   })
   .then((response) => {
@@ -322,7 +325,10 @@ const requestOrientation = (mailBase64, callback) => {
       },
       features: [
         {type: 'TEXT_DETECTION'}
-      ]
+      ],
+      imageContext: {
+        languageHints: ['en']
+      }
     }]
   })
   .then((response) => {

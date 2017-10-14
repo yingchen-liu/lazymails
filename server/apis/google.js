@@ -8,15 +8,30 @@ const config = require('../config');
 
 
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
-const categories = {
-  ads: {
-    food: ['dish', 'cuisine', 'food', 'fast food'],
-    property: ['house', 'home'],
+// const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
+const categories = [{
+  name: 'food',
+  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza']
+}, {
+  name: 'property',
+  labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
+}];
 
-  },
-  letters: {
+const extractPoBox = (fullText) => {
+  fullText = fullText.split('\n').join(' ');
+  const reg = /po\s*?box.*?(NSW|QLD|SA|TAS|VIC|WA|ACT|JBT|NT)\w*?\s*?\d\d\d\d/gi;
+  const match = reg.exec(fullText);
+  
+  return match ? match[0] : null;
+};
 
-  }
+const extractStamp = (fullText) => {
+  fullText = fullText.split('\n').join(' ');
+  const reg = /po\s*box.*(NSW|QLD|SA|TAS|VIC|WA|ACT|JBT|NT)\s*\d\d\d\d/gi;
+  const match = reg.exec(fullText);
+  
+  console.log(match);
+  return match ? match[0] : null;
 };
 
 const calculateArea = (vertices) => {
@@ -56,6 +71,7 @@ const calculatePostageSimilarity = (query) => {
   a = FuzzySet([], false);
 
   a.add('postage paid australia');
+  a.add('postage paid australia priority');
 
   const result = a.get(query.toLowerCase());
 
@@ -106,52 +122,89 @@ const calculateAddressSimilarity = (query, address) => {
   }
 };
 
-const request = (mail, names, address) => {
-  
-  // https://cloud.google.com/vision/docs/request
-  // https://github.com/mzabriskie/axios
+const request = (mailBase64, names, address, callback) => {
   axios.post(url, {
     requests: [{
       image: {
-        content: mail
+        content: mailBase64
       },
-      features: [{
-        type: 'LABEL_DETECTION'
-      }, {
-        type: 'LOGO_DETECTION'
-      }, {
-        type: 'DOCUMENT_TEXT_DETECTION'
-      }]
+      features: [
+        {type: 'TYPE_UNSPECIFIED', maxResults: 50},
+        {type: 'LOGO_DETECTION', maxResults: 50},
+        {type: 'LABEL_DETECTION', maxResults: 50},
+        {type: 'IMAGE_PROPERTIES', maxResults: 50},
+        {type: 'TEXT_DETECTION'}
+      ],
+      imageContext: {
+        languageHints: ['en']
+      }
     }]
   })
   .then((response) => {
-    const result = response.data.responses[0];
+    const _result = response.data.responses[0];
+    const result = {
+      labels: [],
+      logos: [],
+      category: {},
+      mainText: [],
+      text: '',
+      urls: []
+    };
 
-    if (result.hasOwnProperty('labelAnnotations')) {
-      console.log('labels')
-      labels = result.labelAnnotations;
+    if (_result.hasOwnProperty('labelAnnotations')) {
+      const labels = _result.labelAnnotations;
       labels.map((label) => {
-        console.log(label);
+        result.labels.push({
+          desc: label.description,
+          score: label.score
+        });
+
+        categories.map((category) => {
+          if (category.labels.indexOf(label.description) >= 0) {
+            if (!result.category[category.name]) {
+              result.category[category.name] = 0;
+            }
+            result.category[category.name] += label.score;
+          }
+        });
       });
     }
 
-    if (result.hasOwnProperty('logoAnnotations')) {
-      console.log('logos')
-      logos = result.logoAnnotations;
-      console.log(logos[0].description)
+    if (_result.hasOwnProperty('logoAnnotations')) {
+      const logos = _result.logoAnnotations;
+      logos.map((logo) => {
+        result.logos.push({
+          desc: logo.description,
+          score: logo.score
+        });
+      });
     }
 
-    if (result.hasOwnProperty('fullTextAnnotation')) {
-      console.log('fullText')
-      fullText = result.fullTextAnnotation;
-      console.log(fullText);
+    if (_result.hasOwnProperty('fullTextAnnotation')) {
+      const fullText = _result.fullTextAnnotation;
 
       var nameSimilarity = 0.0;
       var addressSimilarity = 0.0;
       var paragraphRates = [];
 
-      console.log('blocks')
-      blocks = fullText.pages[0].blocks
+      // for detecting image orientation
+      var lastX = [];
+      var lastY = [];
+      const orientationInfo = [{
+        type: 'xIncrease',
+        n: 0
+      }, {
+        type: 'xDecrease',
+        n: 0
+      }, {
+        type: 'yIncrease',
+        n: 0
+      }, {
+        type: 'yDecrease',
+        n: 0
+      }];
+
+      const blocks = fullText.pages[0].blocks
       blocks.map((block) => {
         // console.log(block)
         block.paragraphs.map((paragraph) => {
@@ -177,16 +230,51 @@ const request = (mail, names, address) => {
 
           // filter useless text
           if (postageSimilarity <= 0.5 && // remove postage paid australia
-            text.length >= 3 && // remove too short text
+            text.length >= 3 /*&& // remove too short text
             nameSimilarity <= 0.5 &&  // remove name
-            addressSimilarity <= 0.5) { // remove address
+            addressSimilarity <= 0.5*/) { // remove address
 
             console.log(text);
+            const box = paragraph.boundingBox.vertices;
+            const center = {
+              x: (box[0].x + box[1].x + box[2].x + box[3].x) / 4,
+              y: (box[0].y + box[1].y + box[2].y + box[3].y) / 4
+            };
+            
+            // for detecting image orientation
+            if (lastX.length !== 0) {
+              box.map((box, i) => {
+                if (box.x - lastX[i] >= 0) {
+                  orientationInfo[0].n++;
+                } else {
+                  orientationInfo[1].n++;
+                }
+
+                if (box.y - lastY[i] >= 0) {
+                  orientationInfo[2].n++;
+                } else {
+                  orientationInfo[3].n++;
+                }
+              });
+            }
+            box.map((box, i) => {
+              lastX[i] = box.x;
+              lastY[i] = box.y;
+            });
+            
+
+            result.text += text + '\n';
 
             // http://alexcorvi.github.io/anchorme.js/
-            const links = anchorme(text);
-            if (links !== text) {
-              console.log('> url', links)
+            const link = anchorme(text);
+            if (link !== text) {
+              const reg = /href="(.*?)"/g
+
+              var match = reg.exec(link);
+              while (match != null) {
+                result.urls.push(match[1]);
+                match = reg.exec(link);
+              }
             }
 
             paragraphRates.push({
@@ -194,7 +282,7 @@ const request = (mail, names, address) => {
               rate: calculateArea(paragraph.boundingBox.vertices) / text.length
             })
           } else {
-            console.log('> ignored ', text)
+            // console.log('> ignored ', text)
           }
         });
       });
@@ -204,19 +292,136 @@ const request = (mail, names, address) => {
         return b.rate - a.rate; // desc
       });
       for (let i = 0; i < Math.min(3, paragraphRates.length); i++) {
-        console.log('> main text', paragraphRates[i].text);
+        result.mainText.push(paragraphRates[i]);
       }
 
-      console.log('> address', addressSimilarity, 'name', nameSimilarity);
+      // name and address
+      result.addressSimilarity = addressSimilarity;
+      result.nameSimilarity = nameSimilarity;
+
+      // po box
+      result.poBox = extractPoBox(result.text);
     }
-    
+
+    return callback(null, result);
   })
   .catch((error) => {
-    console.error(error);
+    if (error.response) {
+      return callback(error.response.data.error);
+    } else {
+      return callback(rror.message);
+    }
+  });
+};
+
+const requestOrientation = (mailBase64, callback) => {
+
+  // https://cloud.google.com/vision/docs/request
+  // https://github.com/mzabriskie/axios
+  axios.post(url, {
+    requests: [{
+      image: {
+        content: mailBase64
+      },
+      features: [
+        {type: 'TEXT_DETECTION'}
+      ],
+      imageContext: {
+        languageHints: ['en']
+      }
+    }]
+  })
+  .then((response) => {
+    const _result = response.data.responses[0];
+
+    if (_result.hasOwnProperty('fullTextAnnotation')) {
+      const fullText = _result.fullTextAnnotation;
+
+      // for detecting image orientation
+      var lastX = [];
+      var lastY = [];
+      const orientationInfo = [{
+        type: 'xIncrease',
+        n: 0
+      }, {
+        type: 'xDecrease',
+        n: 0
+      }, {
+        type: 'yIncrease',
+        n: 0
+      }, {
+        type: 'yDecrease',
+        n: 0
+      }];
+
+      const blocks = fullText.pages[0].blocks
+      blocks.map((block) => {
+        block.paragraphs.map((paragraph) => {
+          const box = paragraph.boundingBox.vertices;
+          
+          // for detecting image orientation
+          if (lastX.length !== 0) {
+            box.map((box, i) => {
+              if (box.x - lastX[i] >= 0) {
+                orientationInfo[0].n++;
+              } else {
+                orientationInfo[1].n++;
+              }
+
+              if (box.y - lastY[i] >= 0) {
+                orientationInfo[2].n++;
+              } else {
+                orientationInfo[3].n++;
+              }
+            });
+          }
+          box.map((box, i) => {
+            lastX[i] = box.x;
+            lastY[i] = box.y;
+          });
+        });
+      });
+
+      // orientation
+      var rotateDeg = 0;
+      orientationInfo.sort((a, b) => {
+        return b.n - a.n;
+      });
+
+      switch (orientationInfo[0].type) {
+        case 'yIncrease':
+          rotateDeg = 0;
+          break;
+        case 'xIncrease':
+          rotateDeg = 90;
+          break;
+        case 'yDecrease':
+          rotateDeg = 180;
+          break;
+        case 'xDecrease':
+          rotateDeg = 270;
+          break;
+        default:
+          rotateDeg = 0;
+          break;
+      }
+
+      return callback(null, rotateDeg);
+    }
+    
+    return callback(null, 0);
+  })
+  .catch((error) => {
+    if (error.response) {
+      return callback(error.response.data.error);
+    } else {
+      return callback(rror.message);
+    }
   });
 };
 
 
 module.exports = {
+  requestOrientation,
   request
 };

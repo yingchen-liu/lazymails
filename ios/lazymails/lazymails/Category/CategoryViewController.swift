@@ -70,15 +70,16 @@ class CategoryViewController: UITableViewController {
        
     }
     
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 16
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 140
         }
-        else if indexPath.section == 1 {
-            return 77
-        }
         else {
-            return 77
+            return 44
         }
     }
     

@@ -23,5 +23,16 @@ class Data: NSObject {
         self.managedObjectContext = (appDelegate?.persistentContainer.viewContext)!
     }
     
+    func delete(object: NSManagedObject) {
+        managedObjectContext.delete(object)
+    }
+    
+    func save() throws {
+        do {
+            try managedObjectContext.save()
+        } catch {
+            throw error
+        }
+    }
 }
 

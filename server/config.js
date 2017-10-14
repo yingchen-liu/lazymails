@@ -23,7 +23,7 @@ const config = {
       url: 'mongodb://localhost:27017/lazymails'
     },
     socket: {
-      host: '0.0.0.0',
+      host: '192.168.0.3',
       port: 6969
     }
   }

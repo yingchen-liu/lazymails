@@ -49,7 +49,7 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCell", for: indexPath) as! LazyMailIconViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCell", for: indexPath)
             //set the data here
             //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
            return cell

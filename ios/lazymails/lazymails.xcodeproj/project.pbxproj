@@ -48,10 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-<<<<<<< HEAD
 		5579E463D2DCC7F88BF47BD7 /* Pods_lazymails.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lazymails.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		651EA8BD1F908E1A00FC43BB /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
-=======
 		1859CD151F90AF6200F01FE6 /* OneCategoryDetailsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCategoryDetailsViewCell.swift; sourceTree = "<group>"; };
 		18B348541F8EFBFF002B3F9E /* CurrentCategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentCategoryViewCell.swift; sourceTree = "<group>"; };
 		18B348561F8EFC14002B3F9E /* MoveToCagetoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToCagetoryViewCell.swift; sourceTree = "<group>"; };
@@ -70,7 +68,6 @@
 		18EC13231F8E15D600EC9CBC /* IssuesListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListViewCell.swift; sourceTree = "<group>"; };
 		18EC13251F8E228600EC9CBC /* PhotoIncorrectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoIncorrectViewController.swift; sourceTree = "<group>"; };
 		18F7BD201F8A50D700E91760 /* MoveCategoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCategoryController.swift; sourceTree = "<group>"; };
->>>>>>> MailBoxDetails
 		6526EACB1F832B8C00CEF2FD /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		6526EACE1F83337F00CEF2FD /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		6526EAD01F83394600CEF2FD /* PageOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOneViewController.swift; sourceTree = "<group>"; };
@@ -85,7 +82,6 @@
 		6541AD801F81E1C6003A28E2 /* lazymailsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = lazymailsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6541AD841F81E1C6003A28E2 /* lazymailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lazymailsTests.swift; sourceTree = "<group>"; };
 		6541AD861F81E1C6003A28E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		65579FB81F8D918C00B3F148 /* EnergySavingSettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergySavingSettingTableViewController.swift; sourceTree = "<group>"; };
 		65579FBA1F8D91CD00B3F148 /* NotificationSettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingTableViewController.swift; sourceTree = "<group>"; };
 		65579FBD1F8D936C00B3F148 /* NotificationSettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingTableViewCell.swift; sourceTree = "<group>"; };
@@ -103,8 +99,6 @@
 		657663471F8F84B60022EAD2 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		657663491F8F85EC0022EAD2 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		658C84431F8F95E700964B4B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
-=======
->>>>>>> MailBoxDetails
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,10 +214,7 @@
 				6541AD691F81E1C6003A28E2 /* lazymails */,
 				6541AD831F81E1C6003A28E2 /* lazymailsTests */,
 				6541AD681F81E1C6003A28E2 /* Products */,
-<<<<<<< HEAD
 				27FE5329F9F80FE4DDEFD0F1 /* Frameworks */,
-=======
->>>>>>> MailBoxDetails
 			);
 			sourceTree = "<group>";
 		};
@@ -263,7 +254,6 @@
 			path = lazymailsTests;
 			sourceTree = "<group>";
 		};
-<<<<<<< HEAD
 		65579FB71F8D911A00B3F148 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,8 +300,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-=======
->>>>>>> MailBoxDetails
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */

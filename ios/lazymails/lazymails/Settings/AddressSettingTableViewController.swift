@@ -102,7 +102,7 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         for result in completer.results {
-            let title = "\(unit != nil ? "UNIT \(unit!) " : "")\(result.title)"
+            let title = "\(unit != nil ? "Unit \(unit!) " : "")\(result.title)"
             addresses.append(["title": title, "subtitle": result.subtitle])
         }
         self.tableView.reloadData()

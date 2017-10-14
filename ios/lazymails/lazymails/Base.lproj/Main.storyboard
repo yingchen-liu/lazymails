@@ -217,17 +217,14 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="next" translatesAutoresizingMaskIntoConstraints="NO" id="JUh-LC-wiQ">
-                                            <rect key="frame" x="347" y="12" width="20" height="20"/>
+                                            <rect key="frame" x="351" y="14" width="16" height="16"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="AbP-wx-XQR"/>
-                                                <constraint firstAttribute="height" constant="20" id="QaE-sE-olh"/>
+                                                <constraint firstAttribute="width" constant="16" id="AbP-wx-XQR"/>
                                                 <constraint firstAttribute="width" secondItem="JUh-LC-wiQ" secondAttribute="height" multiplier="1:1" id="tqB-O9-Sgp"/>
-                                                <constraint firstAttribute="width" constant="20" id="y82-qD-3h6"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="JUh-LC-wiQ" secondAttribute="trailing" constant="10" id="EcW-pV-QTe"/>
                                         <constraint firstItem="eSk-tB-8gS" firstAttribute="leading" secondItem="7Pf-dB-B1K" secondAttribute="leadingMargin" id="QOd-rO-5Hd"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="JUh-LC-wiQ" secondAttribute="trailing" id="Qlt-bP-LpA"/>
                                         <constraint firstItem="JUh-LC-wiQ" firstAttribute="centerY" secondItem="7Pf-dB-B1K" secondAttribute="centerY" id="WXA-bN-BD0"/>

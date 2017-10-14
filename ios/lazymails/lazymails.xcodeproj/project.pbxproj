@@ -50,7 +50,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lazymails.release.xcconfig"; path = "Pods/Target Support Files/Pods-lazymails/Pods-lazymails.release.xcconfig"; sourceTree = "<group>"; };
 		5579E463D2DCC7F88BF47BD7 /* Pods_lazymails.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lazymails.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		651EA8BD1F908E1A00FC43BB /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		6526EACB1F832B8C00CEF2FD /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
@@ -85,7 +84,6 @@
 		657663471F8F84B60022EAD2 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		657663491F8F85EC0022EAD2 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		658C84431F8F95E700964B4B /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
-		DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lazymails.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lazymails/Pods-lazymails.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +138,6 @@
 				6541AD691F81E1C6003A28E2 /* lazymails */,
 				6541AD831F81E1C6003A28E2 /* lazymailsTests */,
 				6541AD681F81E1C6003A28E2 /* Products */,
-				EE066915E1F2B33EAEECEDF9 /* Pods */,
 				27FE5329F9F80FE4DDEFD0F1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -226,15 +223,6 @@
 				658C84431F8F95E700964B4B /* Socket.swift */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		EE066915E1F2B33EAEECEDF9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */,
-				3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -572,7 +560,6 @@
 		};
 		6541AD8A1F81E1C6003A28E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA545694EE44C3DB17290051 /* Pods-lazymails.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -588,7 +575,6 @@
 		};
 		6541AD8B1F81E1C6003A28E2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B73ECA6218D637ABFB5AD30 /* Pods-lazymails.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

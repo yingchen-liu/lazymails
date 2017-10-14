@@ -32,6 +32,10 @@ class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource,
         return 1
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 16
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryDetailsList.count
     }

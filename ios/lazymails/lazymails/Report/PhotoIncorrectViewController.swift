@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotoIncorrectViewController: UIViewController {
+class PhotoIncorrectViewController: UITableViewController {
 
     @IBOutlet weak var checkboxImgView: UIImageView!
     

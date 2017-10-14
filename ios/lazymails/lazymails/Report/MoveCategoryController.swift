@@ -16,14 +16,6 @@ class MoveCategoryController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-       
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,26 +28,24 @@ class MoveCategoryController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-    
-    
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-    {
-    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Section \(section)"
-       
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return 18
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
             return categoryList.count - 1
-        }else {
+        } else {
             return 1
-            
         }
     }
 
@@ -116,15 +106,13 @@ class MoveCategoryController: UITableViewController {
     var checked: Int? = nil
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCustomCell", for: indexPath) as! CurrentCategoryViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "currentCategoryCell", for: indexPath) as! CurrentCategoryViewCell
             //set the data here
             //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
             cell.currentCategoryLabel.text = categoryList[0]
             return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCustomCell", for: indexPath) as! MoveToCagetoryViewCell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "targetCategoryCell", for: indexPath) as! MoveToCagetoryViewCell
             //set the data here
             cell.categoryNameLabel.text = categoryList[indexPath.row]
             if checked != nil {
@@ -137,7 +125,7 @@ class MoveCategoryController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        if indexPath.section == 1 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCustomCell", for: indexPath) as! MoveToCagetoryViewCell
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "targetCategoryCell", for: indexPath) as! MoveToCagetoryViewCell
 //            checked = !checked
 //            cell.moveCheckBoxImgView.image = UIImage(named: checked ? "checkbox-checked" : "checkbox" )
 //        }

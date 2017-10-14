@@ -11,10 +11,17 @@ import UIKit
 class LetterPhotoViewController: UIViewController {
 
     @IBOutlet weak var photoImgView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let imageTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        photoImgView.isUserInteractionEnabled = true
+        photoImgView.addGestureRecognizer(imageTapGestureRecognizer)
+    }
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        dismiss(animated: true) { }
     }
 
     override func didReceiveMemoryWarning() {

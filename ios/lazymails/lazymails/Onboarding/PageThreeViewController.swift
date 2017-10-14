@@ -10,10 +10,30 @@ import UIKit
 
 class OnboardingPageThreeViewController: UIViewController {
 
+    @IBOutlet weak var getStartedButton: UIButton!
+    
+    @IBOutlet weak var checkboxImage: UIImageView!
+    
+    var checked = false
+    
+    let setting = Setting.shared
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        getStartedButton.layer.cornerRadius = 5
+        getStartedButton.backgroundColor = UIColor.lightGray
+        
+        let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        checkboxImage.isUserInteractionEnabled = true
+        checkboxImage.addGestureRecognizer(checkboxTapGestureRecognizer)
+    }
+    
+    @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        checked = !checked
+        checkboxImage.image = UIImage(named: checked ? "checkbox-checked" : "checkbox")
+        getStartedButton.backgroundColor = checked ? UIColor(red: 122.0/255, green: 195.0/255, blue: 246.0/255, alpha: 1) : UIColor.lightGray
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,14 +42,21 @@ class OnboardingPageThreeViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+ 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "getStartedSegue" {
+            setting.inited = true
+            setting.save()
+        }
     }
-    */
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "getStartedSegue" {
+            return checked
+        }
+        return true
+    }
 
 }

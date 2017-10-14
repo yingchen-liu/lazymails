@@ -66,6 +66,15 @@ class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDa
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        for subView in view.subviews {
+            if subView is UIPageControl {
+                subView.frame.origin.y = self.view.frame.size.height - 164
+            }
+        }
+    }
+    
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return 3
     }

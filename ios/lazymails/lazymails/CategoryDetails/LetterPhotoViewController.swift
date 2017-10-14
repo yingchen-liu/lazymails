@@ -14,6 +14,8 @@ class LetterPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //      https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
 
         let imageTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         photoImgView.isUserInteractionEnabled = true

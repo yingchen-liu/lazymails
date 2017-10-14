@@ -122,26 +122,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="jjx-rf-ktS">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue" translatesAutoresizingMaskIntoConstraints="NO" id="oAO-ZR-CPH">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="oAO-ZR-CPH" secondAttribute="trailing" id="3A6-Q3-IfS"/>
+                                <constraint firstItem="oAO-ZR-CPH" firstAttribute="leading" secondItem="jjx-rf-ktS" secondAttribute="leading" id="G0L-VU-uIj"/>
+                                <constraint firstAttribute="bottom" secondItem="oAO-ZR-CPH" secondAttribute="bottom" id="YvK-e6-dpk"/>
+                                <constraint firstItem="oAO-ZR-CPH" firstAttribute="top" secondItem="jjx-rf-ktS" secondAttribute="top" id="hnq-NE-OTQ"/>
+                            </constraints>
+                        </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="firstCell" rowHeight="140" id="khU-eJ-0fR" customClass="LazyMailIconViewCell" customModule="lazymails" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="140"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="khU-eJ-0fR" id="IKt-IO-21j">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="139.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue" translatesAutoresizingMaskIntoConstraints="NO" id="79e-6O-mtK">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
-                                        </imageView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="79e-6O-mtK" secondAttribute="trailing" id="1Xt-Z5-org"/>
-                                        <constraint firstItem="79e-6O-mtK" firstAttribute="leading" secondItem="IKt-IO-21j" secondAttribute="leading" id="9yk-Cs-QSF"/>
-                                        <constraint firstAttribute="bottom" secondItem="79e-6O-mtK" secondAttribute="bottom" id="Edx-bq-aye"/>
-                                        <constraint firstItem="79e-6O-mtK" firstAttribute="top" secondItem="IKt-IO-21j" secondAttribute="top" id="scr-IR-lTL"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondCell" rowHeight="44" id="5Al-DL-NS2" customClass="CategoryListViewCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="168" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
@@ -481,7 +478,7 @@
             </objects>
             <point key="canvasLocation" x="646" y="-396"/>
         </scene>
-        <!--Move Category Controller-->
+        <!--Incorrect Category-->
         <scene sceneID="S21-uZ-cjG">
             <objects>
                 <tableViewController id="bof-vz-c7p" customClass="MoveCategoryController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
@@ -619,6 +616,7 @@
                             <outlet property="delegate" destination="bof-vz-c7p" id="5Nc-nE-X6w"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Incorrect Category" id="McT-dW-ctb"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ys-xU-ZH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -656,7 +654,7 @@
             </objects>
             <point key="canvasLocation" x="646" y="385"/>
         </scene>
-        <!--Incorrect Recognition View Controller-->
+        <!--Incorrect Recognition-->
         <scene sceneID="MXK-Gn-BJM">
             <objects>
                 <tableViewController id="rrD-uh-lXd" customClass="IncorrectRecognitionViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
@@ -757,12 +755,13 @@
                             <outlet property="delegate" destination="rrD-uh-lXd" id="QcH-rS-Hj5"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Incorrect Recognition" id="goC-Pt-Goz"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pkD-tS-XI3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1774" y="385"/>
         </scene>
-        <!--Photo Incorrect View Controller-->
+        <!--Photo Incorrect Display-->
         <scene sceneID="n7U-hz-vgy">
             <objects>
                 <tableViewController id="Bjf-cu-JDw" customClass="PhotoIncorrectViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
@@ -848,6 +847,7 @@
                             <outlet property="delegate" destination="Bjf-cu-JDw" id="o3P-N8-piM"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Photo Incorrect Display" id="exD-YO-hOv"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60Z-jz-2fZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

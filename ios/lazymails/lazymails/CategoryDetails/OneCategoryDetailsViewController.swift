@@ -11,6 +11,8 @@ import UIKit
 class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var categoryDetailsTableView: UITableView!
+    @IBOutlet weak var letterPhotoImgView: UIImageView!
+    
     var categoryDetailsList = ["Category:" : "Bills","From:" : "Po Box 6324 WETHERILL PARK NSW 1851","To:" : "MISS QIUXIAN CAI"]
     override func viewDidLoad() {
         super.viewDidLoad()

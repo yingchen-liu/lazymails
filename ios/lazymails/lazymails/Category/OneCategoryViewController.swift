@@ -13,6 +13,8 @@ class OneCategoryViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.estimatedRowHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -45,7 +47,7 @@ class OneCategoryViewController: UITableViewController {
         // Configure the cell...
         cell.letterTitleLabel.text = "Myer"
         cell.receiveDateLabel.text = "9.00am"
-        cell.letterDescriptionLabel.text = "this is a description of each letters"
+        cell.letterDescriptionLabel.text = "This is a description of each letters! This is a description of each letters"
         cell.letterMarkImgView.image =  UIImage(named:"star-outline")
         return cell
     }

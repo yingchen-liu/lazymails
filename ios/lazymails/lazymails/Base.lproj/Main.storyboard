@@ -40,12 +40,6 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:25" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pNe-P6-OFx">
-                                <rect key="frame" x="316" y="20" width="43" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="VKB-Xu-ZIg">
                                 <rect key="frame" x="177.5" y="323" width="20" height="20"/>
                             </activityIndicatorView>
@@ -75,19 +69,17 @@
                             <constraint firstItem="VKB-Xu-ZIg" firstAttribute="centerY" secondItem="k7p-Fl-qix" secondAttribute="centerY" id="VEZ-KI-YGv"/>
                             <constraint firstItem="QYL-dC-egG" firstAttribute="leading" secondItem="HUn-aW-dj8" secondAttribute="leading" id="bw2-kx-w24"/>
                             <constraint firstItem="VKB-Xu-ZIg" firstAttribute="centerX" secondItem="k7p-Fl-qix" secondAttribute="centerX" id="c0N-Wm-xbb"/>
-                            <constraint firstItem="pNe-P6-OFx" firstAttribute="top" secondItem="k7p-Fl-qix" secondAttribute="topMargin" id="kij-LQ-e5C"/>
                             <constraint firstItem="a6Q-aC-bo9" firstAttribute="leading" secondItem="Coo-l0-OAL" secondAttribute="trailing" constant="2" id="mQW-FH-hog"/>
-                            <constraint firstItem="HUn-aW-dj8" firstAttribute="trailing" secondItem="pNe-P6-OFx" secondAttribute="trailing" constant="16" id="yrZ-Q4-Hu0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HUn-aW-dj8"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Live" image="camera" id="O7W-lk-Zy4"/>
                     <navigationItem key="navigationItem" id="bts-BV-42r"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="VKB-Xu-ZIg" id="mPG-ao-gHQ"/>
                         <outlet property="liveImageView" destination="QYL-dC-egG" id="QcL-Tn-WEA"/>
                         <outlet property="loadingDotsLabel" destination="a6Q-aC-bo9" id="dx3-9x-HUb"/>
                         <outlet property="loadingLabel" destination="Coo-l0-OAL" id="Yc1-Qh-RUo"/>
-                        <outlet property="timeLabel" destination="pNe-P6-OFx" id="Ulj-bx-7XS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YPv-dp-dc2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1144,7 +1136,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="F3D-tM-MYe" kind="show" id="qyM-8o-yh7"/>
+                                    <segue destination="F3D-tM-MYe" kind="show" identifier="getStartedSegue" id="qyM-8o-yh7"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information and send photo of your letters to Google for recognition." lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68T-ZR-aVx">

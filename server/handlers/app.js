@@ -147,11 +147,11 @@ const updateMailbox = (sock, message, clients) => {
 
 // TODO: to be tested
 const startLive = (sock, message, clients) => {
-  users.findOne({ email: clients.apps[sock].email })
+  users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
       if (clients.getSockByClientId(user.mailbox)) {
         clients.getSockByClientId(user.mailbox).sendMessage('start_live', {
-          email: clients.apps[sock].email
+          email: clients.getClientIdByKey(sock.getClientKey())
         });
       }
     })
@@ -162,11 +162,11 @@ const startLive = (sock, message, clients) => {
 
 // TODO: to be tested
 const stopLive = (sock, message, clients) => {
-  users.findOne({ email: clients.apps[sock].email })
+  users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
       if (clients.getSockByClientId(user.mailbox)) {
         clients.getSockByClientId(user.mailbox).sendMessage('stop_live', {
-          email: clients.apps[sock].email
+          email: clients.getClientIdByKey(sock.getClientKey())
         });
       }
     })
@@ -177,11 +177,11 @@ const stopLive = (sock, message, clients) => {
 
 // TODO: to be tested
 const liveHeartbeat = (sock, message, clients) => {
-  users.findOne({ email: clients.apps[sock].email })
+  users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
       if (clients.getSockByClientId(user.mailbox)) {
         clients.getSockByClientId(user.mailbox).sendMessage('live_heartbeat', {
-          email: clients.apps[sock].email
+          email: clients.getClientIdByKey(sock.getClientKey())
         });
       }
     })

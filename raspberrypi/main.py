@@ -16,6 +16,7 @@ import json
 import socket
 import _thread
 import datetime
+from PIL import Image
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from pyimagesearch.transform import four_point_transform
@@ -28,12 +29,21 @@ LETTER_RESOLUTION = (1440, 1080)
 TIME_TO_WAIT_FOR_CAMERA_READY = 0.1
 FRAMES_TO_WAIT_TO_CAPTURE_LETTER = 10
 MIN_LETTER_AREA = 20000
+MAX_LETTER_AREA = 250000
 # SOCKET_HOST = 'socket.lazymails.com'
 SOCKET_HOST = '192.168.0.3'
 SOCKET_PORT = 6969
 SOCKET_END_SYMBOL = '[^END^]'
+LIVE_FRAMES_KEEP_LIVE = 10
+LIVE_SEND_PER_FRAMES = 1
 
 MAILBOX_ID = '59e1e68a00d5f221145ba626'
+
+
+settings = {
+  'isEnergySavingOn': False
+}
+lives = {}
 
 
 # initialize the motion detector
@@ -42,46 +52,90 @@ for pin in MOTION_DETECTOR_PINS:
   GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # initialize socket connection
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = None
+
+def sendMessage(message):
+  global sock
+
+  try:
+    # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+    sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
+  except Exception as e:
+    print('Failed to send the message', e)
+
+def sendConnectMessage():
+  message = {
+    'type': 'connect',
+    'id': MAILBOX_ID,
+    'end': 'mailbox'
+  }
+  
+  sendMessage(message)
 
 def connect():
+  global sock
+
   while True:
     try:
+      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       sock.connect((SOCKET_HOST, SOCKET_PORT))
+
+      sendConnectMessage()
       print('Connected to the server')
       break
     except Exception as e:
       print('Failed to connenct to the server, retry after 3 seconds', e)
       time.sleep(3)
 
-def sendConnectMessage():
-  message = {
-    'id': MAILBOX_ID,
-    'client': 'mailbox'
-  }
 
-  # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
+
+def processMessage(message):
+  if message['type'] == 'update_settings':
+    global settings
+    settings = message['settings']
+    print('Setting updated', settings)
+  elif message['type'] == 'start_live':
+    global lives
+    lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
+    print('Start live to', message['email'])
+  elif message['type'] == 'live_heartbeat':
+    global lives
+    lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
+    print('Keep live to', message['email'])
+  elif message['type'] == 'stop_live':
+    global lives
+    del lives[message['email']]
+    print('Stop live to', message['email'])
 
 def receiveMessage():
   while True:
+    data = ''
     try:
-      data = ''
       while not data.endswith(SOCKET_END_SYMBOL):
-        data += sock.recv(16)
-      
-      message = json.loads(data)
-      print('Received message from the server', message)
+        buffer = sock.recv(16)
+        if buffer:
+          data += buffer.decode('utf-8')
+        else:
+          # http://www.programmingforums.org/post143163.html
+          
+          print('Disconnected')
+          sock.close()
+          connect()
+
     except KeyboardInterrupt:
       sock.close()
       break
     except Exception as e:
       # https://stackoverflow.com/questions/17386487/python-detect-when-a-socket-disconnects-for-any-reason
-      print('Failed to receive message from the server:', e)
+      print('Error occurs when receiving message', e)
+      sock.close()
       connect()
 
+    message = json.loads(data.replace(SOCKET_END_SYMBOL, ''))
+    print('Received message from the server', message)
+    processMessage(message)
+
 connect()
-sendConnectMessage()
 try:
   # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
@@ -101,6 +155,11 @@ def analyse():
   camera = PiCamera()
   camera.resolution = FRAME_RESOLUTION
   camera.framerate = 30
+  camera.iso = 200
+  camera.brightness = 50
+  camera.sharpness = 100
+  camera.shutter_speed = 13000
+
   rawCapture = PiRGBArray(camera, size=FRAME_RESOLUTION)
 
   # allow the camera to warmup
@@ -112,14 +171,21 @@ def analyse():
   # capture frames from the camera
   # https://stackoverflow.com/questions/522563/accessing-the-index-in-python-for-loops
   for i, frame in enumerate(camera.capture_continuous(rawCapture, format='bgr', use_video_port=True)):
-    minAreaBox = analyseOneFrame(frame, substractor)
+    
+    # grab the raw NumPy array representing the image
+    image = frame.array
+
+    live(image, i)
+
+    minAreaBox = analyseOneFrame(image, substractor)
     if minAreaBox != None:
       # close the camera
       camera.close()
       time.sleep(TIME_TO_WAIT_FOR_CAMERA_READY)
 
       takePictureOfRecognisedLetter(minAreaBox)
-      upload(convertToBase64('letter.jpg'), convertToBase64('letterbox.jpg'))
+
+      upload(convertToBase64('letter.jpg'), letter.size, convertToBase64('letterbox.jpg'), letterbox.size)
 
       return True
 
@@ -144,7 +210,7 @@ def convertToBase64(filename):
   with open(filename, 'rb') as image:
     return base64.b64encode(image.read())
 
-def upload(mail, mailbox):
+def upload(mail, mailSize, mailbox, mailboxSize):
   
   # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
   now = datetime.datetime.now()
@@ -152,13 +218,21 @@ def upload(mail, mailbox):
 
   # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
   message = {
-    'mail': mail.decode('utf-8'),
-    'mailbox': mailbox.decode('utf-8'),
+    'type': 'mail',
+    'end': 'mailbox',
+    'mail': {
+      'content': mail.decode('utf-8'),
+      'size': mailSize
+    },
+    'mailbox': {
+      'content': mailbox.decode('utf-8'),
+      'size': mailboxSize
+    },
     'id': MAILBOX_ID,
-    'time': nowStr
+    'receivedAt': nowStr
   }
 
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode())
+  sendMessage(message)
   
 
 def takePictureOfRecognisedLetter(minAreaBox):
@@ -200,27 +274,54 @@ def takePictureOfRecognisedLetter(minAreaBox):
 
   camera.close()
 
-def analyseOneFrame(frame, substractor):
+def live(image, i):
+  global lives
+
+  # https://stackoverflow.com/questions/17682103/how-can-i-send-cv2-frames-to-a-browser
+  if len(lives) > 0:
+    cv2.imwrite('live.jpg', image)
+    jpg = Image.open('live.jpg')
+    jpg.save('live.jpg', quality=40, optimize=True)
+    encode = convertToBase64('live.jpg')
+
+    for email in list(lives.keys()):
+      framesLeft = lives[email]
+
+      if framesLeft > 0:
+        # only send per n frames or the first frame when live started
+        print(i)
+        if i % LIVE_SEND_PER_FRAMES == 0 or framesLeft == LIVE_FRAMES_KEEP_LIVE:
+          print('live to {}, {} remains'.format(email, lives[email]))
+          message = {
+            'type': 'live',
+            'mailbox': {
+              'content': encode.decode('utf-8')
+            },
+            'email': email,
+            'end': 'mailbox'
+          }
+
+          sendMessage(message)
+          lives[email] -= 1
+      else:
+        del lives[email]
+
+def analyseOneFrame(image, substractor):
   """
   analyse one frame
   """
-
+  
   global hasMotionDetected
   global lastCenter
-
-  # grab the raw NumPy array representing the image, then initialize the timestamp
-  # and occupied/unoccupied text
-  image = frame.array
 
   # pre-process
   # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as
   # https://stackoverflow.com/questions/15100913/color-space-conversion-with-cv2
   # https://stackoverflow.com/questions/22153271/error-using-cv2-equalizehist
-  image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-  image = cv2.equalizeHist(image)
+  # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+  # image = cv2.equalizeHist(image)
   
-  # cv2.imshow('sharped', image)
+  cv2.imshow('sharped', image)
 
   fgmask = substractor.apply(image)
 
@@ -251,29 +352,30 @@ def analyseOneFrame(frame, substractor):
       minAreaBox = cv2.boxPoints(minAreaRect)
       minAreaBox = np.int0(minAreaBox)
       area = cv2.contourArea(minAreaBox)
-
       
-      if area > MIN_LETTER_AREA:
+      if area > MIN_LETTER_AREA and area < MAX_LETTER_AREA:
         center = (
           (minAreaBox[0][0] + minAreaBox[1][0] + minAreaBox[2][0] + minAreaBox[3][0]) / 4,
           (minAreaBox[0][1] + minAreaBox[1][1] + minAreaBox[2][1] + minAreaBox[3][1]) / 4,
         )
         if lastCenter:
           move = math.sqrt(math.pow(center[0] - lastCenter[0], 2) + math.pow(center[1] - lastCenter[1], 2))
+          print('area', area, 'move', move)
           if move <= 0.01:
             # wait until it is static
             print('Letter recognised', minAreaBox)
+            hasMotionDetected = False
             return minAreaBox
 
         lastCenter = center
       else:
         # ignore if the letter is too small
-        print('Ignored, area of the letter ({}) is too small'.format(area))
+        print('Ignored, area of the letter ({}) is too small/large'.format(area))
 
   # live view
-  # cv2.imshow('frame', image)
-  # cv2.imshow('mask', fgmask)
-  # cv2.imshow('dinoised', mask)
+  cv2.imshow('frame', image)
+  cv2.imshow('mask', fgmask)
+  cv2.imshow('dinoised', mask)
 
   return None
 

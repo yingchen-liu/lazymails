@@ -14,7 +14,7 @@ import CoreData
 public class Receiver: NSManagedObject {
 
     static func insertNewObject(id: String, title: String, firstname: String, lastname: String) -> Receiver {
-        let receiver = NSEntityDescription.insertNewObject(forEntityName: "Receiver", into: Data.shared.managedObjectContext) as! Receiver
+        let receiver = NSEntityDescription.insertNewObject(forEntityName: "Receiver", into: DataManager.shared.managedObjectContext) as! Receiver
         receiver.id = id
         receiver.title = title
         receiver.firstname = firstname
@@ -27,7 +27,7 @@ public class Receiver: NSManagedObject {
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Receiver")
         
         do {
-            return try Data.shared.managedObjectContext.fetch(fetch) as NSArray as! [Receiver]
+            return try DataManager.shared.managedObjectContext.fetch(fetch) as NSArray as! [Receiver]
         } catch {
             fatalError("Failed to fetch receivers: \(error)")
         }

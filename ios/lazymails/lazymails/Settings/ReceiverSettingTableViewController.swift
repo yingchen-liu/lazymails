@@ -24,7 +24,7 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
     
     var settingTableDelegate: SettingTableDelegate?
     
-    let data = Data.shared
+    let data = DataManager.shared
     
     let socket = Socket.shared
     

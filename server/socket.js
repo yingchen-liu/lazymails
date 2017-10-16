@@ -85,7 +85,7 @@ const processMessage = (sock, message) => {
         app.startLive(sock, message, clients);
         break;
       case 'stop_live':
-        app.startLive(sock, message, clients);
+        app.stopLive(sock, message, clients);
         break;
       case 'live_heartbeat':
         app.liveHeartbeat(sock, message, clients);
@@ -126,8 +126,10 @@ const connect = () => {
     },
     
     sock.sendMessage = (type, message) => {
+      message = message ? message : {};
+      
       message.type = type;
-      console.log('sent', JSON.stringify(message))
+      console.log('sent', message.type)
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
 

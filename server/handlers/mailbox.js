@@ -13,8 +13,8 @@ const mails = db.get('mails');
 const users = db.get('users');
 
 const ROAD_TYPES = {
-  rd: ['rd', 'road'],
-  st: ['st', 'street']
+  'ROAD': ['rd', 'road'],
+  'STREET': ['st', 'street']
 }
 
 const connect = (sock, message, clients) => {
@@ -59,10 +59,10 @@ const receiveMail = (sock, message, clients) => {
 
       // save images
       // https://stackoverflow.com/questions/6926016/nodejs-saving-a-base64-encoded-image-to-disk
-      fs.writeFile(mailFilename, message.mail.content, 'base64', function(err) {
+      fs.writeFile(mailFilename, message.mail.content, 'base64', (err) => {
         if (err) return console.error(err);
 
-        fs.writeFile(mailboxFilename, message.mailbox.content, 'base64', function(err) {
+        fs.writeFile(mailboxFilename, message.mailbox.content, 'base64', (err) => {
           if (err) return console.error(err);
           
           // request orientation
@@ -139,7 +139,9 @@ const live = (sock, message, clients) => {
     });
   } else {
     // app is offline, stop live
-    sock.sendMessage('stop_live');
+    sock.sendMessage('stop_live', {
+      email: message.email
+    });
   }
 };
 

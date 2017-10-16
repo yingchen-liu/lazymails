@@ -41,7 +41,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryDetailsCell")! as! OneCategoryDetailsViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
         
         var keys = Array(categoryDetailsList.keys)
         cell.detailsTitleLabel.text = keys[indexPath.row]

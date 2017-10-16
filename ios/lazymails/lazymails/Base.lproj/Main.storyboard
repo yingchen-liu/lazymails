@@ -139,7 +139,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondCell" rowHeight="44" id="5Al-DL-NS2" customClass="CategoryListViewCell" customModule="lazymails" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="specialCell" rowHeight="44" id="5Al-DL-NS2" customClass="SpecialCategoryCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="168" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Al-DL-NS2" id="CaG-6Y-ztO">
@@ -193,7 +193,7 @@
                                     <segue destination="Jc7-xO-vLp" kind="show" id="yzj-D4-3B9"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="thirdCell" rowHeight="44" id="rCP-ad-LsR" customClass="CategoryViewCell" customModule="lazymails" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryCell" rowHeight="44" id="rCP-ad-LsR" customClass="CategoryCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="212" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rCP-ad-LsR" id="7Pf-dB-B1K">
@@ -251,7 +251,7 @@
         <!--MailBoxDetails-->
         <scene sceneID="Bhz-DB-g69">
             <objects>
-                <viewController id="nqa-gW-yaq" userLabel="MailBoxDetails" customClass="OneCategoryDetailsViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nqa-gW-yaq" userLabel="MailBoxDetails" customClass="MailDetailsViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SbZ-Jz-r91">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -281,7 +281,7 @@
                                     <viewLayoutGuide key="safeArea" id="91J-Yu-Zte"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryDetailsCell" rowHeight="38" id="we6-zY-KlZ" customClass="OneCategoryDetailsViewCell" customModule="lazymails" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mailInfoCell" rowHeight="38" id="we6-zY-KlZ" customClass="MailInfoCell" customModule="lazymails" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="313.5" width="375" height="38"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="we6-zY-KlZ" id="l2t-wc-Lzb">
@@ -883,13 +883,13 @@
         <!--MailboxCategory-->
         <scene sceneID="40g-cN-wFz">
             <objects>
-                <tableViewController title="MailboxCategory" id="Jc7-xO-vLp" customClass="OneCategoryViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="MailboxCategory" id="Jc7-xO-vLp" customClass="MailListViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4fZ-rQ-HyV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="oneCategoryCell" rowHeight="97" id="r7y-QZ-irP" customClass="OneCategoryViewCell" customModule="lazymails" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mailCell" rowHeight="97" id="r7y-QZ-irP" customClass="MailCell" customModule="lazymails" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="97"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r7y-QZ-irP" id="UoT-qZ-udn">

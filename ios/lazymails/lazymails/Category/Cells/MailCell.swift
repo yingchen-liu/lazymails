@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CorrectCategoryCell: UITableViewCell {
+class MailCell: UITableViewCell {
 
    
     @IBOutlet weak var letterPhotoImgView: UIImageView!

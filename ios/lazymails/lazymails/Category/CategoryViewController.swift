@@ -31,56 +31,39 @@ class CategoryViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
-        }else if section == 1 {
             return readAndImportantList.count
-        }else {
+        } else {
             return categoryList.count
-            
         }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "firstCell", for: indexPath)
-            //set the data here
-            //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
-           return cell
-        }
-        else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "secondCell", for: indexPath) as! CategoryListViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "specialCell", for: indexPath) as! SpecialCategoryCell
             //set the data here
             cell.cateNameLabel.text = readAndImportantList[indexPath.row]
         
             return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "thirdCell", for: indexPath) as! CategoryViewCell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
             //set the data here
             cell.cateNameLabel.text = categoryList[indexPath.row]
             return cell
         }
-       
     }
     
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 16
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 140
-        }
-        else {
-            return 44
-        }
+        return 44
     }
     
 

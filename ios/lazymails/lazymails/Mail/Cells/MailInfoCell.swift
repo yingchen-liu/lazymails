@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MaiCell: UITableViewCell {
+class MailInfoCell: UITableViewCell {
 
     @IBOutlet weak var detailsTitleLabel: UILabel!
     @IBOutlet weak var detailsValueLabel: UILabel!

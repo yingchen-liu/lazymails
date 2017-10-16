@@ -33,7 +33,7 @@ SOCKET_HOST = '192.168.0.3'
 SOCKET_PORT = 6969
 SOCKET_END_SYMBOL = '[^END^]'
 
-MAILBOX_ID = '59d34df2b114a0423bcfc7a6'
+MAILBOX_ID = '59e1e68a00d5f221145ba626'
 
 
 # initialize the motion detector

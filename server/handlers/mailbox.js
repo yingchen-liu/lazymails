@@ -13,8 +13,8 @@ const mails = db.get('mails');
 const users = db.get('users');
 
 const ROAD_TYPES = {
-  rd: ['rd', 'road'],
-  st: ['st', 'street']
+  'ROAD': ['rd', 'road'],
+  'STREET': ['st', 'street']
 }
 
 const connect = (sock, message, clients) => {

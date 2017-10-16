@@ -129,20 +129,24 @@ class Socket: NSObject, StreamDelegate {
     }
     
     func readBytes(stream: InputStream) {
-        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: maxReadLength)
+        
+        //  In order to receive long messages,
+        //      https://stackoverflow.com/questions/42646159/swiftsocket-cant-send-more-than-one-tcp-message
+        
+        var buffer = Array<UInt8>(repeating: 0, count: maxReadLength)
         
         while (stream.hasBytesAvailable) {
-            let bytesRead = inputStream.read(buffer, maxLength: maxReadLength)
+            let bytesRead = inputStream.read(&buffer, maxLength: maxReadLength)
             
-            if (bytesRead <= 0) {
+            if (bytesRead < 0) {
                 if let _ = inputStream.streamError {
                     break
                 }
             }
             
-            let string =  String(bytesNoCopy: buffer, length: bytesRead, encoding: .ascii, freeWhenDone: true)
+            let string = NSString(bytes: &buffer, length: bytesRead, encoding: String.Encoding.utf8.rawValue)
             if let string = string {
-                self.buffer += string
+                self.buffer += string as String
             }
             
             if self.buffer.contains(endSymbol) {
@@ -151,9 +155,8 @@ class Socket: NSObject, StreamDelegate {
                 for i in 0..<strings.count - 1 {
                     if let data = strings[i].data(using: .utf8) {
                         do {
-                            print("received", strings[i])
                             let message = try JSONSerialization.jsonObject(with: data, options: []) as! NSDictionary as! Dictionary<String, Any>
-                            print("received message", message)
+                            print("received message", message["type"] as! String)
                             processMessage(message: message)
                         } catch {
                             print("Error occurs when parsing json", error)
@@ -229,6 +232,15 @@ class Socket: NSObject, StreamDelegate {
                 }
                 responseCallback(errorMessage, message)
             }
+            break
+        case "mailbox_online":
+            print("Your mailbox is now online")
+            break
+        case "mailbox_offline":
+            print("Your mailbox goes offline just now")
+            break
+        case "mail":
+            print("You have received a mail just now")
             break
         default:
             print("Unknown message type")

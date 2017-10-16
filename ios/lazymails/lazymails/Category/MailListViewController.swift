@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OneCategoryViewController: UITableViewController {
+class MailListViewController: UITableViewController {
 
     
     override func viewDidLoad() {

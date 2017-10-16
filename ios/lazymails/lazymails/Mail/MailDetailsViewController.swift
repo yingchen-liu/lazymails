@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MailDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var categoryDetailsTableView: UITableView!
     @IBOutlet weak var letterPhotoImgView: UIImageView!

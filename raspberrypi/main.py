@@ -34,6 +34,8 @@ MAX_LETTER_AREA = 250000
 SOCKET_HOST = '192.168.0.3'
 SOCKET_PORT = 6969
 SOCKET_END_SYMBOL = '[^END^]'
+LIVE_FRAMES_KEEP_LIVE = 10
+LIVE_SEND_PER_FRAMES = 1
 
 MAILBOX_ID = '59e1e68a00d5f221145ba626'
 
@@ -41,6 +43,7 @@ MAILBOX_ID = '59e1e68a00d5f221145ba626'
 settings = {
   'isEnergySavingOn': False
 }
+lives = {}
 
 
 # initialize the motion detector
@@ -51,15 +54,23 @@ for pin in MOTION_DETECTOR_PINS:
 # initialize socket connection
 sock = None
 
+def sendMessage(message):
+  global sock
+
+  try:
+    # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+    sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
+  except Exception as e:
+    print('Failed to send the message', e)
+
 def sendConnectMessage():
   message = {
     'type': 'connect',
     'id': MAILBOX_ID,
     'end': 'mailbox'
   }
-
-  # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
+  
+  sendMessage(message)
 
 def connect():
   global sock
@@ -76,11 +87,25 @@ def connect():
       print('Failed to connenct to the server, retry after 3 seconds', e)
       time.sleep(3)
 
+
+
 def processMessage(message):
   if message['type'] == 'update_settings':
     global settings
     settings = message['settings']
     print('Setting updated', settings)
+  elif message['type'] == 'start_live':
+    global lives
+    lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
+    print('Start live to', message['email'])
+  elif message['type'] == 'live_heartbeat':
+    global lives
+    lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
+    print('Keep live to', message['email'])
+  elif message['type'] == 'stop_live':
+    global lives
+    del lives[message['email']]
+    print('Stop live to', message['email'])
 
 def receiveMessage():
   while True:
@@ -146,8 +171,13 @@ def analyse():
   # capture frames from the camera
   # https://stackoverflow.com/questions/522563/accessing-the-index-in-python-for-loops
   for i, frame in enumerate(camera.capture_continuous(rawCapture, format='bgr', use_video_port=True)):
+    
+    # grab the raw NumPy array representing the image
+    image = frame.array
 
-    minAreaBox = analyseOneFrame(frame, substractor)
+    live(image, i)
+
+    minAreaBox = analyseOneFrame(image, substractor)
     if minAreaBox != None:
       # close the camera
       camera.close()
@@ -155,9 +185,7 @@ def analyse():
 
       takePictureOfRecognisedLetter(minAreaBox)
 
-      with Image.open('letter.jpg') as letter:
-        with Image.open('letterbox.jpg') as letterbox:
-          upload(convertToBase64('letter.jpg'), letter.size, convertToBase64('letterbox.jpg'), letterbox.size)
+      upload(convertToBase64('letter.jpg'), letter.size, convertToBase64('letterbox.jpg'), letterbox.size)
 
       return True
 
@@ -204,7 +232,7 @@ def upload(mail, mailSize, mailbox, mailboxSize):
     'receivedAt': nowStr
   }
 
-  sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
+  sendMessage(message)
   
 
 def takePictureOfRecognisedLetter(minAreaBox):
@@ -246,17 +274,45 @@ def takePictureOfRecognisedLetter(minAreaBox):
 
   camera.close()
 
-def analyseOneFrame(frame, substractor):
+def live(image, i):
+  global lives
+
+  # https://stackoverflow.com/questions/17682103/how-can-i-send-cv2-frames-to-a-browser
+  if len(lives) > 0:
+    cv2.imwrite('live.jpg', image)
+    jpg = Image.open('live.jpg')
+    jpg.save('live.jpg', quality=40, optimize=True)
+    encode = convertToBase64('live.jpg')
+
+    for email in list(lives.keys()):
+      framesLeft = lives[email]
+
+      if framesLeft > 0:
+        # only send per n frames or the first frame when live started
+        print(i)
+        if i % LIVE_SEND_PER_FRAMES == 0 or framesLeft == LIVE_FRAMES_KEEP_LIVE:
+          print('live to {}, {} remains'.format(email, lives[email]))
+          message = {
+            'type': 'live',
+            'mailbox': {
+              'content': encode.decode('utf-8')
+            },
+            'email': email,
+            'end': 'mailbox'
+          }
+
+          sendMessage(message)
+          lives[email] -= 1
+      else:
+        del lives[email]
+
+def analyseOneFrame(image, substractor):
   """
   analyse one frame
   """
   
   global hasMotionDetected
   global lastCenter
-
-  # grab the raw NumPy array representing the image, then initialize the timestamp
-  # and occupied/unoccupied text
-  image = frame.array
 
   # pre-process
   # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as

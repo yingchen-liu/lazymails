@@ -12,9 +12,9 @@ import CoreData
 /**
  Help easy access to CoreData managed object context
  */
-class Data: NSObject {
+class DataManager: NSObject {
     
-    static let shared = Data()
+    static let shared = DataManager()
     
     let managedObjectContext: NSManagedObjectContext
     

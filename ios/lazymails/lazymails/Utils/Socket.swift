@@ -22,15 +22,17 @@ class Socket: NSObject, StreamDelegate {
     
     var outputStream: OutputStream!
     
-    let maxReadLength = 1024
+    let maxReadLength = 65500
     
     var buffer = ""
     
-    let data = Data.shared
+    let data = DataManager.shared
     
     let setting = Setting.shared
     
     var responseCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
+    
+    var liveCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
 
     
     func connect() {
@@ -84,8 +86,25 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
-    func sendStartLiveMessage() {
+    func sendStartLiveMessage(callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         let message = ["end": "app", "type": "start_live"]
+        
+        liveCallback = callback
+        
+        sendMessage(message: message)
+    }
+    
+    func sendLiveHeartbeatMessage() {
+        let message = ["end": "app", "type": "live_heartbeat"]
+        
+        sendMessage(message: message)
+    }
+    
+    func sendStopLiveMessage() {
+        let message = ["end": "app", "type": "stop_live"]
+        
+        liveCallback = nil
+        
         sendMessage(message: message)
     }
     
@@ -100,6 +119,8 @@ class Socket: NSObject, StreamDelegate {
         _ = data.withUnsafeBytes {
             outputStream.write($0, maxLength: data.count)
         }
+        
+        print("sent message \(message["type"] as! String)")
     }
     
     func close() {
@@ -218,6 +239,15 @@ class Socket: NSObject, StreamDelegate {
         setting.save()
     }
     
+    func getErrorMessage(message: Dictionary<String, Any>) -> String? {
+        var errorMessage: String?
+        if let error = message["error"] {
+            let errorObject = error as! NSDictionary as! Dictionary<String, Any>
+            errorMessage = errorObject["message"] as? String
+        }
+        return errorMessage
+    }
+    
     func processMessage(message: Dictionary<String, Any>) {
         switch message["type"] as! String {
         case "connect":
@@ -225,12 +255,7 @@ class Socket: NSObject, StreamDelegate {
             break
         case "update_mailbox":
             if let responseCallback = responseCallback {
-                var errorMessage: String?
-                if let error = message["error"] {
-                    let errorObject = error as! NSDictionary as! Dictionary<String, Any>
-                    errorMessage = errorObject["message"] as? String
-                }
-                responseCallback(errorMessage, message)
+                responseCallback(getErrorMessage(message: message), message)
             }
             break
         case "mailbox_online":
@@ -242,8 +267,12 @@ class Socket: NSObject, StreamDelegate {
         case "mail":
             print("You have received a mail just now")
             break
+        case "live":
+            if let liveCallback = liveCallback {
+                liveCallback(getErrorMessage(message: message), message)
+            }
         default:
-            print("Unknown message type")
+            break
         }
     }
 

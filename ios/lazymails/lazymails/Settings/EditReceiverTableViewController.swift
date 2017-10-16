@@ -25,7 +25,7 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
     
     var receiverSettingTableDelegate: ReceiverSettingTableDelegate?
     
-    let data = Data.shared
+    let data = DataManager.shared
     
     let socket = Socket.shared
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MailDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var categoryDetailsTableView: UITableView!
     @IBOutlet weak var letterPhotoImgView: UIImageView!
@@ -41,7 +41,7 @@ class OneCategoryDetailsViewController: UIViewController, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryDetailsCell")! as! OneCategoryDetailsViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
         
         var keys = Array(categoryDetailsList.keys)
         cell.detailsTitleLabel.text = keys[indexPath.row]

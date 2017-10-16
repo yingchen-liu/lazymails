@@ -1,5 +1,5 @@
 //
-//  CategoryViewCell.swift
+//  CategoryListViewCell.swift
 //  lazymails
 //
 //  Created by QIUXIAN CAI on 10/10/17.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-class CategoryViewCell: UITableViewCell {
+class SpecialCategoryCell: UITableViewCell {
 
     @IBOutlet weak var cateIconImgView: UIImageView!
     @IBOutlet weak var cateNameLabel: UILabel!
-    
+    @IBOutlet weak var cateUnreadNoLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

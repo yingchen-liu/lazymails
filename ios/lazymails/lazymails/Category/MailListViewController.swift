@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OneCategoryViewController: UITableViewController {
+class MailListViewController: UITableViewController {
 
     
     override func viewDidLoad() {
@@ -42,7 +42,7 @@ class OneCategoryViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "oneCategoryCell", for: indexPath) as! OneCategoryViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mailCell", for: indexPath) as! MailCell
 
         // Configure the cell...
         cell.letterTitleLabel.text = "Myer"

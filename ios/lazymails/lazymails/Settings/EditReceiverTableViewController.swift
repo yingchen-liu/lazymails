@@ -71,7 +71,9 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             disableRightButton()
         } else {
             firstnameText.hideError()
-            enableRightButton()
+            if lastnameText.text != "" {
+                enableRightButton()
+            }
         }
     }
     
@@ -81,7 +83,9 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
             disableRightButton()
         } else {
             lastnameText.hideError()
-            enableRightButton()
+            if firstnameText.text != "" {
+                enableRightButton()
+            }
         }
     }
     
@@ -96,6 +100,7 @@ class EditReceiverTableViewController: UITableViewController, UIPickerViewDelega
                 try data.save()
                 receiverSettingTableDelegate?.addReceiver(receiver: receiver)
             } catch {
+                // duplicate
                 if (error.localizedDescription.contains("133021")) {
                     self.showError(message: "You already have a receiver with the same name.")
                 } else {

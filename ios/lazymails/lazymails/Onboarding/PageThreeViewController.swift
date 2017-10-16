@@ -29,7 +29,7 @@ class OnboardingPageThreeViewController: UIViewController {
     
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
-        checkboxImage.image = UIImage(named: checked ? "checkbox-checked" : "checkbox")
+        checkboxImage.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
         getStartedButton.backgroundColor = checked ? UIColor(red: 122.0/255, green: 195.0/255, blue: 246.0/255, alpha: 1) : UIColor.lightGray
     }
 

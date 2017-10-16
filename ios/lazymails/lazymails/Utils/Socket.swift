@@ -112,16 +112,16 @@ class Socket: NSObject, StreamDelegate {
         case Stream.Event.hasBytesAvailable:
             readBytes(stream: aStream as! InputStream)
             break
-        case Stream.Event.endEncountered:
-            print("disconnected")
-            close()
-            reconnect()
-            break
-        case Stream.Event.errorOccurred:
-            print("error")
-            close()
-            reconnect()
-            break
+//        case Stream.Event.endEncountered:
+//            print("disconnected")
+//            close()
+//            reconnect()
+//            break
+//        case Stream.Event.errorOccurred:
+//            print("error")
+//            close()
+//            reconnect()
+//            break
         default:
             print ("Unspecified event occured", eventCode)
             break

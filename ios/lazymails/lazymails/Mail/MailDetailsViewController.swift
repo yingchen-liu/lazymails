@@ -47,7 +47,10 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         cell.detailsTitleLabel.text = keys[indexPath.row]
         var values = Array(categoryDetailsList.values)
         cell.detailsValueLabel.text = values[indexPath.row]
-       return cell
+        
+        cell.selectionStyle = .none
+        
+        return cell
     }
     
 

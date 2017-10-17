@@ -60,6 +60,8 @@ class IncorrectRecognitionViewController: UITableViewController {
         var values = Array(contentList.values)
         cell.valueLabel.text = values[indexPath.row]
         
+        cell.selectionStyle = .none
+        
         return cell
     }
     

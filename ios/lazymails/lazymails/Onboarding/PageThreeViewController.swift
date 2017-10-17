@@ -14,7 +14,11 @@ class OnboardingPageThreeViewController: UIViewController {
     
     @IBOutlet weak var checkboxImage: UIImageView!
     
+    
     var checked = false
+    
+    let setting = Setting.shared
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,15 +43,17 @@ class OnboardingPageThreeViewController: UIViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "getStartedSegue" {
+            if checked {
+                setting.inited = true
+                setting.save()
+            }
+        }
     }
-    */
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "getStartedSegue" {

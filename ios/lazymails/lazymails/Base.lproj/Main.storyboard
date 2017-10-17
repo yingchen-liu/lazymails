@@ -494,7 +494,7 @@
                                     <constraints>
                                         <constraint firstAttribute="width" constant="200" id="fjy-Ba-OgW"/>
                                     </constraints>
-                                    <state key="normal" title="Submit">
+                                    <state key="normal" title="Move">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
@@ -609,6 +609,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Incorrect Category" id="McT-dW-ctb"/>
+                    <connections>
+                        <outlet property="checkboxImgView" destination="Sph-bR-PdE" id="vWx-P1-OSI"/>
+                        <outlet property="submitButton" destination="Ti0-GG-6cY" id="8c9-4b-I0q"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ys-xU-ZH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -748,6 +752,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Incorrect Recognition" id="goC-Pt-Goz"/>
+                    <connections>
+                        <outlet property="checkboxImgView" destination="8Cy-B5-h2o" id="aaD-4S-qZa"/>
+                        <outlet property="submitButton" destination="Q8X-cd-C4y" id="c7Z-6e-Zcp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pkD-tS-XI3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -840,6 +848,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Photo Incorrect Display" id="exD-YO-hOv"/>
+                    <connections>
+                        <outlet property="checkboxImgView" destination="UrG-NV-2Mw" id="Ngo-kA-a0i"/>
+                        <outlet property="submitButton" destination="1s3-Mr-Ymz" id="EEh-fp-IdW"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60Z-jz-2fZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

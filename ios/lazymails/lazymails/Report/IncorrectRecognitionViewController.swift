@@ -10,16 +10,28 @@ import UIKit
 
 class IncorrectRecognitionViewController: UITableViewController {
 
+    @IBOutlet weak var checkboxImgView: UIImageView!
+    @IBOutlet weak var submitButton: UIButton!
+    
+    var checked = false
     var contentList = ["From:": "Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street","To:": "Monash University ","Websites:": "http://www.coolmelb.ml"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        submitButton.layer.cornerRadius = 5
+        submitButton.backgroundColor = UIColor.lightGray
+        
+        let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        checkboxImgView.isUserInteractionEnabled = true
+        checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
     }
+    
+    @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        checked = !checked
+        checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
+        submitButton.backgroundColor = checked ? UIColor(red: 1, green: 102.0/255, blue: 82.0/255, alpha: 1) : UIColor.lightGray
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

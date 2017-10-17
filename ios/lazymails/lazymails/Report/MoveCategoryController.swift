@@ -10,13 +10,30 @@ import UIKit
 
 class MoveCategoryController: UITableViewController {
 
+    @IBOutlet weak var checkboxImgView: UIImageView!
+    @IBOutlet weak var submitButton: UIButton!
     
-    
+    var reportChecked = false
     var categoryList = ["Parcel Collection Card","Normal Letters","Bank Statements","Utility Bills","Others","Ads"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        checkboxImgView.isUserInteractionEnabled = true
+        checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+        
     }
+    
+    @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        reportChecked = !reportChecked
+        checkboxImgView.image = UIImage(named: reportChecked ? "checkbox-checked-small" : "checkbox-small")
+        
+        submitButton.setTitle((reportChecked ? "Move and Submit" : "Move"), for: .normal)
+    }
+    
+   
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

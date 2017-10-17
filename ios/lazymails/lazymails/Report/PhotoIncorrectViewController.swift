@@ -12,18 +12,25 @@ class PhotoIncorrectViewController: UITableViewController {
 
     @IBOutlet weak var checkboxImgView: UIImageView!
     
-    @IBAction func checkboxTapped(_ sender: UITapGestureRecognizer) {
-        checked = !checked
-        checkboxImgView.image = UIImage(named: checked ? "checkbox-checked" : "checkbox")
-    }
+    @IBOutlet weak var submitButton: UIButton!
+    
+    
     var checked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        submitButton.layer.cornerRadius = 5
+        submitButton.backgroundColor = UIColor.lightGray
         
-        
+        let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        checkboxImgView.isUserInteractionEnabled = true
+        checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+    }
+    
+    @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        checked = !checked
+        checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
+        submitButton.backgroundColor = checked ? UIColor(red: 1, green: 102.0/255, blue: 82.0/255, alpha: 1) : UIColor.lightGray
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

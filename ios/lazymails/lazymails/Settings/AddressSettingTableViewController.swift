@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Whisper
 
 class AddressSettingTableViewController: UITableViewController, UISearchBarDelegate, MKLocalSearchCompleterDelegate {
     
@@ -146,9 +147,19 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
                     
                     self.settingTableDelegate?.editAddress(address: address)
                     self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.showNotValidAddressToast()
                 }
+            } else {
+                self.showNotValidAddressToast()
             }
         }
+    }
+    
+    func showNotValidAddressToast() {
+        let message = Message(title: "This is not a valid address, please input your street number.", backgroundColor: .red)
+        
+        Whisper.show(whisper: message, to: self.navigationController!, action: .show)
     }
 
     /*

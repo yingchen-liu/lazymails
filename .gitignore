@@ -6,3 +6,4 @@ server/mails/*.png
 ios/.DS_Store
 ios/lazymails/.DS_Store
 ios/lazymails/lazymails/.DS_Store
+ios/lazymails/Pods

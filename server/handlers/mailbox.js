@@ -25,6 +25,7 @@ const connect = (sock, message, clients) => {
   // update settings
   mailboxes.findOne({ _id: message.id })
     .then((mailbox) => {
+      sock.sendMessage('connect');
       sock.sendMessage('update_settings', {
         settings: mailbox.settings
       });

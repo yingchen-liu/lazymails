@@ -3,6 +3,7 @@ raspberrypi/letterbox.jpg
 server/node_modules
 server/data
 server/mails/*.png
+.DS_Store
 ios/.DS_Store
 ios/lazymails/.DS_Store
 ios/lazymails/lazymails/.DS_Store

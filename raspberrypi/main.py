@@ -16,6 +16,7 @@ import json
 import socket
 import _thread
 import datetime
+import serial
 from PIL import Image
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -39,7 +40,7 @@ LIVE_SEND_PER_FRAMES = 1
 
 MAILBOX_ID = '59e1e68a00d5f221145ba626'
 
-
+isEnergySavingPeriod = False
 settings = {
   'isEnergySavingOn': False
 }
@@ -50,6 +51,9 @@ lives = {}
 GPIO.setmode(GPIO.BCM)
 for pin in MOTION_DETECTOR_PINS:
   GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+# initialize light serial
+light = None
 
 # initialize socket connection
 sock = None
@@ -81,27 +85,44 @@ def connect():
       sock.connect((SOCKET_HOST, SOCKET_PORT))
 
       sendConnectMessage()
-      print('Connected to the server')
       break
     except Exception as e:
       print('Failed to connenct to the server, retry after 3 seconds', e)
       time.sleep(3)
 
+def connectLight():
+  global light
 
+  # https://stackoverflow.com/questions/41987168/serial-object-has-no-attribute-is-open
+
+  if not light or not light.isOpen():
+
+    # http://pyserial.readthedocs.io/en/latest/shortintro.html
+    # https://stackoverflow.com/questions/5471158/typeerror-str-does-not-support-the-buffer-interface
+
+    light = serial.Serial('/dev/ttyUSB0')
+    light.write(b'on\n')
 
 def processMessage(message):
-  if message['type'] == 'update_settings':
+  if message['type'] == 'connect':
+    connectLight()
+    print('Connected to server')
+    
+  elif message['type'] == 'update_settings':
     global settings
     settings = message['settings']
     print('Setting updated', settings)
+
   elif message['type'] == 'start_live':
     global lives
     lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
     print('Start live to', message['email'])
+
   elif message['type'] == 'live_heartbeat':
     global lives
     lives[message['email']] = LIVE_FRAMES_KEEP_LIVE
     print('Keep live to', message['email'])
+
   elif message['type'] == 'stop_live':
     global lives
     del lives[message['email']]
@@ -131,9 +152,14 @@ def receiveMessage():
       sock.close()
       connect()
 
-    message = json.loads(data.replace(SOCKET_END_SYMBOL, ''))
-    print('Received message from the server', message)
-    processMessage(message)
+    messages = data.split(SOCKET_END_SYMBOL)
+
+    for message in messages:
+      if message != '':
+        print('Received message from the server', message)
+        message = json.loads(message)
+        
+        processMessage(message)
 
 connect()
 try:
@@ -185,8 +211,13 @@ def analyse():
 
       takePictureOfRecognisedLetter(minAreaBox)
 
-      upload(convertToBase64('letter.jpg'), letter.size, convertToBase64('letterbox.jpg'), letterbox.size)
+      upload(convertToBase64('letter.jpg'), convertToBase64('letterbox.jpg'))
 
+      return True
+
+    if isEnergySavingPeriod:
+      camera.close()
+      time.sleep(TIME_TO_WAIT_FOR_CAMERA_READY)
       return True
 
     # clear the stream in preparation for the next frame
@@ -210,7 +241,7 @@ def convertToBase64(filename):
   with open(filename, 'rb') as image:
     return base64.b64encode(image.read())
 
-def upload(mail, mailSize, mailbox, mailboxSize):
+def upload(mail, mailbox):
   
   # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
   now = datetime.datetime.now()
@@ -221,12 +252,10 @@ def upload(mail, mailSize, mailbox, mailboxSize):
     'type': 'mail',
     'end': 'mailbox',
     'mail': {
-      'content': mail.decode('utf-8'),
-      'size': mailSize
+      'content': mail.decode('utf-8')
     },
     'mailbox': {
-      'content': mailbox.decode('utf-8'),
-      'size': mailboxSize
+      'content': mailbox.decode('utf-8')
     },
     'id': MAILBOX_ID,
     'receivedAt': nowStr
@@ -379,6 +408,37 @@ def analyseOneFrame(image, substractor):
 
   return None
 
+
+def energySaving():
+  global light
+  global isEnergySavingPeriod
+
+  while True:
+    connectLight()
+      
+    if settings['isEnergySavingOn']:
+      
+      # https://stackoverflow.com/questions/30071886/how-to-get-current-time-in-python-and-break-up-into-year-month-day-hour-minu
+      now = datetime.datetime.now()
+
+      if now.hour >= 19 or now.hour < 7:
+        isEnergySavingPeriod = True
+        light.write(b'off\n')
+      else:
+        isEnergySavingPeriod = False
+        light.write(b'on\n')
+    else:
+      isEnergySavingPeriod = False
+      light.write(b'on\n')
+    
+    time.sleep(5)
+
+_thread.start_new_thread(energySaving, ())
+
+
 while True:
-  if not analyse():
-    break
+  if not isEnergySavingPeriod:
+    if not analyse():
+      break
+
+

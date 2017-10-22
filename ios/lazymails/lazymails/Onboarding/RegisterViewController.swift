@@ -37,12 +37,20 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        //  https://stackoverflow.com/questions/5711434/how-can-i-dismiss-the-keyboard-if-a-user-taps-off-the-on-screen-keyboard
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        
+        self.view.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
 

@@ -29,6 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // socket
         Socket.shared.connect()
         
+        if setting.inited {
+            Socket.shared.sendConnectMessage(email: setting.email!, password: setting.password!, callback: { (error, message) in
+                
+            })
+        }
+        
         return true
     }
     

@@ -35,6 +35,9 @@ class Socket: NSObject, StreamDelegate {
     
     var liveCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
 
+    var registerCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
+    
+    var loginCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
     
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
@@ -52,8 +55,6 @@ class Socket: NSObject, StreamDelegate {
         
         inputStream.open()
         outputStream.open()
-        
-        sendConnectMessage()
     }
     
     func reconnect() {
@@ -64,8 +65,19 @@ class Socket: NSObject, StreamDelegate {
         })
     }
     
-    func sendConnectMessage() {
-        let message = ["end": "app", "type": "connect", "email": "ytxiuxiu@gmail.com", "password": "123456"]
+    func sendRegisterMessage(email: String, password: String, mailbox: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
+        let message = ["end": "app", "type": "register", "email": email, "password": password, "mailbox": mailbox]
+        
+        registerCallback = callback
+        
+        sendMessage(message: message)
+    }
+    
+    func sendConnectMessage(email: String, password: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
+        let message = ["end": "app", "type": "connect", "email": email, "password": password]
+        
+        loginCallback = callback
+        
         sendMessage(message: message)
     }
     
@@ -195,6 +207,8 @@ class Socket: NSObject, StreamDelegate {
             data.delete(object: _receiver)
         }
         
+        print(message)
+        
         let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
         let receivers = mailbox["names"] as! NSArray as! Array<NSDictionary>
         for receiver in receivers {
@@ -251,8 +265,24 @@ class Socket: NSObject, StreamDelegate {
     
     func processMessage(message: Dictionary<String, Any>) {
         switch message["type"] as! String {
+        case "register":
+            if let registerCallback = registerCallback {
+                registerCallback(getErrorMessage(message: message), message)
+            }
+            break
         case "connect":
+            let error = getErrorMessage(message: message)
+            guard error == nil else {
+                if let loginCallback = loginCallback {
+                    loginCallback(error, message)
+                }
+                return
+            }
+            
             processConnectMessage(message: message)
+            if let loginCallback = loginCallback {
+                loginCallback(error, message)
+            }
             break
         case "update_mailbox":
             if let responseCallback = responseCallback {

@@ -24,13 +24,19 @@ class Setting: NSObject {
     
     static let shared = Setting()
     
-    let keys = (inited: "inited", addressUnit: "addressUnit", addressStreetNo: "addressStreetNo", addressStreetName: "addressStreetName", addressStreetType: "addressStreetType", addressSuburb: "addressSuburb", addressState: "addressState", addressPostalCode: "addressPostalCode", isEnergySavingOn: "isEnergySavingOn")
+    let keys = (inited: "inited", email: "email", password: "password", mailbox: "mailbox", addressUnit: "addressUnit", addressStreetNo: "addressStreetNo", addressStreetName: "addressStreetName", addressStreetType: "addressStreetType", addressSuburb: "addressSuburb", addressState: "addressState", addressPostalCode: "addressPostalCode", isEnergySavingOn: "isEnergySavingOn")
     
     let preferences = UserDefaults.standard
     
     var inited = false
     
     var address: Address?
+    
+    var email: String?
+    
+    var password: String?
+    
+    var mailbox: String?
     
     var isEnergySavingOn = false
     
@@ -51,6 +57,10 @@ class Setting: NSObject {
             // otherwise, retrieve settings
             inited = preferences.bool(forKey: keys.inited)
             
+            email = preferences.string(forKey: keys.email)
+            mailbox = preferences.string(forKey: keys.mailbox)
+            password = preferences.string(forKey: keys.password)
+            
             let addressUnit = preferences.string(forKey: keys.addressUnit)
             let addressStreetNo = preferences.string(forKey: keys.addressStreetNo)!
             let addressStreetName = preferences.string(forKey: keys.addressStreetName)!
@@ -70,6 +80,10 @@ class Setting: NSObject {
      */
     func save() {
         preferences.set(inited, forKey: keys.inited)
+        
+        preferences.set(email, forKey: keys.email)
+        preferences.set(mailbox, forKey: keys.mailbox)
+        preferences.set(password, forKey: keys.password)
         
         preferences.set(address?.unit, forKey: keys.addressUnit)
         preferences.set(address?.streetNo, forKey: keys.addressStreetNo)

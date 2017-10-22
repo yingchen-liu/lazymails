@@ -6,10 +6,10 @@ const config = {
       }
     },
     db: {
-      url: 'mongodb://db.lazymails.com:27017/lazymails'
+      url: 'mongodb://localhost:27017/lazymails'
     },
     socket: {
-      host: 'socket.lazymails.com',
+      host: '0.0.0.0',
       port: 6969
     }
   },

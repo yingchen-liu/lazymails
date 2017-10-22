@@ -41,7 +41,7 @@ app = {
       'camera': {
         'frameResolution': (640, 480),
         'mailResolution': (1440, 1080),
-        'timeToWaitForReady': 0.1,
+        'timeToWaitForReady': 1,
         'framesToWaitToCaptureMail': 10
       },
       'files': {

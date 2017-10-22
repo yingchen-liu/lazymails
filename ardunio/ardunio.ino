@@ -17,29 +17,35 @@ void setup() {
   strip.show();  // Turn all LEDs off ASAP
 }
 
-uint32_t color  = 0x333333;
-int      head   = 0, tail = -10;
-bool     inited = false;
+uint32_t color                  = 0x333333;
+int      head                   = 0, tail = -10;
+bool     inited                 = false;
+int      serialNotAvailabeTimes = 0;
 
 void loop() {
 
   // https://www.arduino.cc/en/Reference/Serial
   if (Serial.available()) {
+    serialNotAvailabeTimes = 0;
+    inited = true;
     String command = Serial.readStringUntil('\n');
     
     if (command == "on") {
-      inited = true;
       for (int i = 0; i < NUMPIXELS; i++) {
         strip.setPixelColor(i, color);
       }
       strip.show();
       
     } else if (command == "off") {
-      inited = true;
       for (int i = 0; i < NUMPIXELS; i++) {
         strip.setPixelColor(i, 0);
       }
       strip.show();
+    }
+  } else {
+    delay(10);
+    if (++serialNotAvailabeTimes >= 5 * (1000 / 10)) {    // Show connecting animation if 5s no signal
+      inited = false;
     }
   }
 
@@ -49,7 +55,7 @@ void loop() {
     strip.setPixelColor(head, color); // 'On' pixel at head
     strip.setPixelColor(tail, 0);     // 'Off' pixel at tail
     strip.show();
-    delay(20);
+    delay(10);
   
     if (++head >= NUMPIXELS) {        // Increment head index
       head = 0;                       // Reset head index to start

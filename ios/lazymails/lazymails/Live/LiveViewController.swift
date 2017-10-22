@@ -69,7 +69,9 @@ class LiveViewController: UIViewController {
             let base64 = mailbox["content"] as! String
             let time = message["time"] as! String
 
-            self.timeLabel.text = time
+            //  https://stackoverflow.com/questions/25678373/swift-split-a-string-into-an-array
+            
+            self.timeLabel.text = time.components(separatedBy: " ")[1]
             
             if let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) {
                 let image = UIImage(data: data)

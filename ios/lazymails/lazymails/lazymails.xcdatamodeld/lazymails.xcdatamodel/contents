@@ -26,7 +26,7 @@
         <attribute name="title" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Category" positionX="-63" positionY="9" width="128" height="103"/>
+        <element name="Category" positionX="-63" positionY="9" width="128" height="105"/>
         <element name="Mail" positionX="288" positionY="-18" width="128" height="208"/>
         <element name="Receiver" positionX="-38" positionY="-153" width="128" height="105"/>
     </elements>

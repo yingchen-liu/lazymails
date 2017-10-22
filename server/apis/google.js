@@ -234,7 +234,7 @@ const request = (mailBase64, names, address, callback) => {
             nameSimilarity <= 0.5 &&  // remove name
             addressSimilarity <= 0.5*/) { // remove address
 
-            console.log(text);
+            // console.log(text);
             const box = paragraph.boundingBox.vertices;
             const center = {
               x: (box[0].x + box[1].x + box[2].x + box[3].x) / 4,

@@ -4,16 +4,10 @@ import json
 import _thread
 
 
-# network settings
-# SOCKET_HOST = 'socket.lazymails.com'
-SOCKET_HOST = '192.168.0.3'
-SOCKET_PORT = 6969
-SOCKET_END_SYMBOL = '[^END^]'
-
-
 class Network:
   
-  def __init__(self, connected, disconnected, receivedMessage):
+  def __init__(self, app, connected, disconnected, receivedMessage):
+    self._app = app
     self._sock = None
     self._connected = connected
     self._disconnected = disconnected
@@ -28,19 +22,25 @@ class Network:
       print('Unable to start thread for receiving message:', e)
 
   def sendMessage(self, message):
+    
+    networkConfig = self._app['config']['network']
+
     try:
       # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-      self._sock.sendall((json.dumps(message) + SOCKET_END_SYMBOL).encode('utf-8'))
+      self._sock.sendall((json.dumps(message) + networkConfig['endSymbol']).encode('utf-8'))
     except Exception as e:
       print('Failed to send the message', e)
 
   def connect(self):
+    
+    networkConfig = self._app['config']['network']
+
     print('Connection ...')
 
     while True:
       try:
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self._sock.connect((SOCKET_HOST, SOCKET_PORT))
+        self._sock.connect((networkConfig['host'], networkConfig['port']))
 
         if self._connected:
           self._connected(self)
@@ -53,13 +53,16 @@ class Network:
         time.sleep(3)
 
   def receiveMessage(self):
+    
+    networkConfig = self._app['config']['network']
+
     while True:
       if not self._sock or not self._isConnected:
         continue
 
       data = ''
       try:
-        while not data.endswith(SOCKET_END_SYMBOL):
+        while not data.endswith(networkConfig['endSymbol']):
           buff = self._sock.recv(16)
           if buff:
             data += buff.decode('utf-8')
@@ -89,7 +92,7 @@ class Network:
 
         self.connect()
 
-      messages = data.split(SOCKET_END_SYMBOL)
+      messages = data.split(networkConfig['endSymbol'])
 
       for message in messages:
         if message != '':

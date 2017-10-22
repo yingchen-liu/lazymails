@@ -88,10 +88,18 @@ const receiveMail = (sock, message, clients) => {
                 result.mailbox = mailbox._id.toString();
                 result.serverReceivedAt = moment();
                 result.mailboxReceivedAt = moment(message.receivedAt);
+                result.croppedPoints = message.croppedPoints;
                 result.sentTo = [];
 
                 mails.insert(result)
                   .then((mail) => {
+                    // reply mailbox
+                    sock.sendMessage('mail', {
+                      mail: {
+                        receivedAt: message.receivedAt
+                      }
+                    });
+
                     // notify users
                     delete mail.sentTo
 

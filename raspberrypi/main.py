@@ -6,7 +6,7 @@
 # https://pymotw.com/2/socket/tcp.html
 
 import datetime
-
+import os
 import cv2
 from PIL import Image
 
@@ -61,6 +61,49 @@ light = None
 sock = None
 
 
+def sendAllMails():
+  filesConfig = app['config']['recognition']['files']
+
+  # Send all saved mails  
+  # https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+
+  filenames = os.listdir()
+  for filename in filenames:
+    if filename.endswith(filesConfig['mail']):
+      
+      # https://docs.python.org/2/library/string.html
+
+      # get received time
+      timeStr = filename.split('_')[0]
+
+      # get croped points
+      cropStr = filename.split('_')[1]
+      cropPoints = []
+      cropPointStrs = cropStr.split('),(')
+      for cropPointStr in cropPointStrs:
+        pointStr = cropPointStr.replace('(', '').replace(')', '').split(',')
+        cropPoints.append((float(pointStr[0]), float(pointStr[1])))
+
+      message = {
+        'type': 'mail',
+        'end': 'mailbox',
+        'mail': {
+          'content': toBase64(filename).decode('utf-8')
+        },
+        'mailbox': {
+          'content': toBase64(timeStr + '_' + filesConfig['mailbox']).decode('utf-8')
+        },
+        'id': app['config']['mailbox']['id'],
+        'croppedPoints': cropPoints,
+        'receivedAt': timeStr
+      }
+
+      sock.sendMessage(message)
+
+      print('Sent a mail to the server')
+      print(timeStr)
+      print(cropPoints)
+
 def connected(self):
   message = {
     'type': 'connect',
@@ -69,6 +112,7 @@ def connected(self):
   }
   
   self.sendMessage(message)
+  sendAllMails()
 
 def disconnected(self):
   print('Disconnected')
@@ -98,29 +142,14 @@ def processMessage(self, message):
       del app['status']['lives'][message['email']]
       print('Stop live to', message['email'])
 
+  elif message['type'] == 'mail':
+    filenames = os.listdir()
+    for filename in filenames:
+      if message['mail']['receivedAt'] in filename:
+        os.remove(filename)
+
 def mailDetected(self):
-  
-  filesConfig = app['config']['recognition']['files']
-
-  # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
-  now = datetime.datetime.now()
-  nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
-
-  # https://stackoverflow.com/questions/33269020/convert-byte-string-to-base64-encoded-string-output-not-being-a-byte-string
-  message = {
-    'type': 'mail',
-    'end': 'mailbox',
-    'mail': {
-      'content': toBase64(filesConfig['mail']).decode('utf-8')
-    },
-    'mailbox': {
-      'content': toBase64(filesConfig['mailbox']).decode('utf-8')
-    },
-    'id': app['config']['mailbox']['id'],
-    'receivedAt': nowStr
-  }
-
-  sock.sendMessage(message)
+  sendAllMails()
 
 def frameAvailable(self, image, i):
   

@@ -110,13 +110,17 @@ class MailDetector:
     cameraConfig = self._app['config']['recognition']['camera']
     filesConfig = self._app['config']['recognition']['files']
 
+    # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
+    now = datetime.datetime.now()
+    nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
+
     # http://picamera.readthedocs.io/en/release-1.10/api_camera.html
     camera = PiCamera()
     camera.resolution = cameraConfig['mailResolution']
-    camera.capture(filesConfig['mailbox'])
+    camera.capture(nowStr + '_' + filesConfig['mailbox'])
     print('A picture of the mailbox has been taken')
     
-    mailbox = cv2.imread(filesConfig['mailbox'])
+    mailbox = cv2.imread(nowStr + '_' + filesConfig['mailbox'])
 
     ratioX = 1.0 * cameraConfig['mailResolution'][0] / cameraConfig['frameResolution'][0]
     ratioY = 1.0 * cameraConfig['mailResolution'][1] / cameraConfig['frameResolution'][1]
@@ -139,7 +143,7 @@ class MailDetector:
 
     # save the letter
     # http://docs.opencv.org/2.4/doc/tutorials/introduction/load_save_image/load_save_image.html
-    cv2.imwrite(filesConfig['mail'], mail)
+    cv2.imwrite(nowStr + '_(' + repr(points[0][0]) + ',' + repr(points[0][1]) + '),(' + repr(points[1][0]) + ',' + repr(points[1][1]) + '),(' + repr(points[2][0]) + ',' + repr(points[2][1]) + '),(' + repr(points[3][0]) + ',' + repr(points[3][1]) + ')_' + filesConfig['mail'], mail)
     print('Mail saved')
 
     camera.close()

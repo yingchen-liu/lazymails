@@ -40,7 +40,6 @@ class Light:
       time.sleep(1000)
 
   def switchOn(self):
-    print('Switch light on')
     try:
       self._light.write(b'on\n')
     except Exception as e:
@@ -48,7 +47,6 @@ class Light:
       self.connect()
 
   def switchOff(self):
-    print('Switch light off')
     try:
       self._light.write(b'off\n')
     except Exception as e:

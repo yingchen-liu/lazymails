@@ -8,6 +8,7 @@ const moment = require('moment');
 
 const socket = require('../socket');
 const db = require('../db');
+const monk = require('monk');
 const mailboxes = db.get('mailboxes');
 const mails = db.get('mails');
 const users = db.get('users');
@@ -23,7 +24,7 @@ const connect = (sock, message, clients) => {
   clients.addClient(sock, message.id, 'mailbox');
 
   // update settings
-  mailboxes.findOne({ _id: message.id })
+  mailboxes.findOne({ _id: monk.id(message.id) })
     .then((mailbox) => {
       sock.sendMessage('connect');
       sock.sendMessage('update_settings', {
@@ -49,7 +50,7 @@ const connect = (sock, message, clients) => {
 };
 
 const receiveMail = (sock, message, clients) => {
-  mailboxes.findOne({ _id: message.id })
+  mailboxes.findOne({ _id: monk.id(message.id) })
     .then((mailbox) => {
       // get similar road type
       mailbox.address.roadType = ROAD_TYPES[mailbox.address.roadType];
@@ -85,7 +86,7 @@ const receiveMail = (sock, message, clients) => {
 
                 // save to db
                 result.code = code;
-                result.mailbox = mailbox._id.toString();
+                result.mailbox = mailbox._id;
                 result.serverReceivedAt = moment();
                 result.mailboxReceivedAt = moment(message.receivedAt);
                 result.croppedPoints = message.croppedPoints;
@@ -103,7 +104,7 @@ const receiveMail = (sock, message, clients) => {
                     // notify users
                     delete mail.sentTo
 
-                    users.find({ mailbox: result.mailbox })
+                    users.find({ mailbox: monk.id(result.mailbox) })
                       .then((users) => {
                         users.map((user) => {
                           if (clients.getSockByClientId(user.email)) {

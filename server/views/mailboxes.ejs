@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mailboxes - Lazy Mails</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css' />
+    <style>
+      body {
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mailboxes</h1>
+    
+    <table class="ui celled padded table">
+      <thead>
+        <tr>
+          <th class="single line">ID</th>
+          <th>Address</th>
+          <th>Receivers</th>
+          <th>Users</th>
+          <th>Energy Saving</th>
+          <th>Mails</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% mailboxes.map((mailbox) => {
+          %>
+          <tr>
+            <td><%= mailbox._id %></td>
+            <td><%= mailbox.address.unit ? 'Unit ' + mailbox.address.unit + ' ' : '' %><%= mailbox.address.number %>
+              <%= mailbox.address.road %>
+              <%= mailbox.address.roadType %><br>
+              <%= mailbox.address.suburb %>
+              <%= mailbox.address.state %>
+              <%= mailbox.address.postalCode %>
+            </td>
+            <td>
+              <% mailbox.names.map((name) => {
+                %>
+                <%= name.firstname %>
+                <%= name.lastname %>
+                <br>
+                <%
+              }) %>
+            </td>
+            <td>
+                <% mailbox.users.map((user) => {
+                  %>
+                  <%= user.email %>
+                  <br>
+                  <%
+                }) %>
+            </td>
+            <td>
+              <% if (mailbox.settings.isEnergySavingOn) { %>
+                <i class="large green checkmark icon"></i>
+              <% } %>
+            </td>
+            <td><a href="/mailboxes/<%= mailbox._id %>/mails"><%= mailbox.mails.length %></a></td>
+          </tr>
+          <%
+        }) %>
+      </tbody>
+    </table>
+  </body>
+</html>
+

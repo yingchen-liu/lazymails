@@ -19,8 +19,8 @@ from classes.utils import toBase64
 app = {
   'config': {
     'network': {
-      'host': 'socket.lazymails.com',
-      # 'host': '192.168.0.3',
+      # 'host': 'socket.lazymails.com',
+      'host': '192.168.0.3',
       'port': 6969,
       'endSymbol': '[^END^]'
     },

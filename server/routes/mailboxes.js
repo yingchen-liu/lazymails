@@ -1,17 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 const socket = require('../socket');
 const db = require('../db');
+const monk = require('monk');
 const mailboxes = db.get('mailboxes');
+const users = db.get('users');
+const mails = db.get('mails');
 
+router.get('/', (req, res, next) => {
+  mailboxes.aggregate([
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'mailbox',
+        as: 'users'
+      }
+    }, {
+      $lookup: {
+        from: 'mails',
+        localField: '_id',
+        foreignField: 'mailbox',
+        as: 'mails'
+      }
+    }
+  ])
+    .then((mailboxes) => {
+      res.render('mailboxes', {
+        mailboxes
+      });
+    })
+    .catch(next);
+});
 
-/* Get a mailbox */
-router.get('/:id', (req, res, next) => {
-  mailboxes.findOne({ _id: req.params.id })
-    .then((mailbox) => {
-      res.json({
-        mailbox
+/* Get mails in a mailbox */
+router.get('/:id/mails', (req, res, next) => {
+  mails.find({ mailbox: monk.id(req.params.id) })
+    .then((mails) => {
+      res.render('mails', {
+        mails,
+        moment
       });
     })
     .catch(next);

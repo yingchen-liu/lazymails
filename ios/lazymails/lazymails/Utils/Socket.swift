@@ -12,8 +12,8 @@ class Socket: NSObject, StreamDelegate {
     
     static let shared = Socket()
     
-    let host = "localhost"
-//    let host = "socket.lazymails.com"
+//    let host = "localhost"
+    let host = "socket.lazymails.com"
     
     let port = 6969
     
@@ -281,7 +281,7 @@ class Socket: NSObject, StreamDelegate {
             
             processConnectMessage(message: message)
             if let loginCallback = loginCallback {
-                loginCallback(error, message)
+                loginCallback(nil, message)
             }
             break
         case "update_mailbox":

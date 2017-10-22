@@ -192,7 +192,7 @@ def frameAvailable(self, image, i):
         del lives[email]
 
 
-sock = Network(connected, disconnected, processMessage)
+sock = Network(app, connected, disconnected, processMessage)
 sock.connect()
 detector = MailDetector(app, mailDetected, frameAvailable)
 

@@ -8,7 +8,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const basicAuth = require('express-basic-auth');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -18,10 +17,6 @@ const socket = require('./socket');
 
 const app = express();
 
-// auth
-app.use(basicAuth({
-  users: { 'admin': '26981068' }
-}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -61,30 +61,4 @@ app.use((err, req, res, next) => {
 socket.connect();
 
 
-// https://github.com/mqttjs/MQTT.js
-
-const client = mqtt.connect('mqtt://mqtt.lazymails.com', {
-  options: {
-    clientId: 'server',
-    // set to false to receive QoS 1 and 2 messages while offline
-    clean: false
-  }
-});
-const MAILBOX_ID = 'a8hfq3ohc9awr823rhdos9d3fasdf';
-
-client.on('connect', () => {
-  console.log('mqtt connected')
-  client.subscribe(`mailbox/+`, {
-    qos: 2
-  });
-});
-
-client.on('message', (topic, message) => {
-  const info = JSON.parse(message.toString());
-  const mailbox = topic.replace('mailbox/', '');
-  console.log(`received message from ${mailbox}: ${info}`);
-
-});
-
-
 module.exports = app;

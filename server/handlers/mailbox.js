@@ -144,7 +144,8 @@ const receiveMail = (sock, message, clients) => {
 const live = (sock, message, clients) => {
   if (clients.getSockByClientId(message.email)) {
     clients.getSockByClientId(message.email).sendMessage('live', {
-      mailbox: message.mailbox
+      mailbox: message.mailbox,
+      time: message.time
     });
   } else {
     // app is offline, stop live

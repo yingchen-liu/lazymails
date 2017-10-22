@@ -47,8 +47,8 @@ app = {
       'camera': {
         'frameResolution': (640, 480),
         'mailResolution': (1440, 1080),
-        'timeToWaitForReady': 1,
-        'framesToWaitToCaptureMail': 10
+        'timeToWaitForReady': 2,
+        'framesToWaitToCaptureMail': 20
       },
       'files': {
         'mail': 'mail.jpg',
@@ -177,11 +177,16 @@ def frameAvailable(self, image, i):
         print(i)
         if i % liveConfig['sendPerFrames'] == 0 or framesLeft == liveConfig['sendPerFrames']:
           print('live to {}, {} remains'.format(email, lives[email]))
+
+          now = datetime.datetime.now()
+          nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
+
           message = {
             'type': 'live',
             'mailbox': {
               'content': encode.decode('utf-8')
             },
+            'time': nowStr,
             'email': email,
             'end': 'mailbox'
           }

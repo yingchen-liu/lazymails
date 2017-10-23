@@ -15,6 +15,14 @@ const categories = [{
 }, {
   name: 'property',
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
+}, {
+  name: 'bank',
+  logos: ['anz', 'commonwealth bank'],
+  mainTexts: ['commonwealth bank ']
+}, {
+  name: 'bill',
+  logos: ['vodafone', 'agl'],
+  mainTexts: ['agl ']
 }];
 
 const extractPoBox = (fullText) => {
@@ -159,8 +167,9 @@ const request = (mailBase64, names, address, callback) => {
           score: label.score
         });
 
+        // find out category
         categories.map((category) => {
-          if (category.labels.indexOf(label.description) >= 0) {
+          if (category.labels && category.labels.indexOf(label.description) >= 0) {
             if (!result.category[category.name]) {
               result.category[category.name] = 0;
             }
@@ -176,6 +185,16 @@ const request = (mailBase64, names, address, callback) => {
         result.logos.push({
           desc: logo.description,
           score: logo.score
+        });
+
+        // find out category
+        categories.map((category) => {
+          if (category.logos && category.logos.indexOf(logo.description.toLowerCase()) >= 0) {
+            if (!result.category[category.name]) {
+              result.category[category.name] = 0;
+            }
+            result.category[category.name] += label.score;
+          }
         });
       });
     }
@@ -293,6 +312,16 @@ const request = (mailBase64, names, address, callback) => {
       });
       for (let i = 0; i < Math.min(3, paragraphRates.length); i++) {
         result.mainText.push(paragraphRates[i]);
+
+        // find out category
+        categories.map((category) => {
+          if (category.mainTexts && category.mainTexts.indexOf(paragraphRates[i].toLowerCase()) >= 0) {
+            if (!result.category[category.name]) {
+              result.category[category.name] = 0;
+            }
+            result.category[category.name] += label.score;
+          }
+        });
       }
 
       // name and address

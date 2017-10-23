@@ -16,6 +16,7 @@ class PhotoIncorrectViewController: UITableViewController {
     
     
     var checked = false
+    var currentMail : Mail?
     
     override func viewDidLoad() {
         super.viewDidLoad()

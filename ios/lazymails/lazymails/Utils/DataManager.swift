@@ -15,7 +15,8 @@ import CoreData
 class DataManager: NSObject {
     
     static let shared = DataManager()
-    
+    var categoryList : [Category] = []
+    var mailList : [Mail] = []
     let managedObjectContext: NSManagedObjectContext
     
     override init() {
@@ -32,6 +33,27 @@ class DataManager: NSObject {
             try managedObjectContext.save()
         } catch {
             throw error
+        }
+    }
+    func fetchCategories() {
+        let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
+        do {
+            categoryList = try self.managedObjectContext.fetch(fetchRequest)
+            
+        } catch {
+            let fetchError = error as NSError
+            print(fetchError)
+        }
+    }
+    
+    func fetchMails() {
+        let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
+        do {
+            mailList = try self.managedObjectContext.fetch(fetchRequest)
+            
+        } catch {
+            let fetchError = error as NSError
+            print(fetchError)
         }
     }
 }

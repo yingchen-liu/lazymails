@@ -14,17 +14,24 @@ class MoveCategoryController: UITableViewController {
     @IBOutlet weak var submitButton: UIButton!
     
     var reportChecked = false
-    var categoryList = ["Parcel Collection Card","Normal Letters","Bank Statements","Utility Bills","Others","Ads"]
+    var currentMail : Mail?
+    var categoryList = DataManager.shared.categoryList
+    var filteredCategoryList: [Category] = []
+    var delegate: removeMailDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        filteredCategoryList = categoryList.filter { (category) -> Bool in
+            return currentMail?.category?.id != category.id
+        }
         
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
         
     }
+    
     
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         reportChecked = !reportChecked
@@ -60,7 +67,7 @@ class MoveCategoryController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return categoryList.count - 1
+            return filteredCategoryList.count
         } else {
             return 1
         }
@@ -126,12 +133,12 @@ class MoveCategoryController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCategoryCell", for: indexPath) as! CurrentCategoryViewCell
             //set the data here
             //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
-            cell.currentCategoryLabel.text = categoryList[0]
+            cell.currentCategoryLabel.text = currentMail?.category?.name
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "targetCategoryCell", for: indexPath) as! MoveToCagetoryViewCell
             //set the data here
-            cell.categoryNameLabel.text = categoryList[indexPath.row]
+            cell.categoryNameLabel.text = filteredCategoryList[indexPath.row].name
             if checked != nil {
                 cell.moveCheckBoxImgView.image = UIImage(named: checked == indexPath.row ? "checkbox-checked" : "checkbox")
             }
@@ -148,6 +155,21 @@ class MoveCategoryController: UITableViewController {
 //        }
         checked = indexPath.row
         tableView.reloadData()
+    }
+    
+    @IBAction func moveCategory(_ sender: Any) {
+        currentMail?.category?.removeFromMail(currentMail!)
+        filteredCategoryList[checked!].addToMail(currentMail!)
+        do {
+            try DataManager.shared.save()
+        } catch {
+            self.showError(message: "Could not save: \(error)")
+            return
+        }
+        self.navigationController?.popViewController(animated: true)
+        
+        delegate?.removeMail()
+        
     }
     
     

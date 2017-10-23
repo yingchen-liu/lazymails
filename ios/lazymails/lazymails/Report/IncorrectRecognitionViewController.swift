@@ -15,6 +15,8 @@ class IncorrectRecognitionViewController: UITableViewController {
     
     var checked = false
     var contentList = ["From:": "Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street","To:": "Monash University ","Websites:": "http://www.coolmelb.ml"]
+    var currentMail : Mail?
+    var mainContentDictionary : NSDictionary?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +49,7 @@ class IncorrectRecognitionViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return contentList.count
+        return mainContentDictionary!.count
     }
 
     
@@ -55,10 +57,10 @@ class IncorrectRecognitionViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "recognitionCell", for: indexPath) as! IncorrectRecognitionViewCell
 
         // Configure the cell...
-        var keys = Array(contentList.keys)
-        cell.titleLabel.text = keys[indexPath.row]
-        var values = Array(contentList.values)
-        cell.valueLabel.text = values[indexPath.row]
+        var keys = mainContentDictionary?.allKeys
+        cell.titleLabel.text = keys?[indexPath.row] as? String
+        var values = mainContentDictionary?.allValues
+        cell.valueLabel.text = (values?[indexPath.row] as! String)
         
         cell.selectionStyle = .none
         

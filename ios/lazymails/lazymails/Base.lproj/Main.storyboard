@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -194,7 +194,7 @@
                                     <outlet property="cateIconImgView" destination="Xna-VL-Izy" id="VOb-F8-IE2"/>
                                     <outlet property="cateNameLabel" destination="FFk-w1-1Aq" id="W8N-m4-ezT"/>
                                     <outlet property="cateUnreadNoLabel" destination="lyz-P8-s2t" id="IWa-OV-K5E"/>
-                                    <segue destination="Jc7-xO-vLp" kind="show" id="yzj-D4-3B9"/>
+                                    <segue destination="Jc7-xO-vLp" kind="show" identifier="showOneCategorySegue" id="yzj-D4-3B9"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryCell" rowHeight="44" id="rCP-ad-LsR" customClass="CategoryCell" customModule="lazymails" customModuleProvider="target">
@@ -238,6 +238,7 @@
                                 <connections>
                                     <outlet property="cateIconImgView" destination="eSk-tB-8gS" id="fwh-e5-bKP"/>
                                     <outlet property="cateNameLabel" destination="Qee-gJ-xEB" id="0I7-0F-Tig"/>
+                                    <segue destination="Jc7-xO-vLp" kind="show" identifier="showOneCategorySegue" id="j0U-Kk-F0z"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -268,7 +269,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="IFM-Je-I2o">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="258"/>
+                                            <rect key="frame" x="0.0" y="20" width="375" height="238"/>
                                             <gestureRecognizers/>
                                             <connections>
                                                 <outletCollection property="gestureRecognizers" destination="go4-b9-dED" appends="YES" id="cem-wF-nZW"/>
@@ -342,7 +343,7 @@
                     <navigationItem key="navigationItem" title="Title" id="Jum-Vq-3YZ">
                         <barButtonItem key="rightBarButtonItem" title="Report" id="lbd-jq-VlI">
                             <connections>
-                                <segue destination="XmF-YZ-iyx" kind="show" id="Uoe-nY-KMq"/>
+                                <segue destination="XmF-YZ-iyx" kind="show" identifier="reportSegue" id="Uoe-nY-KMq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -401,7 +402,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="issueTitleLabel" destination="LEB-N0-MKz" id="ZmO-Ug-65D"/>
-                                            <segue destination="bof-vz-c7p" kind="show" id="8Pq-xJ-BX6"/>
+                                            <segue destination="bof-vz-c7p" kind="show" identifier="incorrectCategorySegue" id="8Pq-xJ-BX6"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="ANk-wX-hBG">
@@ -433,7 +434,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Bjf-cu-JDw" kind="show" id="vJg-8G-DTK"/>
+                                            <segue destination="Bjf-cu-JDw" kind="show" identifier="incorrectDisplaySegue" id="vJg-8G-DTK"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="fb9-iV-tb6">
@@ -495,7 +496,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information, including name and address, in order to improve our app." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eyq-kB-hA0">
-                                    <rect key="frame" x="48" y="42.5" width="303" height="16.5"/>
+                                    <rect key="frame" x="48" y="62.5" width="303" height="16.5"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -509,16 +510,19 @@
                                     <state key="normal" title="Move">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="moveCategory:" destination="bof-vz-c7p" eventType="touchUpInside" id="g7Z-48-RG2"/>
+                                    </connections>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="Sph-bR-PdE">
-                                    <rect key="frame" x="24" y="16" width="16" height="16"/>
+                                    <rect key="frame" x="24" y="36" width="16" height="16"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="Sph-bR-PdE" secondAttribute="height" multiplier="1:1" id="3QF-u5-sIe"/>
                                         <constraint firstAttribute="width" constant="16" id="eV1-Sc-Btb"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report issues to us for improvement" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLG-dK-hgT">
-                                    <rect key="frame" x="48" y="14.5" width="273.5" height="20"/>
+                                    <rect key="frame" x="48" y="34.5" width="273.5" height="20"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -675,7 +679,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information, including name and address, in order to improve our app." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8s8-fU-rqB">
-                                    <rect key="frame" x="48" y="42.5" width="303" height="16.5"/>
+                                    <rect key="frame" x="48" y="62.5" width="303" height="16.5"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -691,14 +695,14 @@
                                     </state>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="8Cy-B5-h2o">
-                                    <rect key="frame" x="24" y="16" width="16" height="16"/>
+                                    <rect key="frame" x="24" y="36" width="16" height="16"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="16" id="dCf-nO-aTQ"/>
                                         <constraint firstAttribute="width" secondItem="8Cy-B5-h2o" secondAttribute="height" multiplier="1:1" id="oCg-KY-KiM"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report issues to us for improvement" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="anT-K5-T5b">
-                                    <rect key="frame" x="48" y="14.5" width="273.5" height="20"/>
+                                    <rect key="frame" x="48" y="34.5" width="273.5" height="20"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -786,7 +790,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information, including name and address, in order to improve our app." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVP-1U-bJ5">
-                                    <rect key="frame" x="48" y="42.5" width="303" height="16.5"/>
+                                    <rect key="frame" x="48" y="62.5" width="303" height="16.5"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -802,14 +806,14 @@
                                     </state>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="UrG-NV-2Mw">
-                                    <rect key="frame" x="24" y="16" width="16" height="16"/>
+                                    <rect key="frame" x="24" y="36" width="16" height="16"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="16" id="6KK-r2-5ME"/>
                                         <constraint firstAttribute="width" secondItem="UrG-NV-2Mw" secondAttribute="height" multiplier="1:1" id="7Nv-ft-5zy"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report issues to us for improvement" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pOg-nL-q73">
-                                    <rect key="frame" x="48" y="14.5" width="273.5" height="20"/>
+                                    <rect key="frame" x="48" y="34.5" width="273.5" height="20"/>
                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -981,7 +985,7 @@
                                     <outlet property="letterPhotoImgView" destination="bFc-6z-rLS" id="3bL-fj-A3B"/>
                                     <outlet property="letterTitleLabel" destination="ECa-wg-uma" id="YyY-h7-In5"/>
                                     <outlet property="receiveDateLabel" destination="6vY-Sq-Kvz" id="maE-72-PZY"/>
-                                    <segue destination="nqa-gW-yaq" kind="show" id="FZy-8M-usD"/>
+                                    <segue destination="nqa-gW-yaq" kind="show" identifier="showCategoryDetailsSegue" id="FZy-8M-usD"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1988,4 +1992,7 @@
         <image name="settings" width="30" height="30"/>
         <image name="star" width="32" height="32"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="j0U-Kk-F0z"/>
+    </inferredMetricsTieBreakers>
 </document>

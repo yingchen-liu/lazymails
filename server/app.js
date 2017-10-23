@@ -12,11 +12,13 @@ const bodyParser = require('body-parser');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const mailboxes = require('./routes/mailboxes');
-
+const auth = require('./auth');
 const socket = require('./socket');
 
 const app = express();
 
+
+app.use(auth);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

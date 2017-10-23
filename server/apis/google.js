@@ -334,7 +334,7 @@ const request = (mailBase64, names, address, callback) => {
     }
 
     // order categories
-    result.categories.sort((a, b) => {
+    result.category.sort((a, b) => {
       return b.score - a.score; // desc
     });
 

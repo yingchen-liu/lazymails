@@ -17,12 +17,12 @@ const categories = [{
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
 }, {
   name: 'bank',
-  logos: ['anz', 'commonwealth bank'],
-  mainTexts: ['commonwealth bank ']
+  logos: ['anz', 'commonwealth bank', 'commonwealthbank'],
+  mainTexts: ['commonwealth bank', 'commonwealthbank']
 }, {
   name: 'bill',
   logos: ['vodafone', 'agl'],
-  mainTexts: ['agl ']
+  mainTexts: ['agl', 'bill', 'paperless']
 }];
 
 const extractPoBox = (fullText) => {

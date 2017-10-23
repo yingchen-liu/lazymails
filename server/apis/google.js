@@ -25,14 +25,14 @@ const extractPoBox = (fullText) => {
   return match ? match[0] : null;
 };
 
-const extractStamp = (fullText) => {
+const extractReceiver = (fullText) => {
   fullText = fullText.split('\n').join(' ');
-  const reg = /po\s*box.*(NSW|QLD|SA|TAS|VIC|WA|ACT|JBT|NT)\s*\d\d\d\d/gi;
+  const reg = /((mr|miss|mrs) (.*?)) (unit|u)?\s?\d/gi;
   const match = reg.exec(fullText);
   
-  console.log(match);
-  return match ? match[0] : null;
+  return match ? match[1] : null;
 };
+
 
 const calculateArea = (vertices) => {
   // http://www.mathopenref.com/coordpolygonarea.html
@@ -301,6 +301,7 @@ const request = (mailBase64, names, address, callback) => {
 
       // po box
       result.poBox = extractPoBox(result.text);
+      result.receiver = extractReceiver(result.text);
     }
 
     return callback(null, result);

@@ -31,7 +31,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         if setting.inited {
             Socket.shared.sendConnectMessage(email: setting.email!, password: setting.password!, callback: { (error, message) in
-                
+                guard error == nil else {
+                    let alert = UIAlertController(title: "Login Error", message: "Cannot login to Lazy Mails: \(error!)", preferredStyle: .alert)
+                    
+                    let actionYes = UIAlertAction(title: "Login", style: .default, handler: { action in
+                        let registerViewController = storyboard.instantiateViewController(withIdentifier: "registerViewController")
+                        self.window?.rootViewController?.present(registerViewController, animated: true, completion: nil)
+                    })
+                    
+                    alert.addAction(actionYes)
+                    
+                    DispatchQueue.main.async {
+                        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+                    }
+                    
+                    return
+                }
             })
         }
         

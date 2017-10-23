@@ -74,6 +74,7 @@ class Socket: NSObject, StreamDelegate {
     }
     
     func sendConnectMessage(email: String, password: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
+        print("Connecting with email \(email), password \(password)")
         let message = ["end": "app", "type": "connect", "email": email, "password": password]
         
         loginCallback = callback

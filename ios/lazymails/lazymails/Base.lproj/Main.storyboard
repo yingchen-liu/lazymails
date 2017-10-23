@@ -1219,7 +1219,7 @@
         <!--Register View Controller-->
         <scene sceneID="Iu5-0z-FVU">
             <objects>
-                <viewController id="9x7-6c-b7N" customClass="RegisterViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registerViewController" id="9x7-6c-b7N" customClass="RegisterViewController" customModule="lazymails" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="X2x-Nk-PH5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

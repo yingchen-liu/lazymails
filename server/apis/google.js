@@ -334,9 +334,19 @@ const request = (mailBase64, names, address, callback) => {
     }
 
     // order categories
-    result.category.sort((a, b) => {
+    const categories = [];
+    for (category in result.category) {
+      categories.push({
+        name: category,
+        score: result.category[category]
+      });
+    }
+
+    categories.sort((a, b) => {
       return b.score - a.score; // desc
     });
+    result.categories = categories;
+    delete result.category;
 
     return callback(null, result);
   })

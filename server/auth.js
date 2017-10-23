@@ -1,3 +1,5 @@
+//  https://stackoverflow.com/questions/23616371/basic-http-authentication-with-node-and-express-4
+
 const auth = require('basic-auth');
 
 const admins = {

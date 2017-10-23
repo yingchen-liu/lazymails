@@ -4,6 +4,15 @@ const router = express.Router();
 const db = require('../db');
 const users = db.get('users');
 
+router.get('/', (req, res, next) => {
+  users.find({})
+    .then((users) => {
+      res.render('users', {
+        users
+      });
+    })
+    .catch(next);
+})
 
 /* Register an user */
 router.post('/', (req, res, next) => {

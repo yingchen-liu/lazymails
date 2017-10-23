@@ -12,6 +12,8 @@ class LiveViewController: UIViewController {
     
     @IBOutlet weak var loadingLabel: UILabel!
     
+    @IBOutlet weak var timeLabel: UILabel!
+    
     @IBOutlet weak var loadingDotsLabel: UILabel!
     
     @IBOutlet weak var liveImageView: UIImageView!
@@ -24,7 +26,11 @@ class LiveViewController: UIViewController {
     
     var loadingDotsTimer: Timer?
     
-    var frameReceived = 0
+    var heartbeatTimer: Timer?
+    
+    var timeBetweenTwoFrames: [Double] = []
+    
+    var lastReceivedFrameAt: Double?
     
     let socket = Socket.shared
     
@@ -32,7 +38,7 @@ class LiveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.timeLabel.text = ""
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,18 +67,46 @@ class LiveViewController: UIViewController {
             
             let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
             let base64 = mailbox["content"] as! String
+            let time = message["time"] as! String
 
+            //  https://stackoverflow.com/questions/25678373/swift-split-a-string-into-an-array
+            
+            self.timeLabel.text = time.components(separatedBy: " ")[1]
+            
             if let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) {
                 let image = UIImage(data: data)
                 self.liveImageView.image = image
             }
             
-            self.frameReceived += 1
-            // send heartbeat half the time of the mailbox keeping alive time
-            if self.frameReceived % (LiveViewController.liveFrameKeepLive / 2) == 0 {
-                self.socket.sendLiveHeartbeatMessage()
+            // Calculate mean latency
+            if let lastReceivedFrameAt = self.lastReceivedFrameAt {
+                //  https://stackoverflow.com/questions/358207/iphone-how-to-get-current-milliseconds
+                
+                let delay = self.timeBetweenTwoFrames.count > 0 ? (self.timeBetweenTwoFrames.average + (CACurrentMediaTime() - lastReceivedFrameAt)) / 2 : (CACurrentMediaTime() - lastReceivedFrameAt)
+                
+                self.timeBetweenTwoFrames.append(delay)
+                
+                //      https://stablekernel.com/swift-subarrays-array-and-arrayslice/
+                
+                var start = self.timeBetweenTwoFrames.count - 5
+                start = start >= 0 ? start : 0
+                let end = self.timeBetweenTwoFrames.count
+                self.timeBetweenTwoFrames = Array(self.timeBetweenTwoFrames[start..<end])
+                
+                let latency = self.timeBetweenTwoFrames[self.timeBetweenTwoFrames.count - 1]
+                if latency > 2 {
+                    self.loadingLabel.text = "[!] High latency"
+                    self.activityIndicator.isHidden = false
+                } else {
+                    self.loadingLabel.text = ""
+                    self.activityIndicator.isHidden = true
+                }
             }
+            
+            self.lastReceivedFrameAt = CACurrentMediaTime()
         }
+        
+        heartbeatTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.heartbeat), userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -81,10 +115,17 @@ class LiveViewController: UIViewController {
         //      https://stackoverflow.com/questions/40081574/using-swift-3-stopping-a-scheduledtimer-timer-continue-firing-even-if-timer-is
         
         loadingDotsTimer?.invalidate()
+        heartbeatTimer?.invalidate()
         socket.sendStopLiveMessage()
         activityIndicator.isHidden = false
+        lastReceivedFrameAt = nil
         loadingLabel.text = "Connecting to your mailbox"
+        timeLabel.text = ""
         liveImageView.image = nil
+    }
+    
+    @objc func heartbeat() {
+        self.socket.sendLiveHeartbeatMessage()
     }
     
     @objc func refreshLoadingDots() {

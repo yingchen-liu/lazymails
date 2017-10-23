@@ -5,9 +5,47 @@ const path = require('path');
 const imageSize = require('image-size');
 
 const db = require('../db');
+const monk = require('monk');
 const mailboxes = db.get('mailboxes');
 const mails = db.get('mails');
 const users = db.get('users');
+
+const register = (sock, message, clients) => {
+  users.findOne({ email: message.email })
+    .then((user) => {
+      if (user) {
+        // user already exists
+        sock.sendError(message.type, new Error('Email already exists'));
+      } else {
+
+        mailboxes.findOne({ _id: monk.id(message.mailbox) })
+          .then((mailbox) => {
+            console.log(mailbox)
+            if (mailbox) {
+              users.insert({
+                email: message.email,
+                password: md5(message.password),
+                mailbox: monk.id(message.mailbox)
+              })
+                .then((user) => {
+                  sock.sendMessage(message.type, {});
+                })
+                .catch((err) => {
+                  sock.sendError(message.type, err);
+                });
+            } else {
+              // mailbox not found
+              sock.sendError(message.type, new Error('Incorrect mailbox ID'));
+            }
+          })
+          .catch((err) => {
+            sock.sendError(message.type, err);
+          });
+
+        
+      }
+    });
+};
 
 const connect = (sock, message, clients) => {
   console.log('App connected');
@@ -192,6 +230,7 @@ const liveHeartbeat = (sock, message, clients) => {
 
 
 module.exports = {
+  register,
   connect,
   checkMails,
   updateUser,

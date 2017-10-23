@@ -8,7 +8,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const mqtt = require('mqtt');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -17,6 +16,7 @@ const mailboxes = require('./routes/mailboxes');
 const socket = require('./socket');
 
 const app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'mails')));
 
 app.use('/', index);
 app.use('/users', users);
@@ -43,6 +44,8 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
+  console.error(err);
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -59,32 +62,6 @@ app.use((err, req, res, next) => {
 });
 
 socket.connect();
-
-
-// https://github.com/mqttjs/MQTT.js
-
-const client = mqtt.connect('mqtt://mqtt.lazymails.com', {
-  options: {
-    clientId: 'server',
-    // set to false to receive QoS 1 and 2 messages while offline
-    clean: false
-  }
-});
-const MAILBOX_ID = 'a8hfq3ohc9awr823rhdos9d3fasdf';
-
-client.on('connect', () => {
-  console.log('mqtt connected')
-  client.subscribe(`mailbox/+`, {
-    qos: 2
-  });
-});
-
-client.on('message', (topic, message) => {
-  const info = JSON.parse(message.toString());
-  const mailbox = topic.replace('mailbox/', '');
-  console.log(`received message from ${mailbox}: ${info}`);
-
-});
 
 
 module.exports = app;

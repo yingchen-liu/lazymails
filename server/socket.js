@@ -69,6 +69,9 @@ const processMessage = (sock, message) => {
     }
   } else if (message.end === 'app') {
     switch (message.type) {
+      case 'register':
+        app.register(sock, message, clients);
+        break;
       case 'connect':
         app.connect(sock, message, clients);
         break;
@@ -142,6 +145,10 @@ const connect = () => {
       };
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
+
+    sock.on('error', (err) => {
+      console.log('Socket error', err);
+    });
 
     sock.on('close', (data) => {
       var clientId = clients.getClientIdByKey(sock.getClientKey());

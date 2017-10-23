@@ -11,18 +11,18 @@ const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.
 // const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
 const categories = [{
   name: 'food',
-  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza']
+  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink']
 }, {
   name: 'property',
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
 }, {
   name: 'bank',
   logos: ['anz', 'commonwealth bank', 'commonwealthbank'],
-  mainTexts: ['commonwealth bank', 'commonwealthbank']
+  mainTexts: ['anz', 'commonwealth bank', 'commonwealthbank']
 }, {
   name: 'bill',
   logos: ['vodafone', 'agl'],
-  mainTexts: ['agl', 'bill', 'paperless']
+  mainTexts: ['agl', 'bill', 'vodafone', 'origin']
 }];
 
 const extractPoBox = (fullText) => {
@@ -187,13 +187,22 @@ const request = (mailBase64, names, address, callback) => {
           score: logo.score
         });
 
+        const logoDesc = logo.description.toLowerCase();
+        const logoScore = logo.score;
+
         // find out category
         categories.map((category) => {
-          if (category.logos && category.logos.indexOf(logo.description.toLowerCase()) >= 0) {
-            if (!result.category[category.name]) {
-              result.category[category.name] = 0;
+          if (category.logos) {
+            for (let i = 0; i < category.logos.length; i++) {
+              const _logo = category.logos[i];
+
+              if (logoDesc.indexOf(_logo) >= 0) {
+                if (!result.category[category.name]) {
+                  result.category[category.name] = 0;
+                }
+                result.category[category.name] += logoScore;
+              }
             }
-            result.category[category.name] += label.score;
           }
         });
       });
@@ -312,14 +321,22 @@ const request = (mailBase64, names, address, callback) => {
       });
       for (let i = 0; i < Math.min(3, paragraphRates.length); i++) {
         result.mainText.push(paragraphRates[i]);
-
+        const mainText = paragraphRates[i].text.toLowerCase();
+        
         // find out category
         categories.map((category) => {
-          if (category.mainTexts && category.mainTexts.indexOf(paragraphRates[i].text.toLowerCase()) >= 0) {
-            if (!result.category[category.name]) {
-              result.category[category.name] = 0;
+          if (category.mainTexts) {
+            for (let i = 0; i < category.mainTexts.length; i++) {
+              const _mainText = category.mainTexts[i];
+
+              console.log('compare', _mainText, mainText)
+              if (mainText.indexOf(_mainText) >= 0) {
+                if (!result.category[category.name]) {
+                  result.category[category.name] = 0;
+                }
+                result.category[category.name] += 0.3;
+              }
             }
-            result.category[category.name] += label.score;
           }
         });
       }
@@ -328,14 +345,26 @@ const request = (mailBase64, names, address, callback) => {
       result.addressSimilarity = addressSimilarity;
       result.nameSimilarity = nameSimilarity;
 
+      if (addressSimilarity >= 0.5 || nameSimilarity >= 0.5) {
+        if (result.category.bank) {
+          result.category.bank += 3;
+        } else if (result.category.bill) {
+          result.category.bill += 3;
+        } else {
+          result.category.letter += 4;
+        }
+      }
+
       // po box
       result.poBox = extractPoBox(result.text);
       result.receiver = extractReceiver(result.text);
     }
 
+    console.log('===================')
     // order categories
     result.categories = [];
     for (category in result.category) {
+      console.log(category)
       result.categories.push({
         name: category,
         score: result.category[category]

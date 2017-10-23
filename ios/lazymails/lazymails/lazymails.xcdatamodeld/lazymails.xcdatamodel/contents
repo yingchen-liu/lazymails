@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
+    <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="mail" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mail" inverseName="category" inverseEntity="Mail" syncable="YES"/>
     </entity>
-    <entity name="Mail" representedClassName="Mail" syncable="YES" codeGenerationType="class">
+    <entity name="Mail" representedClassName="Mail" syncable="YES">
         <attribute name="boxImage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="didRead" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,8 +26,8 @@
         <attribute name="title" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Category" positionX="-63" positionY="9" width="128" height="103"/>
-        <element name="Mail" positionX="288" positionY="-18" width="128" height="208"/>
+        <element name="Category" positionX="-63" positionY="9" width="128" height="105"/>
+        <element name="Mail" positionX="288" positionY="-18" width="128" height="210"/>
         <element name="Receiver" positionX="-38" positionY="-153" width="128" height="105"/>
     </elements>
 </model>

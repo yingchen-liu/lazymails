@@ -10,7 +10,10 @@ import UIKit
 
 class ReportIssuesViewController: UITableViewController {
 
-        override func viewDidLoad() {
+    var currentMail : Mail?
+    var mainContentDictionary : NSDictionary?
+    var delegate : removeMailDelegate?
+    override func viewDidLoad() {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
@@ -101,5 +104,20 @@ class ReportIssuesViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "incorrectCategorySegue" {
+            let destination : MoveCategoryController = segue.destination as! MoveCategoryController
+            destination.currentMail = currentMail
+            destination.delegate = delegate
+        }else if segue.identifier == "incorrectDisplaySegue" {
+            let destination : PhotoIncorrectViewController = segue.destination as! PhotoIncorrectViewController
+            destination.currentMail = currentMail
+        }else {
+            let destination : IncorrectRecognitionViewController = segue.destination as! IncorrectRecognitionViewController
+            destination.currentMail = currentMail
+            destination.mainContentDictionary = mainContentDictionary
+        }
+    }
 
 }

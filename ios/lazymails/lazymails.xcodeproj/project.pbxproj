@@ -21,6 +21,10 @@
 		18C79D041F8F81360025A351 /* IncorrectRecognitionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C79D031F8F81360025A351 /* IncorrectRecognitionViewCell.swift */; };
 		18C79D061F8F82E30025A351 /* IncorrectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C79D051F8F82E30025A351 /* IncorrectRecognitionViewController.swift */; };
 		18E5CDA11F957415003F0AB8 /* lazymails.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6526B9581F920C8100C01D39 /* lazymails.xcdatamodeld */; };
+		18E5CDA61F95B763003F0AB8 /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E5CDA21F95B763003F0AB8 /* Category+CoreDataClass.swift */; };
+		18E5CDA71F95B763003F0AB8 /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E5CDA31F95B763003F0AB8 /* Category+CoreDataProperties.swift */; };
+		18E5CDA81F95B763003F0AB8 /* Mail+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E5CDA41F95B763003F0AB8 /* Mail+CoreDataClass.swift */; };
+		18E5CDA91F95B763003F0AB8 /* Mail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E5CDA51F95B763003F0AB8 /* Mail+CoreDataProperties.swift */; };
 		18EC131F1F8E064100EC9CBC /* LetterPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EC131E1F8E064100EC9CBC /* LetterPhotoViewController.swift */; };
 		18EC13211F8E157000EC9CBC /* ReportIssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EC13201F8E157000EC9CBC /* ReportIssuesViewController.swift */; };
 		18EC13241F8E15D600EC9CBC /* IssuesListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EC13231F8E15D600EC9CBC /* IssuesListViewCell.swift */; };
@@ -81,6 +85,10 @@
 		18C1E4101F8CED750034EE06 /* MailDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailDetailsViewController.swift; sourceTree = "<group>"; };
 		18C79D031F8F81360025A351 /* IncorrectRecognitionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncorrectRecognitionViewCell.swift; sourceTree = "<group>"; };
 		18C79D051F8F82E30025A351 /* IncorrectRecognitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncorrectRecognitionViewController.swift; sourceTree = "<group>"; };
+		18E5CDA21F95B763003F0AB8 /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
+		18E5CDA31F95B763003F0AB8 /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		18E5CDA41F95B763003F0AB8 /* Mail+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mail+CoreDataClass.swift"; sourceTree = "<group>"; };
+		18E5CDA51F95B763003F0AB8 /* Mail+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mail+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		18EC131E1F8E064100EC9CBC /* LetterPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterPhotoViewController.swift; sourceTree = "<group>"; };
 		18EC13201F8E157000EC9CBC /* ReportIssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportIssuesViewController.swift; sourceTree = "<group>"; };
 		18EC13231F8E15D600EC9CBC /* IssuesListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListViewCell.swift; sourceTree = "<group>"; };
@@ -289,6 +297,10 @@
 		6541AD5E1F81E1C6003A28E2 = {
 			isa = PBXGroup;
 			children = (
+				18E5CDA21F95B763003F0AB8 /* Category+CoreDataClass.swift */,
+				18E5CDA31F95B763003F0AB8 /* Category+CoreDataProperties.swift */,
+				18E5CDA41F95B763003F0AB8 /* Mail+CoreDataClass.swift */,
+				18E5CDA51F95B763003F0AB8 /* Mail+CoreDataProperties.swift */,
 				6541AD691F81E1C6003A28E2 /* lazymails */,
 				6541AD831F81E1C6003A28E2 /* lazymailsTests */,
 				6541AD681F81E1C6003A28E2 /* Products */,
@@ -529,6 +541,7 @@
 				18C1E4071F8CE3020034EE06 /* MailListViewController.swift in Sources */,
 				18C1E4031F8C41D30034EE06 /* CategoryCell.swift in Sources */,
 				18C1E4011F8C3F6A0034EE06 /* SpecialCategoryCell.swift in Sources */,
+				18E5CDA61F95B763003F0AB8 /* Category+CoreDataClass.swift in Sources */,
 				6526B9861F921B2300C01D39 /* Receiver+CoreDataClass.swift in Sources */,
 				18EC131F1F8E064100EC9CBC /* LetterPhotoViewController.swift in Sources */,
 				18C1E4111F8CED750034EE06 /* MailDetailsViewController.swift in Sources */,
@@ -549,9 +562,12 @@
 				6526B9781F921ABE00C01D39 /* AddressSettingTableViewCell.swift in Sources */,
 				6526B9871F921B2300C01D39 /* Receiver+CoreDataProperties.swift in Sources */,
 				6526B9881F921B2300C01D39 /* Setting.swift in Sources */,
+				18E5CDA71F95B763003F0AB8 /* Category+CoreDataProperties.swift in Sources */,
+				18E5CDA91F95B763003F0AB8 /* Mail+CoreDataProperties.swift in Sources */,
 				6526B9771F921ABE00C01D39 /* AddressSettingTableViewController.swift in Sources */,
 				6526B98E1F921B7400C01D39 /* DataManager.swift in Sources */,
 				18EC13261F8E228600EC9CBC /* PhotoIncorrectViewController.swift in Sources */,
+				18E5CDA81F95B763003F0AB8 /* Mail+CoreDataClass.swift in Sources */,
 				6526B97A1F921ABE00C01D39 /* ReceiverSettingTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

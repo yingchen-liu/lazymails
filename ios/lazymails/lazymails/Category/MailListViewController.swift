@@ -8,9 +8,13 @@
 
 import UIKit
 
-class MailListViewController: UITableViewController {
+protocol removeMailDelegate {
+    func removeMail()
+}
+class MailListViewController: UITableViewController, removeMailDelegate {
 
-    
+    var currentMails : [Mail] = []
+    var selectedRow : Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 44
@@ -22,6 +26,8 @@ class MailListViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -37,7 +43,7 @@ class MailListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 2
+        return currentMails.count
     }
 
     
@@ -45,10 +51,11 @@ class MailListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailCell", for: indexPath) as! MailCell
 
         // Configure the cell...
-        cell.letterTitleLabel.text = "Myer"
-        cell.receiveDateLabel.text = "9.00am"
-        cell.letterDescriptionLabel.text = "This is a description of each letters! This is a description of each letters"
-        cell.letterMarkImgView.image =  UIImage(named:"star-outline")
+        let mail = currentMails[indexPath.row]
+            cell.letterTitleLabel.text = mail.title
+            cell.receiveDateLabel.text = "9.00am"
+            cell.letterDescriptionLabel.text = mail.mainText
+            cell.letterMarkImgView.image =  UIImage(named:"star-outline")
         return cell
     }
     
@@ -101,5 +108,22 @@ class MailListViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue,sender: Any?) {
+        if segue.identifier == "showCategoryDetailsSegue" {
+            let destination : MailDetailsViewController = segue.destination as! MailDetailsViewController
+            selectedRow = tableView.indexPathForSelectedRow?.row
+                //print (selectedRow)
+            destination.selectedMail = currentMails[selectedRow!]
+            destination.delegate = self
+        }
+    }
+    
+    func removeMail() {
+        currentMails.remove(at: selectedRow!)
+        tableView.reloadData()
+    }
+    
+    
 
 }

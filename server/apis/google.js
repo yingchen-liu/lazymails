@@ -315,7 +315,7 @@ const request = (mailBase64, names, address, callback) => {
 
         // find out category
         categories.map((category) => {
-          if (category.mainTexts && category.mainTexts.indexOf(paragraphRates[i].toLowerCase()) >= 0) {
+          if (category.mainTexts && category.mainTexts.indexOf(paragraphRates[i].text.toLowerCase()) >= 0) {
             if (!result.category[category.name]) {
               result.category[category.name] = 0;
             }
@@ -332,6 +332,11 @@ const request = (mailBase64, names, address, callback) => {
       result.poBox = extractPoBox(result.text);
       result.receiver = extractReceiver(result.text);
     }
+
+    // order categories
+    result.categories.sort((a, b) => {
+      return b.score - a.score; // desc
+    });
 
     return callback(null, result);
   })

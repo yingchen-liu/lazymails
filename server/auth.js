@@ -4,6 +4,7 @@ const auth = require('basic-auth');
 
 const admins = {
   'ytxiuxiu@gmail.com': { password: '26981068' },
+  'qcai21@student.monash.edu': { password: '27010767' },
 };
 
 

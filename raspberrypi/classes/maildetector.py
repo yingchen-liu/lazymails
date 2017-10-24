@@ -74,7 +74,7 @@ class MailDetector:
           self.takePictureOfRecognisedLetter(minAreaBox)
 
           if self._mailDetected:
-            self._mailDetected(self)\
+            self._mailDetected(self)
 
           return True
 

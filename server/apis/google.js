@@ -10,19 +10,19 @@ const config = require('../config');
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
 // const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
 const categories = [{
-  name: 'food',
+  name: 'ADs - Food',
   labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink']
 }, {
-  name: 'property',
+  name: 'ADs - Properties',
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
 }, {
-  name: 'bank',
-  logos: ['anz', 'commonwealth bank', 'commonwealthbank'],
-  mainTexts: ['anz', 'commonwealth bank', 'commonwealthbank']
+  name: 'Bank Statements',
+  logos: ['anz', 'commonwealth'],
+  mainTexts: ['anz', 'commonwealth']
 }, {
-  name: 'bill',
+  name: 'Utility Bills',
   logos: ['vodafone', 'agl'],
-  mainTexts: ['agl', 'bill', 'vodafone', 'origin']
+  mainTexts: ['agl', 'bill', 'vodafone', 'origin', 'optus', 'telstra']
 }];
 
 const extractPoBox = (fullText) => {
@@ -329,7 +329,6 @@ const request = (mailBase64, names, address, callback) => {
             for (let i = 0; i < category.mainTexts.length; i++) {
               const _mainText = category.mainTexts[i];
 
-              console.log('compare', _mainText, mainText)
               if (mainText.indexOf(_mainText) >= 0) {
                 if (!result.category[category.name]) {
                   result.category[category.name] = 0;
@@ -360,20 +359,33 @@ const request = (mailBase64, names, address, callback) => {
       result.receiver = extractReceiver(result.text);
     }
 
-    console.log('===================')
     // order categories
     result.categories = [];
     for (category in result.category) {
-      console.log(category)
       result.categories.push({
         name: category,
         score: result.category[category]
       });
     }
 
+    if (result.poBox || result.receiver) {
+      result.categories.push({
+        name: 'Normal Letters',
+        score: 0.1
+      });
+    }
+
     result.categories.sort((a, b) => {
       return b.score - a.score; // desc
     });
+
+    if (result.categories.length == 0) {
+      result.categories.push({
+        name: 'ADs',
+        score: 1
+      });
+    }
+
     delete result.category;
 
     return callback(null, result);

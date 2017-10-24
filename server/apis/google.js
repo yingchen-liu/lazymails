@@ -345,12 +345,12 @@ const request = (mailBase64, names, address, callback) => {
       result.nameSimilarity = nameSimilarity;
 
       if (addressSimilarity >= 0.5 || nameSimilarity >= 0.5) {
-        if (result.category.bank) {
-          result.category.bank += 3;
-        } else if (result.category.bill) {
-          result.category.bill += 3;
+        if (result.category['Bank Statements']) {
+          result.category['Bank Statements'] += 3;
+        } else if (result.category['Utility Bills']) {
+          result.category['Utility Bills'] += 3;
         } else {
-          result.category.letter += 4;
+          result.category['Normal Letters'] += 4;
         }
       }
 

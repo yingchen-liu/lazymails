@@ -93,6 +93,9 @@ const processMessage = (sock, message) => {
       case 'live_heartbeat':
         app.liveHeartbeat(sock, message, clients);
         break;
+      case 'download_category_icon':
+        app.downloadCategoryIcon(sock, message, clients);
+        break;
       default:
         sock.sendError(new Error('Cannot understand the message'));
         break;

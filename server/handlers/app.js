@@ -228,6 +228,31 @@ const liveHeartbeat = (sock, message, clients) => {
     });
 };
 
+const downloadCategoryIcon = (sock, message, clients) => {
+
+  const iconPath = path.join(__dirname, '../public/images/icons/');
+  var found = false;
+
+  //  https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j
+
+  fs.readdirSync(iconPath).forEach(file => {
+    if (file.startsWith(message.category)) {
+      found = true;
+
+      //  https://stackoverflow.com/questions/24523532/how-do-i-convert-an-image-to-a-base64-encoded-data-url-in-sails-js-or-generally
+
+      var base64 = fs.readFileSync(path.join(iconPath, file), 'base64');
+      sock.sendMessage(message.type, {
+        content: base64
+      });
+    }
+  });
+
+  if (!found) {
+    sock.sendError(message.type, new Error('Icon not found'));
+  }
+};
+
 
 module.exports = {
   register,
@@ -237,5 +262,6 @@ module.exports = {
   updateMailbox,
   startLive,
   stopLive,
-  liveHeartbeat
+  liveHeartbeat,
+  downloadCategoryIcon
 };

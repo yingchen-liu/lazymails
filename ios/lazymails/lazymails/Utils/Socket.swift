@@ -55,6 +55,30 @@ class Socket: NSObject, StreamDelegate {
         
         inputStream.open()
         outputStream.open()
+        
+        if setting.inited {
+            Socket.shared.sendConnectMessage(email: setting.email!, password: setting.password!, callback: { (error, message) in
+                guard error == nil else {
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    
+                    let alert = UIAlertController(title: "Login Error", message: "Cannot login to Lazy Mails: \(error!)", preferredStyle: .alert)
+                    
+                    let actionYes = UIAlertAction(title: "Login", style: .default, handler: { action in
+                        let registerViewController = storyboard.instantiateViewController(withIdentifier: "registerViewController")
+                        appDelegate.window?.rootViewController?.present(registerViewController, animated: true, completion: nil)
+                    })
+                    
+                    alert.addAction(actionYes)
+                    
+                    DispatchQueue.main.async {
+                        appDelegate.window?.rootViewController?.present(alert, animated: true, completion: nil)
+                    }
+                    
+                    return
+                }
+            })
+        }
     }
     
     func reconnect() {

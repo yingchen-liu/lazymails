@@ -74,7 +74,7 @@ class MailDetector:
           self.takePictureOfRecognisedLetter(minAreaBox)
 
           if self._mailDetected:
-            self._mailDetected(self)\
+            self._mailDetected(self)
 
           return True
 
@@ -162,7 +162,7 @@ class MailDetector:
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # image = cv2.equalizeHist(image)
     
-    cv2.imshow('sharped', image)
+    # cv2.imshow('sharped', image)
 
     fgmask = substractor.apply(image)
 
@@ -215,7 +215,7 @@ class MailDetector:
 
     # live view
     cv2.imshow('frame', image)
-    cv2.imshow('mask', fgmask)
+    # cv2.imshow('mask', fgmask)
     cv2.imshow('dinoised', mask)
 
     return None

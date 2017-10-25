@@ -5,8 +5,10 @@
 # https://github.com/novaspirit/rpi_zram
 # https://pymotw.com/2/socket/tcp.html
 
+import time
 import datetime
 import os
+import _thread
 import cv2
 from PIL import Image
 
@@ -65,9 +67,39 @@ app = {
 }
 light = None
 sock = None
+secondSendingKeepTheSameFor = 0
+lastSending = 0
 
+def mailSendingMonitor():
+  global lastSending
+  global secondSendingKeepTheSameFor
+
+  filesConfig = app['config']['recognition']['files']
+
+  while True:
+    sending = 0
+    filenames = os.listdir()
+    for filename in filenames:
+      if filename.endswith(filesConfig['mail']):
+        sending += 1
+
+    print(sending, secondSendingKeepTheSameFor)
+    if sending != 0 and secondSendingKeepTheSameFor >= 60:
+      secondSendingKeepTheSameFor = 0
+      print('Spending too long to send a mail to the server')
+    
+    if sending != 0 and sending == lastSending:
+      secondSendingKeepTheSameFor += 1
+
+    if sending != lastSending:
+      secondSendingKeepTheSameFor = 0
+    
+    lastSending = sending
+    time.sleep(1)
 
 def sendAllMails():
+  global sending
+  
   filesConfig = app['config']['recognition']['files']
 
   # Send all saved mails  
@@ -76,7 +108,8 @@ def sendAllMails():
   filenames = os.listdir()
   for filename in filenames:
     if filename.endswith(filesConfig['mail']):
-      
+      print('Sending a mail to the server')
+
       # https://docs.python.org/2/library/string.html
 
       # get received time
@@ -105,10 +138,10 @@ def sendAllMails():
       }
 
       sock.sendMessage(message)
-
       print('Sent a mail to the server')
-      print(timeStr)
-      print(cropPoints)
+      time.sleep(2)
+
+      
 
 def connected(self):
   message = {
@@ -118,7 +151,13 @@ def connected(self):
   }
   
   self.sendMessage(message)
-  sendAllMails()
+  
+  try:
+    # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
+
+    _thread.start_new_thread(sendAllMails, ())
+  except Exception as e:
+    print('Unable to start thread for sending mails:', e)
 
 def disconnected(self):
   print('Disconnected')
@@ -155,7 +194,12 @@ def processMessage(self, message):
         os.remove(filename)
 
 def mailDetected(self):
-  sendAllMails()
+  try:
+    # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
+
+    _thread.start_new_thread(sendAllMails, ())
+  except Exception as e:
+    print('Unable to start thread for sending mails:', e)
 
 def frameAvailable(self, image, i):
   
@@ -200,7 +244,11 @@ def frameAvailable(self, image, i):
 sock = Network(app, connected, disconnected, processMessage)
 sock.connect()
 detector = MailDetector(app, mailDetected, frameAvailable)
-
+try:
+  # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
+  _thread.start_new_thread(mailSendingMonitor, ())
+except Exception as e:
+  print('Unable to start thread for mail sending monitor:', e)
 
 while True:
   if app['settings']['isEnergySavingOn']:

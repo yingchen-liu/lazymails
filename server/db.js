@@ -22,6 +22,7 @@ db.then(() => {
   db.addMiddleware(require('monk-middleware-debug'));
 
   db.get('users').createIndex({ email: 1 }, { unique: true });
+  db.get('mails').createIndex({ code: 1 }, { unique: true });
 }).catch((err) => {
   console.error('Cannot connect to MongoDB');
   process.exit(1);

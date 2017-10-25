@@ -1,22 +1,104 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Lazy Mails</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Lazy Mails - A Creative IoT Project</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css' />
+    <style>
+      body {
+        font-size: 16px;
+        color: #333;
+      }
+
+      .introduction {
+        padding: 60px 0 20px 0;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .introduction h1 {
+        font-size: 40px;
+      }
+
+      .ui.segment {
+        border: none; 
+        box-shadow: none; 
+        text-align: center;
+      }
+      .ui.segment img {
+        width: 50%;
+      }
+      .ui.segment p {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .description {
+        margin-top: 60px;
+      }
+      .members {
+        margin-top: 60px;
+        text-align: center;
+        color: #666;
+      }
+    </style>
   </head>
   <body>
-    <h1>Lazy Mails</h1>
-    <p>Welcome to Lazy Mails</p>
+    <div class="ui secondary pointing menu">
+      <div class="ui container">
+      <a class="active item" href="/">
+        Home
+      </a>
+      <a class="item" href="/admin/mailboxes">
+        Admin
+      </a>
+    </div>
+    </div>
+    <div class="introduction">
+      <div class="ui container">
+        <h1>Lazy Mails</h1>
+      </div>
+    </div>
+    <div class="ui container">
+      <div class="ui three column grid">
+        <div class="column">
+          <div class="ui segment">
+            <img src="/images/onboarding-0.png">
+            <p>Receives mails on iPhone instead of checking mailbox outside your house.</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment">
+            <img src="/images/onboarding-1.png">
+            <p>Categorizes different kinds of letters, utility bills and bank statementss. Of course, filters junk mails!</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment">
+            <img src="/images/onboarding-2.png">
+            <p>Gets mail notifications only of your intrest.</p>
+          </div>
+        </div>
+      </div>
 
-    <ul>
-      <li><a href="/mailboxes">Mailboxes</a></li>
-      <li><a href="/users">Users</a></li>
-    </ul>
+      <div class="description">
+        <p>
+          Lazy Mails is an IoT system aimed at intelligently differentiating variety of mails in a physical mailbox. The system distinguishes useful letters from junk mails and send notifications to the owner’s mobile phone, which saves the users’ time in checking mails everyday and avoid them from missing important letters.
+        </p>
+        <p>
+          Currently, people are getting more junk mails than ever. This leads to the increased difficulty in collecting important letters from a stack of junk mails. People need to check their mailbox frequently in order to make sure that they do not miss any important letter. The system can solve this problem via intelligently categorizing different kinds of mails. It can monitor incoming mails and automatically separate them into different categories. The only thing people need to do is to wait notifications on their mobile phones and decide whether to pick up them from their mailboxes.
+        </p>
+        <p>
+          Another issue is, for tenants, they often receive letters that belong to previous renters. It is very annoyed but they have to check whether the letters belong to them or not. The system also can address this problem by filtering letters based on the receiver’s name and address.
+        </p>
+        <p>
+          When a postman sends a letter to a Lazy Mails box, the system will process the letter, put it into a specific category on the app and decide whether to notify the user or not. The system can distinguish different categories of mails, such as normal letters, parcel collection cards, bank statements, utility bills, and even advertisements.
+        </p>
+      </div>
 
-    <p>Project members:</p>
-    <ul>
-      <li>Yingchen Liu</li>
-      <li>Qiuxian Cai</li>
-    </ul>
+      <p class="members">
+        This is a university assignment made by<br>
+        <a href="http://yingchenliu.com" target="_blank">Yingchen Liu</a> & Qiuxian Cai
+      </p>
+    </div>
   </body>
 </html>

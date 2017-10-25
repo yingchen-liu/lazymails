@@ -10,11 +10,19 @@ const config = require('../config');
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
 // const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
 const categories = [{
-  name: 'food',
-  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza']
+  name: 'ADs - Food',
+  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink']
 }, {
-  name: 'property',
+  name: 'ADs - Properties',
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
+}, {
+  name: 'Bank Statements',
+  logos: ['anz', 'commonwealth'],
+  mainTexts: ['anz', 'commonwealth']
+}, {
+  name: 'Utility Bills',
+  logos: ['vodafone', 'agl'],
+  mainTexts: ['agl', 'bill', 'vodafone', 'origin', 'optus', 'telstra']
 }];
 
 const extractPoBox = (fullText) => {
@@ -159,8 +167,9 @@ const request = (mailBase64, names, address, callback) => {
           score: label.score
         });
 
+        // find out category
         categories.map((category) => {
-          if (category.labels.indexOf(label.description) >= 0) {
+          if (category.labels && category.labels.indexOf(label.description) >= 0) {
             if (!result.category[category.name]) {
               result.category[category.name] = 0;
             }
@@ -176,6 +185,25 @@ const request = (mailBase64, names, address, callback) => {
         result.logos.push({
           desc: logo.description,
           score: logo.score
+        });
+
+        const logoDesc = logo.description.toLowerCase();
+        const logoScore = logo.score;
+
+        // find out category
+        categories.map((category) => {
+          if (category.logos) {
+            for (let i = 0; i < category.logos.length; i++) {
+              const _logo = category.logos[i];
+
+              if (logoDesc.indexOf(_logo) >= 0) {
+                if (!result.category[category.name]) {
+                  result.category[category.name] = 0;
+                }
+                result.category[category.name] += logoScore;
+              }
+            }
+          }
         });
       });
     }
@@ -293,16 +321,72 @@ const request = (mailBase64, names, address, callback) => {
       });
       for (let i = 0; i < Math.min(3, paragraphRates.length); i++) {
         result.mainText.push(paragraphRates[i]);
+        const mainText = paragraphRates[i].text.toLowerCase();
+        
+        // find out category
+        categories.map((category) => {
+          if (category.mainTexts) {
+            for (let i = 0; i < category.mainTexts.length; i++) {
+              const _mainText = category.mainTexts[i];
+
+              if (mainText.indexOf(_mainText) >= 0) {
+                if (!result.category[category.name]) {
+                  result.category[category.name] = 0;
+                }
+                result.category[category.name] += 0.3;
+              }
+            }
+          }
+        });
       }
 
       // name and address
       result.addressSimilarity = addressSimilarity;
       result.nameSimilarity = nameSimilarity;
 
+      if (addressSimilarity >= 0.5 || nameSimilarity >= 0.5) {
+        if (result.category['Bank Statements']) {
+          result.category['Bank Statements'] += 3;
+        } else if (result.category['Utility Bills']) {
+          result.category['Utility Bills'] += 3;
+        } else {
+          result.category['Normal Letters'] += 4;
+        }
+      }
+
       // po box
       result.poBox = extractPoBox(result.text);
       result.receiver = extractReceiver(result.text);
     }
+
+    // order categories
+    result.categories = [];
+    for (category in result.category) {
+      result.categories.push({
+        name: category,
+        score: result.category[category]
+      });
+    }
+
+    if (result.poBox || result.receiver) {
+      result.categories.push({
+        name: 'Normal Letters',
+        score: 0.1
+      });
+    }
+
+    result.categories.sort((a, b) => {
+      return b.score - a.score; // desc
+    });
+
+    if (result.categories.length == 0) {
+      result.categories.push({
+        name: 'ADs',
+        score: 1
+      });
+    }
+
+    delete result.category;
 
     return callback(null, result);
   })

@@ -10,6 +10,18 @@
     </style>
   </head>
   <body>
+    <div class="ui secondary pointing menu">
+      <a class="item" href="/">
+        Home
+      </a>
+      <a class="active item" href="/admin/mailboxes">
+        Mailboxes
+      </a>
+      <a class="item" href="/admin/users">
+        Users
+      </a>
+    </div>
+
     <h1>Mails</h1>
     
     <table class="ui celled padded table">
@@ -18,6 +30,9 @@
           <th class="single line">ID</th>
           <th>Mail</th>
           <th>Mailbox</th>
+          <th>Logos</th>
+          <th>Categories</th>
+          <th>Receiver</th>
           <th>Text</th>
           <th class="single line">Received At</th>
         </tr>
@@ -37,7 +52,34 @@
                 <img class="ui tiny image" src="/<%= mail.code %>-mailbox.png">
               </a>
             </td>
-            <td><%= mail.text %></td>
+            <td>
+              <% if (mail.logos) mail.logos.map((logo) => {
+                %>
+                <%= logo.desc %> (<%= logo.score %>)
+                <br>
+                <%
+              }) %>
+            </td>
+            <td>
+              <% if (mail.categories) mail.categories.map((category) => {
+                %>
+                <%= category.name %> (<%= category.score %>)
+                <br>
+                <%
+              }) %>
+            </td>
+            <td><%= mail.receiver %></td>
+            <td>
+              <strong>
+                <% mail.mainText.map((text) => {
+                  %>
+                  <%= text.text %>
+                  <%
+                }) %>
+              </strong>
+              <br><br>
+              <%= mail.text %>
+            </td>
             <td><%= mail.mailboxReceivedAt._i %></td>
           </tr>
           <%

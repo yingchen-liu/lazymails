@@ -93,6 +93,9 @@ const processMessage = (sock, message) => {
       case 'live_heartbeat':
         app.liveHeartbeat(sock, message, clients);
         break;
+      case 'download_category_icon':
+        app.downloadCategoryIcon(sock, message, clients);
+        break;
       default:
         sock.sendError(new Error('Cannot understand the message'));
         break;
@@ -108,19 +111,26 @@ const connect = () => {
     sock.on('data', (data) => {
       buffer += data.toString();
 
-      if (buffer.endsWith(SOCKET_END_SYMBOL)) {
-        try {
-          const message = JSON.parse(buffer.replace(SOCKET_END_SYMBOL, ''));
-          console.log(`Received message from ${message.end} [${clients.getClientIdByKey(sock.getClientKey())}]`);
+      if (buffer.indexOf(SOCKET_END_SYMBOL) >= 0) {
+        const parts = buffer.split(SOCKET_END_SYMBOL);
         
-          processMessage(sock, message);
+        for (let i = 0; i < parts.length - 1; i++) {
+          const part = parts[i];
 
-        } catch (err) {
-          // send error back
-          console.log(err);
+          try {
+            const message = JSON.parse(part);
+            console.log(`Received message from ${message.end} [${clients.getClientIdByKey(sock.getClientKey())}]`);
+          
+            processMessage(sock, message);
+  
+          } catch (err) {
+            console.log(err);
+
+            sock.sendError('error', new Error('Message cannot be understood.'));
+          }
         }
 
-        buffer = '';
+        buffer = parts[parts.length - 1];
       }
     });
 

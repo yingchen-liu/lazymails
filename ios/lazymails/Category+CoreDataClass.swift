@@ -12,5 +12,13 @@ import CoreData
 
 @objc(Category)
 public class Category: NSManagedObject {
-
+    
+    static func insertNewObject(id: String, name: String, icon: String) -> Category {
+        let category = NSEntityDescription.insertNewObject(forEntityName: "Category", into: DataManager.shared.managedObjectContext) as! Category
+        category.id = id
+        category.name = name
+        category.icon = icon
+        return category
+    }
+    
 }

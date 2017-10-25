@@ -12,5 +12,15 @@ import CoreData
 
 @objc(Mail)
 public class Mail: NSManagedObject {
-
+    static func insertNewObject(id: String, title: String, mainText: String, info: String, didRead: Bool, isImportant: Bool,receivedAt: NSDate,image: String, boxImage: String, showFullImage : Bool) -> Mail {
+        let mail = NSEntityDescription.insertNewObject(forEntityName: "Mail", into: DataManager.shared.managedObjectContext) as! Mail
+        mail.id = id
+        mail.title = title
+        mail.mainText = mainText
+        mail.info = info
+        mail.receivedAt = receivedAt as NSDate
+        mail.image = image
+        mail.boxImage = boxImage
+        return mail
+    }
 }

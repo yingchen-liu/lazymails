@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class Socket: NSObject, StreamDelegate {
     
@@ -39,6 +40,11 @@ class Socket: NSObject, StreamDelegate {
     
     var loginCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
     
+    var requestIconCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
+    
+    var categoryName = ""
+    
+    
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
         var writeStream: Unmanaged<CFWriteStream>?
@@ -69,6 +75,14 @@ class Socket: NSObject, StreamDelegate {
         let message = ["end": "app", "type": "register", "email": email, "password": password, "mailbox": mailbox]
         
         registerCallback = callback
+        
+        sendMessage(message: message)
+    }
+    // send category icon request
+    func sendCategoryIconMessage(category: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
+        let message = ["end": "app", "type": "download_category_icon", "category": category]
+        
+        requestIconCallback = callback
         
         sendMessage(message: message)
     }
@@ -298,14 +312,157 @@ class Socket: NSObject, StreamDelegate {
             break
         case "mail":
             print("You have received a mail just now")
+            print(message["info"])
+            let mail = message["mail"] as! NSDictionary as! Dictionary<String, Any>
+            let mailContent = mail["content"] as! String
+            let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
+            let mailboxContent = mailbox["content"] as! String
+            //print ("mailContent :\(mailContent)")
+            //print ("mailboxContent :\(mailboxContent)")
+            
+            let infoDic = message["info"] as! NSDictionary as! Dictionary<String, Any>
+            // get mail id
+            let mailId = infoDic["_id"] as! String
+            print ("mailId : \(mailId)")
+            
+            // get title
+            var title = ""
+            let logosArray = infoDic["logos"] as! NSArray as! Array<NSDictionary>
+            if logosArray.count != 0 {
+                let eachLogoDic = logosArray[0] as! NSDictionary as! Dictionary<String, Any>
+                title = eachLogoDic["desc"] as! String
+            }
+            print ("title : \(title)")
+
+            // get receive date
+            let receivedAtStr = infoDic["mailboxReceivedAt"] as! String
+            let receivedAt = convertStringToDate(str: receivedAtStr)
+            print ("receivedAt :\(receivedAt)")
+            
+            // get main text
+            var wholeText = ""
+            var text = ""
+            let mainTextArray = infoDic["mainText"] as! NSArray as! Array<NSDictionary>
+            if mainTextArray.count != 0 {
+                for i in 0...mainTextArray.count - 1 {
+                    let eachTextDic = mainTextArray[i] as! Dictionary<String, Any>
+                    text = eachTextDic["text"] as! String
+                    //print("maintext\(i) : \(text) " )
+                    wholeText = wholeText + text
+                }
+                print ("wholeText : \(wholeText)")
+            }
+            
+            // get from
+            let poPox = nullToNil(value: infoDic["poBox"] as AnyObject)
+            var from = ""
+            if poPox != nil {
+                from = poPox as! String
+            }
+            print ("from : \(from)")
+            
+            // get to
+            let receiver = nullToNil(value: infoDic["receiver"] as AnyObject)
+            var to = ""
+            if receiver != nil {
+                to = receiver as! String
+            }
+            print ("to : \(to)")
+
+            // get mail info
+            let mailInfo = infoDic["text"] as! String
+            print ("mailInfo : \(mailInfo)")
+            
+            // get url
+            var urls = infoDic["urls"] as! NSArray as! Array<String>
+            var website = ""
+            if urls.count > 1 {
+                
+                for i in 0...urls.count - 1 {
+                    let url = urls[i] as String
+                    website = website + "," + url
+                }
+                website.remove(at: website.startIndex)
+            }else if urls.count == 1 {
+                website = urls[0] as String
+            }
+            else  {
+                website = ""
+            }
+            print ("website : \(website)")
+            
+            //get category name
+            let categoriesDic = infoDic["categories"] as! NSArray as! Array<NSDictionary>
+            
+            if categoriesDic.count != 0 {
+                let category = categoriesDic[0] as! NSDictionary as! Dictionary<String, Any>
+                categoryName = category["name"] as! String
+            }
+            print ("categoryName : \(categoryName)")
+            // store from, to, wholetext, website to info
+            let jsonObj = ["From": from, "To" : to, "Text": wholeText, "Website": website]
+            let jsonData = try! JSONSerialization.data(withJSONObject: jsonObj, options: JSONSerialization.WritingOptions())
+            let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
+            let info = jsonString
+            
+            // insert new Mail
+            let newMail = insertNewMail(id: mailId, title: title, mainText: wholeText, info: info, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent)
+            // add new Mail to category
+            addMailToCategory(mail: newMail)
+            
+            do {
+                try DataManager.shared.save()
+            } catch {
+                let saveError = error as NSError
+                print("Can not save data : \(saveError)")
+            }
+            
             break
         case "live":
             if let liveCallback = liveCallback {
                 liveCallback(getErrorMessage(message: message), message)
             }
+        case "download_category_icon":
+            if let requestIconCallback = requestIconCallback {
+                requestIconCallback(getErrorMessage(message: message), message)
+            }
         default:
             break
         }
     }
-
+    func insertNewMail(id: String, title: String, mainText: String, info: String, receivedAt: NSDate, image: String, boxImage: String) -> Mail {
+        let mail = Mail.insertNewObject(id: id, title: title, mainText: mainText, info: info, didRead: false, isImportant: false, receivedAt: receivedAt, image: image, boxImage: boxImage, showFullImage: false)
+        return mail
+    }
+    
+    func addMailToCategory(mail : Mail){
+        let uuid = NSUUID().uuidString
+        if categoryName != "" {
+            let category = DataManager.shared.fetchCategoryByName(name: categoryName)
+            
+            if category.count == 0 {
+                print(uuid)
+                let newCategory = Category.insertNewObject(id: uuid, name: categoryName, icon: "")
+                newCategory.addToMail(mail)
+            }else {
+                category[0].addToMail(mail)
+            }
+        }
+    }
+    
+    func nullToNil(value : AnyObject?) -> AnyObject? {
+        if value is NSNull {
+            return nil
+        } else {
+            return value
+        }
+    }
+    // convert String date to NSDate
+    func convertStringToDate(str : String) -> NSDate {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let date = dateFormatter.date(from: str)
+        return date! as NSDate
+    }
 }

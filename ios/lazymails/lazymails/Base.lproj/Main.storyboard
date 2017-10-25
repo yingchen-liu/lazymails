@@ -355,7 +355,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5RW-6L-isd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="go4-b9-dED">
                     <connections>
-                        <segue destination="tUn-eH-6CA" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="6gR-mM-iDY"/>
+                        <segue destination="tUn-eH-6CA" kind="presentation" identifier="showLargePhotoSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="6gR-mM-iDY"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -642,29 +642,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="eH6-TP-qPR">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CIR-mj-rpR">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="Ac0-Pl-Ani">
+                                        <rect key="frame" x="0.0" y="10" width="375" height="647"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Ac0-Pl-Ani" firstAttribute="centerY" secondItem="CIR-mj-rpR" secondAttribute="centerY" id="BmE-8V-NmR"/>
+                                    <constraint firstItem="Ac0-Pl-Ani" firstAttribute="centerX" secondItem="CIR-mj-rpR" secondAttribute="centerX" id="GtW-UE-CZd"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ac0-Pl-Ani" secondAttribute="bottom" constant="10" id="JCv-fJ-0jZ"/>
+                                    <constraint firstItem="Ac0-Pl-Ani" firstAttribute="leading" secondItem="CIR-mj-rpR" secondAttribute="leading" id="fOd-69-C7h"/>
+                                    <constraint firstItem="Ac0-Pl-Ani" firstAttribute="top" secondItem="CIR-mj-rpR" secondAttribute="top" constant="10" id="jT1-dN-psP"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ac0-Pl-Ani" secondAttribute="trailing" id="sWZ-t8-hmY"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="tUn-eH-6CA" id="f1y-IS-W2B"/>
+                                </connections>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="eH6-TP-qPR" firstAttribute="trailing" secondItem="nIA-V4-tEt" secondAttribute="trailing" id="3Wt-tO-afI"/>
-                            <constraint firstItem="eH6-TP-qPR" firstAttribute="top" secondItem="nIA-V4-tEt" secondAttribute="top" id="7xV-xd-fy9"/>
-                            <constraint firstItem="eH6-TP-qPR" firstAttribute="leading" secondItem="nIA-V4-tEt" secondAttribute="leading" id="KKh-8a-dHy"/>
-                            <constraint firstItem="eH6-TP-qPR" firstAttribute="trailing" secondItem="nIA-V4-tEt" secondAttribute="trailing" id="NFu-qQ-Y1t"/>
-                            <constraint firstItem="eH6-TP-qPR" firstAttribute="leading" secondItem="nIA-V4-tEt" secondAttribute="leading" id="TSj-BX-jUM"/>
-                            <constraint firstItem="nIA-V4-tEt" firstAttribute="bottom" secondItem="eH6-TP-qPR" secondAttribute="bottom" id="rem-4o-YfZ"/>
+                            <constraint firstItem="CIR-mj-rpR" firstAttribute="top" secondItem="4qU-2v-gUi" secondAttribute="top" id="6Cd-Dy-qDW"/>
+                            <constraint firstItem="CIR-mj-rpR" firstAttribute="trailing" secondItem="nIA-V4-tEt" secondAttribute="trailing" id="gL3-3s-5gk"/>
+                            <constraint firstItem="CIR-mj-rpR" firstAttribute="leading" secondItem="nIA-V4-tEt" secondAttribute="leading" id="ibC-RX-r8u"/>
+                            <constraint firstItem="CIR-mj-rpR" firstAttribute="bottom" secondItem="nIA-V4-tEt" secondAttribute="bottom" id="uFu-vT-3cf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="nIA-V4-tEt"/>
                     </view>
                     <connections>
-                        <outlet property="photoImgView" destination="eH6-TP-qPR" id="Ooh-NU-WPP"/>
+                        <outlet property="photoImgView" destination="Ac0-Pl-Ani" id="6tv-DV-vwh"/>
+                        <outlet property="scrollView" destination="CIR-mj-rpR" id="7dO-8J-JAq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P23-d4-moS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="646" y="385"/>
+            <point key="canvasLocation" x="645.60000000000002" y="384.55772113943033"/>
         </scene>
         <!--Incorrect Recognition-->
         <scene sceneID="MXK-Gn-BJM">

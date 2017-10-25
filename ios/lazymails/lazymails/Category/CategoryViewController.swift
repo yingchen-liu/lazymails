@@ -11,6 +11,8 @@ import CoreData
 
 class CategoryViewController: UITableViewController {
     
+    var socket = Socket.shared
+    
     var readAndImportantList = ["Unread","Important"]
     //var categoryList = ["card","bills","statements"]
     var categoryList: [Category] = []
@@ -38,6 +40,7 @@ class CategoryViewController: UITableViewController {
         mailUnreadList = mailList.filter { (mail) -> Bool in
             return !mail.didRead
         }
+        
         
         
         // Uncomment the following line to preserve selection between presentations

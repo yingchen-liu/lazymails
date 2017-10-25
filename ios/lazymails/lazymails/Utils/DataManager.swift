@@ -45,6 +45,19 @@ class DataManager: NSObject {
             print(fetchError)
         }
     }
+    func fetchCategoryByName(name: String) -> [Category] {
+        let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
+        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+        var category : [Category] = []
+        do {
+            category = try self.managedObjectContext.fetch(fetchRequest)
+            
+        } catch {
+            let fetchError = error as NSError
+            print(fetchError)
+        }
+        return category
+    }
     
     func fetchMails() {
         let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")

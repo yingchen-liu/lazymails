@@ -29,6 +29,15 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         categoryDetailsTableView.rowHeight = UITableViewAutomaticDimension
         // convert mailinfo jsonString to dictionary
         mailContentDictionary = convertToDictionary(text: (selectedMail?.info!)!) as NSDictionary?
+        
+        //show mail photo
+        let base64 = selectedMail?.image
+        if let data = Data(base64Encoded: base64!, options: .ignoreUnknownCharacters) {
+            let image = UIImage(data: data)
+            self.letterPhotoImgView.image = image
+        }
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,6 +109,13 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             destination.currentMail = selectedMail
             destination.mainContentDictionary = mailContentDictionary
             destination.delegate = delegate
+        }
+        
+        if segue.identifier == "showLargePhotoSegue" {
+            let destination : LetterPhotoViewController = segue.destination as! LetterPhotoViewController
+            destination.imageBase64 = selectedMail?.image
+            
+            
         }
     }
 

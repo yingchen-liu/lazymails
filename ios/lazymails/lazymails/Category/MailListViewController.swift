@@ -53,7 +53,8 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         // Configure the cell...
         let mail = currentMails[indexPath.row]
             cell.letterTitleLabel.text = mail.title
-            cell.receiveDateLabel.text = "9.00am"
+        
+        cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
             cell.letterDescriptionLabel.text = mail.mainText
             cell.letterMarkImgView.image =  UIImage(named:"star-outline")
         return cell
@@ -61,6 +62,14 @@ class MailListViewController: UITableViewController, removeMailDelegate {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 97
+    }
+    
+    func convertDateToString(date : NSDate) -> String {
+        let formatter = DateFormatter()
+        // initially set the format based on your datepicker date
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let str = formatter.string(from: date as! Date)
+        return str
     }
     
 

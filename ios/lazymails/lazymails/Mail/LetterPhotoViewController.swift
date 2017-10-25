@@ -19,11 +19,22 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         //      https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
-
-        let imageTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        
+        // single tapped on the photo to go back
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageSingleTapped(tapGestureRecognizer:)))
         photoImgView.isUserInteractionEnabled = true
-        imageTapGestureRecognizer.numberOfTapsRequired = 2
-        photoImgView.addGestureRecognizer(imageTapGestureRecognizer)
+        singleTapGestureRecognizer.numberOfTapsRequired = 1
+        photoImgView.addGestureRecognizer(singleTapGestureRecognizer)
+        
+        // double tapped on the photo to zoom in and out
+        let imageDoubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageDoubleTapped(tapGestureRecognizer:)))
+        photoImgView.isUserInteractionEnabled = true
+        imageDoubleTapGestureRecognizer.numberOfTapsRequired = 2
+        photoImgView.addGestureRecognizer(imageDoubleTapGestureRecognizer)
+        
+        singleTapGestureRecognizer.require(toFail: imageDoubleTapGestureRecognizer)
+        
+        
         //show large photo
         if let data = Data(base64Encoded: imageBase64!, options: .ignoreUnknownCharacters) {
             let image = UIImage(data: data)
@@ -38,8 +49,11 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.photoImgView
     }
-    
-    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc func imageSingleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        dismiss(animated: true) { }
+        
+    }
+    @objc func imageDoubleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         //dismiss(animated: true) { }
         if scrollView.zoomScale == 1 {
             scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: tapGestureRecognizer.location(in: tapGestureRecognizer.view)), animated: true)

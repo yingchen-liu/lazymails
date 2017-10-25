@@ -9,10 +9,12 @@ const admins = {
 
 
 module.exports = function(req, res, next) {
-  const user = auth(req);
-  if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
-    res.set('WWW-Authenticate', 'Basic realm="Please Login"');
-    return res.status(401).send();
+  if (req.path.startsWith('/admin') || req.path.endsWith('-mail.png') || req.path.endsWith('-mailbox.png')) {
+    const user = auth(req);
+    if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
+      res.set('WWW-Authenticate', 'Basic realm="Please Login"');
+      return res.status(401).send();
+    }
   }
   return next();
 };

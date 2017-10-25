@@ -10,6 +10,18 @@
     </style>
   </head>
   <body>
+    <div class="ui secondary pointing menu">
+      <a class="item" href="/">
+        Home
+      </a>
+      <a class="item" href="/admin/mailboxes">
+        Mailboxes
+      </a>
+      <a class="active item" href="/admin/users">
+        Users
+      </a>
+    </div>
+
     <h1>Users</h1>
     
     <table class="ui celled padded table">
@@ -26,7 +38,7 @@
           <tr>
             <td><%= user._id %></td>
             <td><%= user.email %></td>
-            <td><a href="/mailboxes/<%= user.mailbox %>/mails"><%= user.mailbox %></a></td>
+            <td><a href="/admin/mailboxes/<%= user.mailbox %>/mails"><%= user.mailbox %></a></td>
           </tr>
           <%
         }) %>

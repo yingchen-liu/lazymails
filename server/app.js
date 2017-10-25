@@ -34,8 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'mails')));
 
 app.use('/', index);
-app.use('/users', users);
-app.use('/mailboxes', mailboxes);
+app.use('/admin/users', users);
+app.use('/admin/mailboxes', mailboxes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

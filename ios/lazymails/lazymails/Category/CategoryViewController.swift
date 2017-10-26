@@ -9,7 +9,11 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: UITableViewController {
+protocol mailBoxDelegate {
+    func didRead (mail : Mail)
+}
+
+class CategoryViewController: UITableViewController, mailBoxDelegate {
     
     var socket = Socket.shared
     
@@ -48,6 +52,10 @@ class CategoryViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -350,7 +358,7 @@ class CategoryViewController: UITableViewController {
         if segue.identifier == "showOneCategorySegue" {
             let destination : MailListViewController = segue.destination as! MailListViewController
             let selectedRowIndexPath = tableView.indexPathForSelectedRow
-            
+            destination.mailboxDelegate = self
             if selectedRowIndexPath?.section == 0 {
                 if selectedRowIndexPath?.row == 0 {
                     destination.currentMails = mailUnreadList
@@ -365,6 +373,13 @@ class CategoryViewController: UITableViewController {
                 print (selectedRow)
                 destination.currentMails = categoryList[selectedRow!].mail?.allObjects as! [Mail]
             }
+            
         }
+    }
+    func didRead (mail: Mail){
+        if let index = mailUnreadList.index(of:mail) {
+            mailUnreadList.remove(at: index)
+        }
+        
     }
 }

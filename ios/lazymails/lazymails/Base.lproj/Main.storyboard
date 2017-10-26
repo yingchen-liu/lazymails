@@ -960,10 +960,14 @@
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="Cm5-r7-8bz">
                                             <rect key="frame" x="331" y="44.5" width="36" height="36"/>
+                                            <gestureRecognizers/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="36" id="3kF-A6-gpk"/>
                                                 <constraint firstAttribute="width" secondItem="Cm5-r7-8bz" secondAttribute="height" multiplier="1:1" id="fND-6f-U3M"/>
                                             </constraints>
+                                            <connections>
+                                                <outletCollection property="gestureRecognizers" destination="7Sk-SD-jhW" appends="YES" id="6x6-SQ-W7U"/>
+                                            </connections>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFc-6z-rLS">
                                             <rect key="frame" x="8" y="16" width="50" height="50"/>
@@ -973,6 +977,12 @@
                                                 <constraint firstAttribute="width" constant="50" id="kaE-Dm-XB5"/>
                                             </constraints>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bR8-vt-UpP">
+                                            <rect key="frame" x="12" y="31" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Cm5-r7-8bz" firstAttribute="leading" secondItem="FSS-rS-R5U" secondAttribute="trailing" constant="8" id="04w-RG-H4p"/>
@@ -982,8 +992,10 @@
                                         <constraint firstItem="bFc-6z-rLS" firstAttribute="leading" secondItem="UoT-qZ-udn" secondAttribute="leadingMargin" id="75A-Cs-mHK"/>
                                         <constraint firstItem="6vY-Sq-Kvz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UoT-qZ-udn" secondAttribute="leading" constant="20" symbolic="YES" id="B13-B3-JxQ"/>
                                         <constraint firstItem="PJ1-EM-Ckw" firstAttribute="top" secondItem="UoT-qZ-udn" secondAttribute="topMargin" constant="8" id="B9P-A5-Hwb"/>
+                                        <constraint firstItem="bR8-vt-UpP" firstAttribute="centerY" secondItem="bFc-6z-rLS" secondAttribute="centerY" id="CGt-gk-Tty"/>
                                         <constraint firstItem="ECa-wg-uma" firstAttribute="leading" secondItem="bFc-6z-rLS" secondAttribute="trailing" constant="16" id="Dsq-c3-Wxv"/>
                                         <constraint firstItem="bFc-6z-rLS" firstAttribute="top" secondItem="UoT-qZ-udn" secondAttribute="topMargin" constant="8" id="Eio-6u-IY8"/>
+                                        <constraint firstItem="bR8-vt-UpP" firstAttribute="centerX" secondItem="bFc-6z-rLS" secondAttribute="centerX" id="FeD-Is-nwq"/>
                                         <constraint firstItem="PJ1-EM-Ckw" firstAttribute="leading" secondItem="6vY-Sq-Kvz" secondAttribute="trailing" constant="8" id="SWm-83-UHl"/>
                                         <constraint firstItem="FSS-rS-R5U" firstAttribute="top" secondItem="ECa-wg-uma" secondAttribute="bottom" constant="8" id="XkS-gy-gaJ"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ECa-wg-uma" secondAttribute="trailing" constant="20" symbolic="YES" id="h8Y-VI-S05"/>
@@ -994,6 +1006,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="imgLabel" destination="bR8-vt-UpP" id="eyj-fU-JdB"/>
                                     <outlet property="letterDescriptionLabel" destination="FSS-rS-R5U" id="gIk-fe-PJl"/>
                                     <outlet property="letterMarkImgView" destination="Cm5-r7-8bz" id="xtr-XM-deZ"/>
                                     <outlet property="letterPhotoImgView" destination="bFc-6z-rLS" id="3bL-fj-A3B"/>
@@ -1011,6 +1024,11 @@
                     <navigationItem key="navigationItem" title="Category" id="t8B-nl-Ct7"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VWv-T8-R4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="7Sk-SD-jhW">
+                    <connections>
+                        <action selector="markImportant:" destination="Jc7-xO-vLp" id="1YI-1c-5gh"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-1338.4000000000001" y="-28.335832083958024"/>
         </scene>

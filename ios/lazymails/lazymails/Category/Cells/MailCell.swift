@@ -16,6 +16,7 @@ class MailCell: UITableViewCell {
     @IBOutlet weak var receiveDateLabel: UILabel!
     @IBOutlet weak var letterDescriptionLabel: UILabel!
     @IBOutlet weak var letterMarkImgView: UIImageView!
+    @IBOutlet weak var imgLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

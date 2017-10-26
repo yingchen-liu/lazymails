@@ -15,6 +15,9 @@ class MailListViewController: UITableViewController, removeMailDelegate {
 
     var currentMails : [Mail] = []
     var selectedRow : Int?
+    var mailboxDelegate : mailBoxDelegate?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 44
@@ -25,6 +28,10 @@ class MailListViewController: UITableViewController, removeMailDelegate {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     
@@ -46,19 +53,83 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         return currentMails.count
     }
 
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        currentMails[selectedRow!].didRead = true
+        mailboxDelegate?.didRead(mail: currentMails[selectedRow!])
+        do {
+            try DataManager.shared.save()
+        } catch {
+            self.showError(message: "Could not save: \(error)")
+            return
+        }
+        
+        
+    }
+    func firstChar(str:String) -> String {
+        return String(Array(str)[0])
+    }
+    func setCharacterRange(str : String) -> CharacterSet {
+        
+        return CharacterSet(charactersIn: str)
+    }
+    var checked: Int? = nil
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailCell", for: indexPath) as! MailCell
 
-        // Configure the cell...
+        // display content
         let mail = currentMails[indexPath.row]
+        if mail.title != "" {
             cell.letterTitleLabel.text = mail.title
-        
-        cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
+            cell.imgLabel.text = firstChar(str: mail.title!).uppercased()
+            // set image background color
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "AIU")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.10, green:0.74, blue:0.61, alpha:1.0)
+            }
+            
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "BJPV")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.95, green:0.61, blue:0.07, alpha:1.0)
+            }
+            
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "CKQW")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.20, green:0.60, blue:0.86, alpha:1.0)
+            }
+            
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "DLRX")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.75, green:0.22, blue:0.17, alpha:1.0)
+            }
+            
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "EMSY")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.61, green:0.35, blue:0.71, alpha:1.0)
+            }
+            
+            if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "FNTZ")) != nil) {
+                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.20, green:0.29, blue:0.37, alpha:1.0)
+            }
+        }else {
+            cell.letterTitleLabel.text = "Others"
+            cell.imgLabel.text = "O"
+            cell.letterPhotoImgView.backgroundColor = UIColor(red:0.09, green:0.63, blue:0.52, alpha:1.0)
+        }
+            cell.imgLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
+            cell.imgLabel.textColor = UIColor.white
+            cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
             cell.letterDescriptionLabel.text = mail.mainText
-            cell.letterMarkImgView.image =  UIImage(named:"star-outline")
+            cell.letterMarkImgView.image =  UIImage(named: mail.isImportant ? "star" : "star-outline")
+        
+        // set font systle
+        if mail.didRead {
+            cell.receiveDateLabel.font = UIFont.systemFont(ofSize: 15.0)
+            cell.letterTitleLabel.font = UIFont.systemFont(ofSize: 17.0)
+            cell.letterDescriptionLabel.font = UIFont.systemFont(ofSize: 15.0)
+        }else {
+            cell.receiveDateLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
+            cell.letterTitleLabel.font = UIFont.boldSystemFont(ofSize: 17.0)
+            cell.letterDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
+        }
+        
         return cell
     }
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 97
@@ -72,7 +143,6 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         return str
     }
     
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -125,6 +195,7 @@ class MailListViewController: UITableViewController, removeMailDelegate {
                 //print (selectedRow)
             destination.selectedMail = currentMails[selectedRow!]
             destination.delegate = self
+            //destination.mailboxDelegate = mailboxDelegate
         }
     }
     
@@ -132,7 +203,4 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         currentMails.remove(at: selectedRow!)
         tableView.reloadData()
     }
-    
-    
-
 }

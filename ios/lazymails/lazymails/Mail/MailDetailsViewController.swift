@@ -19,6 +19,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     var mailContentDictionary: NSDictionary?
     var delegate : removeMailDelegate?
     
+   
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,9 +37,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             let image = UIImage(data: data)
             self.letterPhotoImgView.image = image
         }
-        
-        
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         categoryDetailsTableView.reloadData()

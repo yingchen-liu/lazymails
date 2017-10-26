@@ -11,6 +11,8 @@ import CoreData
 
 protocol mailBoxDelegate {
     func didRead (mail : Mail)
+    func addImportant (mail : Mail)
+    func removeImportant (mail : Mail)
 }
 
 class CategoryViewController: UITableViewController, mailBoxDelegate {
@@ -43,6 +45,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         mailList = DataManager.shared.mailList
         mailUnreadList = mailList.filter { (mail) -> Bool in
             return !mail.didRead
+        }
+        mailImportantList = mailList.filter { (mail) -> Bool in
+            return mail.isImportant
         }
         
         
@@ -381,5 +386,16 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             mailUnreadList.remove(at: index)
         }
         
+    }
+    
+    func addImportant (mail : Mail) {
+        if !mailImportantList.contains(mail) {
+            mailImportantList.append(mail)
+        }
+    }
+    func removeImportant(mail: Mail) {
+        if let index = mailImportantList.index(of:mail) {
+            mailImportantList.remove(at: index)
+        }
     }
 }

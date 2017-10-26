@@ -16,7 +16,7 @@ class MailListViewController: UITableViewController, removeMailDelegate {
     var currentMails : [Mail] = []
     var selectedRow : Int?
     var mailboxDelegate : mailBoxDelegate?
-    
+    var indexForCell : Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,10 @@ class MailListViewController: UITableViewController, removeMailDelegate {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -62,6 +65,7 @@ class MailListViewController: UITableViewController, removeMailDelegate {
             self.showError(message: "Could not save: \(error)")
             return
         }
+        
         
         
     }
@@ -127,8 +131,39 @@ class MailListViewController: UITableViewController, removeMailDelegate {
             cell.letterDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
         }
         
+        // mark important
+        
+        
+        
+        cell.letterMarkImgView.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(tapped(_sender:))))
+
+            cell.letterMarkImgView.isUserInteractionEnabled = true
+            cell.letterMarkImgView.tag = indexPath.row
+        
         return cell
     }
+    
+    func tapped(_sender : AnyObject ) {
+        var index = _sender.view.tag
+        var mail = currentMails[index]
+        if !mail.isImportant  {
+            mail.isImportant = true
+            mailboxDelegate?.addImportant(mail: mail)
+        }else {
+            mail.isImportant = false
+            mailboxDelegate?.removeImportant(mail: mail)
+        }
+        do {
+            try DataManager.shared.save()
+        } catch {
+            print ("can not save")
+        }
+        
+        tableView.reloadData()
+        print("you tap image number : \(_sender.view.tag)")
+        
+    }
+    
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

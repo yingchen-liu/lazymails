@@ -14,6 +14,7 @@ class PhotoIncorrectViewController: UITableViewController {
     
     @IBOutlet weak var submitButton: UIButton!
     
+    @IBOutlet weak var fullImageView: UIImageView!
     
     var checked = false
     var currentMail : Mail?
@@ -26,6 +27,12 @@ class PhotoIncorrectViewController: UITableViewController {
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+        
+        if let data = Data(base64Encoded: (currentMail?.boxImage)!, options: .ignoreUnknownCharacters) {
+            let image = UIImage(data: data)
+            self.fullImageView.image = image
+        }
+        
     }
     
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {

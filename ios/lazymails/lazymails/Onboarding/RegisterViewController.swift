@@ -30,6 +30,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     
     @IBOutlet weak var mailboxIdErrorLabel: UILabel!
     
+    @IBOutlet weak var nextButton: UIButton!
     let socket = Socket.shared
     
     let setting = Setting.shared
@@ -178,7 +179,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     }
     
     func validationFailed(_ errors: [(Validatable, ValidationError)]) {
-        var i = 0
+        
         for (field, error) in errors {
             if let field = field as? UITextField {
                 
@@ -187,15 +188,11 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
             }
             
             if let label = error.errorLabel {
-                // scroll to the first error
-                
-                
                 label.text = error.errorMessage
                 label.isHidden = false
             }
-            
-            i = i + 1
         }
+        self.nextButton.backgroundColor = UIColor.darkGray
     }
     
     /**

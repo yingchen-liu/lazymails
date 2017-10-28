@@ -23,9 +23,12 @@ class NotificationSettingTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         var categoryList = DataManager.shared.categoryList
-        for i in 0...categoryList.count - 1 {
-            notifications.append(["name": categoryList[i].name,"notification": categoryList[i].notified])
+        if categoryList.count != 0 {
+            for i in 0...categoryList.count - 1 {
+                notifications.append(["name": categoryList[i].name,"notification": categoryList[i].notified])
+            }
         }
+        
     }
 
     override func didReceiveMemoryWarning() {

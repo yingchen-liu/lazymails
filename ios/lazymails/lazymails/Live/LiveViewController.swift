@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LiveViewController: UIViewController {
+class LiveViewController: UIViewController, UIScrollViewDelegate{
     
     @IBOutlet weak var loadingLabel: UILabel!
     
@@ -19,6 +19,8 @@ class LiveViewController: UIViewController {
     @IBOutlet weak var liveImageView: UIImageView!
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     
     static let liveFrameKeepLive = 10
     
@@ -39,7 +41,9 @@ class LiveViewController: UIViewController {
         super.viewDidLoad()
 
         self.timeLabel.text = ""
-    }
+        
+        
+     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -107,7 +111,43 @@ class LiveViewController: UIViewController {
         }
         
         heartbeatTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.heartbeat), userInfo: nil, repeats: true)
+        
+        // double tapped on the live image to zoom in and out
+        let imageDoubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageDoubleTapped(tapGestureRecognizer:)))
+        liveImageView.isUserInteractionEnabled = true
+        imageDoubleTapGestureRecognizer.numberOfTapsRequired = 2
+        liveImageView.addGestureRecognizer(imageDoubleTapGestureRecognizer)
+        
+        self.scrollView.minimumZoomScale = 1.0
+        self.scrollView.maximumZoomScale = 6.0
+        
+        
     }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.liveImageView
+    }
+    
+    @objc func imageDoubleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        //dismiss(animated: true) { }
+        if scrollView.zoomScale == 1 {
+            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: tapGestureRecognizer.location(in: tapGestureRecognizer.view)), animated: true)
+        } else {
+            scrollView.setZoomScale(1, animated: true)
+        }
+    }
+    // https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
+    func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+        var zoomRect = CGRect.zero
+        zoomRect.size.height = liveImageView.frame.size.height / scale
+        zoomRect.size.width  = liveImageView.frame.size.width  / scale
+        let newCenter = liveImageView.convert(center, from: scrollView)
+        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
+        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
+        return zoomRect
+    }
+    
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         
@@ -162,5 +202,7 @@ class LiveViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
 
 }

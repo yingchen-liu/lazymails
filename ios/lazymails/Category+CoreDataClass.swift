@@ -18,6 +18,7 @@ public class Category: NSManagedObject {
         category.id = id
         category.name = name
         category.icon = icon
+        category.notified = true
         return category
     }
     

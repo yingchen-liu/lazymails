@@ -10,7 +10,9 @@ import UIKit
 
 class NotificationSettingTableViewController: UITableViewController {
     
-    var notifications = [["name": "Parcel Collection Cards", "notification": true], ["name": "ADs", "notification": false]]
+//    var notifications = [["name": "Parcel Collection Cards", "notification": true], ["name": "ADs", "notification": false]]
+    
+    var notifications : [NSDictionary] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,10 @@ class NotificationSettingTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        var categoryList = DataManager.shared.categoryList
+        for i in 0...categoryList.count - 1 {
+            notifications.append(["name": categoryList[i].name,"notification": categoryList[i].notified])
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,6 +57,7 @@ class NotificationSettingTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
+    
 
     /*
     // Override to support conditional editing of the table view.

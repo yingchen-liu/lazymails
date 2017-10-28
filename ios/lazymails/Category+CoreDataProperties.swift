@@ -20,6 +20,7 @@ extension Category {
     @NSManaged public var icon: String?
     @NSManaged public var id: String?
     @NSManaged public var name: String?
+    @NSManaged public var notified: Bool
     @NSManaged public var mail: NSSet?
 
 }

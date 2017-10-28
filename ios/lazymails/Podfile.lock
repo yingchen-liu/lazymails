@@ -1,18 +1,31 @@
 PODS:
   - QRCodeReader.swift (8.0.3)
+  - SwiftValidator (4.0.0)
   - Toast-Swift (2.0.0)
   - Whisper (5.0.0)
 
 DEPENDENCIES:
   - QRCodeReader.swift (~> 8.0.3)
+  - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
   - Toast-Swift (~> 2.0.0)
   - Whisper
 
+EXTERNAL SOURCES:
+  SwiftValidator:
+    :branch: master
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
+CHECKOUT OPTIONS:
+  SwiftValidator:
+    :commit: 6cff6cac3e02a617f7cf11323e18526a117d5673
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
 SPEC CHECKSUMS:
   QRCodeReader.swift: 7c98a05c2544a7c8737853845428b4460273d50d
+  SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
   Toast-Swift: 5b2f8f720f7e78e48511f693df1f9c9a6e38a25a
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
 
-PODFILE CHECKSUM: c3f4d68112e24dfd74a37ce87972a10a7566c902
+PODFILE CHECKSUM: ae85d430710bb66c4ad75dc270f1dc4de9f3c44a
 
 COCOAPODS: 1.3.1

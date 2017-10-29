@@ -61,6 +61,7 @@ class DataManager: NSObject {
     
     func fetchMails() {
         let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "receivedAt", ascending: false)]
         do {
             mailList = try self.managedObjectContext.fetch(fetchRequest)
             

@@ -13,6 +13,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     @IBOutlet weak var categoryDetailsTableView: UITableView!
     @IBOutlet weak var letterPhotoImgView: UIImageView!
     
+    @IBOutlet weak var receivedAtLabel: UILabel!
     
     var categoryDetailsList = ["Category:" : "Bills","From:" : "Po Box 6324 WETHERILL PARK NSW 1851","To:" : "MISS QIUXIAN CAI"]
     var selectedMail : Mail?
@@ -64,6 +65,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
+        receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt!)!)
         
         if indexPath.row == 0 {
             cell.detailsTitleLabel.text = "Category"
@@ -74,12 +76,19 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             var values = mailContentDictionary?.allValues
             cell.detailsValueLabel.text = (values?[indexPath.row - 1] as! String)
         }
-        
         cell.selectionStyle = .none
-        
-        
         return cell
     }
+    
+    func convertDateToString(date : Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let str = formatter.string(from: date)
+        return str
+    }
+    
     
     //https://stackoverflow.com/questions/30480672/how-to-convert-a-json-string-to-a-dictionary
     func convertToDictionary(text: String) -> [String: Any]? {

@@ -284,29 +284,38 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="GaK-FC-od5">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="258"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="219"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="IFM-Je-I2o">
-                                            <rect key="frame" x="0.0" y="20" width="375" height="238"/>
+                                            <rect key="frame" x="0.0" y="20" width="375" height="170"/>
                                             <gestureRecognizers/>
                                             <connections>
                                                 <outletCollection property="gestureRecognizers" destination="go4-b9-dED" appends="YES" id="cem-wF-nZW"/>
                                             </connections>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R7G-cI-csy">
+                                            <rect key="frame" x="8" y="198" width="355" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="IFM-Je-I2o" secondAttribute="bottom" id="0nl-3T-XRl"/>
-                                        <constraint firstItem="IFM-Je-I2o" firstAttribute="leading" secondItem="91J-Yu-Zte" secondAttribute="leading" id="SlI-nS-ldG"/>
-                                        <constraint firstAttribute="trailing" secondItem="IFM-Je-I2o" secondAttribute="trailing" id="Xaj-vX-X26"/>
-                                        <constraint firstItem="IFM-Je-I2o" firstAttribute="top" secondItem="91J-Yu-Zte" secondAttribute="top" id="XuE-dF-mDZ"/>
+                                        <constraint firstItem="IFM-Je-I2o" firstAttribute="leading" secondItem="GaK-FC-od5" secondAttribute="leading" id="32r-EH-4T9"/>
+                                        <constraint firstItem="R7G-cI-csy" firstAttribute="top" secondItem="IFM-Je-I2o" secondAttribute="bottom" constant="8" symbolic="YES" id="DF9-xZ-yNB"/>
+                                        <constraint firstItem="91J-Yu-Zte" firstAttribute="trailing" secondItem="R7G-cI-csy" secondAttribute="trailing" constant="12" id="U0a-bb-FTq"/>
+                                        <constraint firstItem="91J-Yu-Zte" firstAttribute="bottom" secondItem="IFM-Je-I2o" secondAttribute="bottom" constant="29" id="VMp-W6-2SG"/>
+                                        <constraint firstItem="R7G-cI-csy" firstAttribute="leading" secondItem="91J-Yu-Zte" secondAttribute="leading" constant="8" id="bC6-DU-JIv"/>
+                                        <constraint firstItem="IFM-Je-I2o" firstAttribute="top" secondItem="91J-Yu-Zte" secondAttribute="top" id="ceb-fY-yii"/>
+                                        <constraint firstAttribute="trailing" secondItem="IFM-Je-I2o" secondAttribute="trailing" id="zql-q1-9UO"/>
                                     </constraints>
                                     <viewLayoutGuide key="safeArea" id="91J-Yu-Zte"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="mailInfoCell" rowHeight="38" id="we6-zY-KlZ" customClass="MailInfoCell" customModule="lazymails" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="313.5" width="375" height="38"/>
+                                        <rect key="frame" x="0.0" y="274.5" width="375" height="38"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="we6-zY-KlZ" id="l2t-wc-Lzb">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="37.5"/>
@@ -369,6 +378,7 @@
                     <connections>
                         <outlet property="categoryDetailsTableView" destination="VKP-wE-Dgr" id="aW4-IN-9ac"/>
                         <outlet property="letterPhotoImgView" destination="IFM-Je-I2o" id="VBX-GI-Qgl"/>
+                        <outlet property="receivedAtLabel" destination="R7G-cI-csy" id="T1f-TK-9Sl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5RW-6L-isd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -378,7 +388,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-450.5" y="-28.5"/>
+            <point key="canvasLocation" x="-452" y="-29.23538230884558"/>
         </scene>
         <!--Report Issue-->
         <scene sceneID="DGz-uq-Ucf">

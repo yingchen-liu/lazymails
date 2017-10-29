@@ -116,7 +116,16 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         }
             cell.imgLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
             cell.imgLabel.textColor = UIColor.white
-            cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
+            //cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
+        if isDateInToday(date: mail.receivedAt!) {
+            //print ("receiveeeeeee:\(mail.receivedAt)")
+            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt!)
+        }else {
+            cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt!)
+        }
+        
+        
+        
             cell.letterDescriptionLabel.text = mail.mainText
             cell.letterMarkImgView.image =  UIImage(named: mail.isImportant ? "star" : "star-outline")
         
@@ -141,6 +150,12 @@ class MailListViewController: UITableViewController, removeMailDelegate {
             cell.letterMarkImgView.tag = indexPath.row
         
         return cell
+    }
+    
+    func isDateInToday(date: Date) -> Bool {
+        //let today = NSDate()
+        let calendar = NSCalendar.current
+        return calendar.isDateInToday(date)
     }
     
     func tapped(_sender : AnyObject ) {
@@ -170,11 +185,35 @@ class MailListViewController: UITableViewController, removeMailDelegate {
         return 97
     }
     
-    func convertDateToString(date : NSDate) -> String {
+    func convertDateToString(date : Date) -> String {
         let formatter = DateFormatter()
-        // initially set the format based on your datepicker date
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let str = formatter.string(from: date as! Date)
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: date)
+        print ("\(str)")
+        return str
+    }
+    
+    func formatDate(date : Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: date)
+        print ("\(str)")
+        return str
+    }
+    func formatDateAndTime(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "HH:mm"
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: date)
+        print ("\(str)")
         return str
     }
     

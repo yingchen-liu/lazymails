@@ -360,6 +360,7 @@ class Socket: NSObject, StreamDelegate {
 
             // get receive date
             let receivedAtStr = infoDic["mailboxReceivedAt"] as! String
+            print ("receivedAtStr : \(receivedAtStr) " )
             let receivedAt = convertStringToDate(str: receivedAtStr)
             print ("receivedAt :\(receivedAt)")
             
@@ -454,7 +455,7 @@ class Socket: NSObject, StreamDelegate {
             break
         }
     }
-    func insertNewMail(id: String, title: String, mainText: String, info: String, receivedAt: NSDate, image: String, boxImage: String) -> Mail {
+    func insertNewMail(id: String, title: String, mainText: String, info: String, receivedAt: Date, image: String, boxImage: String) -> Mail {
         let mail = Mail.insertNewObject(id: id, title: title, mainText: mainText, info: info, didRead: false, isImportant: false, receivedAt: receivedAt, image: image, boxImage: boxImage, showFullImage: false)
         return mail
     }
@@ -482,11 +483,12 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     // convert String date to NSDate
-    func convertStringToDate(str : String) -> NSDate {
+    func convertStringToDate(str : String) -> Date {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.locale = NSLocale.current
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.date(from: str)
-        return date! as NSDate
+        return date!
     }
 }

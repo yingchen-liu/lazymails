@@ -13,6 +13,7 @@ class NotificationSettingTableViewController: UITableViewController {
 //    var notifications = [["name": "Parcel Collection Cards", "notification": true], ["name": "ADs", "notification": false]]
     
     var notifications : [NSDictionary] = []
+    var categoryList : [Category] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,14 +23,14 @@ class NotificationSettingTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        var categoryList = DataManager.shared.categoryList
+        categoryList = DataManager.shared.categoryList
         if categoryList.count != 0 {
             for i in 0...categoryList.count - 1 {
                 notifications.append(["name": categoryList[i].name,"notification": categoryList[i].notified])
             }
         }
-        
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -53,13 +54,29 @@ class NotificationSettingTableViewController: UITableViewController {
 
         cell.categoryNameLabel.text = notifications[indexPath.row]["name"] as? String
         cell.categoryNotificationSwitch.isOn = notifications[indexPath.row]["notification"] as! Bool
-
+        cell.categoryNotificationSwitch.tag = indexPath.row
+        cell.categoryNotificationSwitch.addTarget(self, action: #selector(notificationTriggerd(sender:)), for: .valueChanged)
         return cell
+    }
+    
+    @objc func notificationTriggerd(sender: UISwitch) {
+        if sender.isOn {
+            categoryList[sender.tag].notified = true
+        }else {
+            categoryList[sender.tag].notified = false
+        }
+        do {
+            try DataManager.shared.save()
+        } catch {
+            print ("Can not save notification settings")
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
+    
+    
     
 
     /*

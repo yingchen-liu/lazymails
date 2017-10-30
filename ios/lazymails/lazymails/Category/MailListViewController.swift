@@ -119,9 +119,9 @@ class MailListViewController: UITableViewController, removeMailDelegate {
             //cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
         if isDateInToday(date: mail.receivedAt!) {
             //print ("receiveeeeeee:\(mail.receivedAt)")
-            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt!)
-        }else {
             cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt!)
+        }else {
+            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt!)
         }
         
         
@@ -154,7 +154,9 @@ class MailListViewController: UITableViewController, removeMailDelegate {
     
     func isDateInToday(date: Date) -> Bool {
         //let today = NSDate()
-        let calendar = NSCalendar.current
+        var calendar = NSCalendar.current
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.locale = Locale.current
         return calendar.isDateInToday(date)
     }
     

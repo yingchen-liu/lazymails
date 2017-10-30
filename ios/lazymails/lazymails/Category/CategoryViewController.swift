@@ -59,9 +59,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

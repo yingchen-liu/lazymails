@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import UserNotifications
+import Whisper
 
 class Socket: NSObject, StreamDelegate {
     
@@ -430,6 +432,31 @@ class Socket: NSObject, StreamDelegate {
             let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
             let info = jsonString
             
+            // notification
+            data.fetchCategories()
+            if data.categoryList.count != 0 {
+                var categoryExist : Bool = false
+                
+                for category in data.categoryList{
+                    if category.name == categoryName {
+                        categoryExist = true
+                        if category.notified {
+                            print("which category notified\(category.name)")
+                            Notification.shared.monitorMail(id : mailId, categoryName: categoryName)
+                        }
+                    }
+                }
+                
+                if !categoryExist {
+                     Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
+                }
+                
+                
+            } else {
+                Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
+            }
+            
+            
             // insert new Mail
             let newMail = insertNewMail(id: mailId, title: title, mainText: wholeText, info: info, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent)
             // add new Mail to category
@@ -441,6 +468,8 @@ class Socket: NSObject, StreamDelegate {
                 let saveError = error as NSError
                 print("Can not save data : \(saveError)")
             }
+            
+            
             
             break
         case "live":
@@ -482,7 +511,7 @@ class Socket: NSObject, StreamDelegate {
             return value
         }
     }
-    // convert String date to NSDate
+    // convert String date to Date
     func convertStringToDate(str : String) -> Date {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX")

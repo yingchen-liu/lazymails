@@ -75,8 +75,7 @@ const receiveMail = (sock, message, clients) => {
             // https://github.com/oliver-moran/jimp
             jimp.read(mailFilename).then((lenna) => {
               lenna.rotate(rotateDeg)
-                .write(mailFilename)
-                .then(() => {
+                .write(mailFilename, () => {
                   // request mail info
                   const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
                   google.request(mailBase64, mailbox.names, mailbox.address, (err, result) => {

@@ -17,7 +17,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     var categoryDetailsList = ["Category:" : "Bills","From:" : "Po Box 6324 WETHERILL PARK NSW 1851","To:" : "MISS QIUXIAN CAI"]
     var selectedMail : Mail?
-    var mailContentDictionary: NSDictionary?
+    var mailContentDictionary: Dictionary<String, String> = [:]
+    var filterDictionary: Dictionary<String, String> = [:]
     var delegate : removeMailDelegate?
     
    
@@ -30,7 +31,15 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         categoryDetailsTableView.estimatedRowHeight = 44
         categoryDetailsTableView.rowHeight = UITableViewAutomaticDimension
         // convert mailinfo jsonString to dictionary
-        mailContentDictionary = convertToDictionary(text: (selectedMail?.info!)!) as NSDictionary?
+        mailContentDictionary = convertToDictionary(text: (selectedMail?.info!)!)!
+        
+        for (key, value) in mailContentDictionary {
+            if mailContentDictionary[key] != "" {
+                filterDictionary[key] = value
+            }
+            print("\(filterDictionary)")
+        }
+        
         
         //show mail photo
         let base64 = selectedMail?.image
@@ -58,7 +67,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mailContentDictionary!.count + 1
+        return filterDictionary.count + 1
     }
     
     
@@ -71,10 +80,11 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             cell.detailsTitleLabel.text = "Category"
             cell.detailsValueLabel.text = selectedMail?.category.name
         } else {
-            var keys = mailContentDictionary?.allKeys
-            cell.detailsTitleLabel.text = keys?[indexPath.row - 1] as? String
-            var values = mailContentDictionary?.allValues
-            cell.detailsValueLabel.text = (values?[indexPath.row - 1] as! String)
+            var keys = Array(filterDictionary.keys)
+            
+            cell.detailsTitleLabel.text = keys[indexPath.row - 1]
+            var values = Array(filterDictionary.values)
+            cell.detailsValueLabel.text = values[indexPath.row - 1]
         }
         cell.selectionStyle = .none
         return cell
@@ -91,10 +101,10 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     
     //https://stackoverflow.com/questions/30480672/how-to-convert-a-json-string-to-a-dictionary
-    func convertToDictionary(text: String) -> [String: Any]? {
+    func convertToDictionary(text: String) -> [String: String]? {
         if let data = text.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
             } catch {
                 print(error.localizedDescription)
             }
@@ -116,7 +126,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         if segue.identifier == "reportSegue" {
             let destination : ReportIssuesViewController = segue.destination as! ReportIssuesViewController
             destination.currentMail = selectedMail
-            destination.mainContentDictionary = mailContentDictionary
+            destination.mainContentDictionary = filterDictionary
             destination.delegate = delegate
         }
         

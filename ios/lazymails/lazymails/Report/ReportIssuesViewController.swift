@@ -11,7 +11,7 @@ import UIKit
 class ReportIssuesViewController: UITableViewController {
 
     var currentMail : Mail?
-    var mainContentDictionary : NSDictionary?
+    var mainContentDictionary : Dictionary<String, String> = [:]
     var delegate : removeMailDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()

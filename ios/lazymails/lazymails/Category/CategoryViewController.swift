@@ -51,10 +51,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         }
         
         Socket.shared.iconDownloadCallbacks.append(categoryIconReceived)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        Socket.shared.mailCallback = mailCallback
+        Socket.shared.mailCallbacks.append(mailCallback)
     }
     
     func mailCallback(mail: Mail) {

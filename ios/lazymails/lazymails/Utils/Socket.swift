@@ -44,7 +44,7 @@ class Socket: NSObject, StreamDelegate {
     
     var requestIconCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
     
-    var mailCallback: ((_ mail: Mail) -> Void)?
+    var mailCallbacks: [(_ mail: Mail) -> Void] = []
     
     var iconDownloadCallbacks: [() -> Void] = []
     
@@ -523,8 +523,8 @@ class Socket: NSObject, StreamDelegate {
             
             sendDownloadIconMessage(categoryName: categoryName)
             
-            if let mailCallback = mailCallback {
-                mailCallback(newMail)
+            for callback in mailCallbacks {
+                callback(newMail)
             }
             
             break

@@ -34,6 +34,7 @@
           <th>Categories</th>
           <th>Receiver</th>
           <th>Text</th>
+          <th>Report</th>
           <th class="single line">Received At</th>
         </tr>
       </thead>
@@ -79,6 +80,11 @@
               </strong>
               <br><br>
               <%= mail.text %>
+            </td>
+            <td>
+              <%= mail.reportedCategory ? 'Category: ' + mail.reportedCategory + '<br>' : '' %>
+              <%= mail.reportedPhoto ? 'Incorrect Photo<br>' : '' %>
+              <%= mail.reportedRecognition ? 'Incorrect Recognition' : '' %>
             </td>
             <td><%= mail.mailboxReceivedAt._i %></td>
           </tr>

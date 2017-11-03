@@ -46,6 +46,8 @@ class Socket: NSObject, StreamDelegate {
     
     var mailCallback: ((_ mail: Mail) -> Void)?
     
+    var iconDownloadCallbacks: [() -> Void] = []
+    
     var categoryName = ""
     
     var connected = false
@@ -140,6 +142,12 @@ class Socket: NSObject, StreamDelegate {
         let message: Dictionary<String, Any> = ["end": "app", "type": "update_mailbox", "mailbox": mailbox]
         
         responseCallback = callback
+        
+        sendMessage(message: message)
+    }
+    
+    func sendDownloadIconMessage(categoryName: String) {
+        let message = ["end": "app", "type": "download_category_icon", "category": categoryName]
         
         sendMessage(message: message)
     }
@@ -522,10 +530,26 @@ class Socket: NSObject, StreamDelegate {
             if let liveCallback = liveCallback {
                 liveCallback(getErrorMessage(message: message), message)
             }
+            break
         case "download_category_icon":
-            if let requestIconCallback = requestIconCallback {
-                requestIconCallback(getErrorMessage(message: message), message)
+            let categoryName = message["category"] as! String
+            let icon = message["content"] as! String
+            
+            if let category = DataManager.shared.fetchCategoryByName(name: categoryName).first {
+                category.icon = icon
+                
+                do {
+                    try DataManager.shared.save()
+                } catch {
+                    let saveError = error as NSError
+                    print("Can not save data : \(saveError)")
+                }
             }
+            
+            for callback in iconDownloadCallbacks {
+                callback()
+            }
+            break
         default:
             break
         }

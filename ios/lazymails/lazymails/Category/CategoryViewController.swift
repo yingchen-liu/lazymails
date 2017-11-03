@@ -49,6 +49,8 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         mailImportantList = mailList.filter { (mail) -> Bool in
             return mail.isImportant
         }
+        
+        Socket.shared.iconDownloadCallbacks.append(categoryIconReceived)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +66,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         tableView.reloadData()
     }
     
+    func categoryIconReceived() {
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -93,16 +98,27 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             cell.cateNameLabel.text = readAndImportantList[indexPath.row]
             if cell.cateNameLabel.text == readAndImportantList[0] {
                 cell.cateUnreadNoLabel.text = String( mailUnreadList.count)
+                cell.cateIconImgView.image = UIImage(named: "unread")
                 print ( mailUnreadList.count)
             }else {
                 cell.cateUnreadNoLabel.text = String( mailImportantList.count)
+                cell.cateIconImgView.image = UIImage(named: "star-outline")
             }
+            
             
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
             //set the data here
             cell.cateNameLabel.text = categoryList[indexPath.row].name
+            
+            if let icon = categoryList[indexPath.row].icon {
+                if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
+                    let image = UIImage(data: data)
+                    
+                    cell.cateIconImgView.image = image
+                }
+            }
             return cell
         }
     }

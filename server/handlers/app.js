@@ -266,6 +266,7 @@ const downloadCategoryIcon = (sock, message, clients) => {
 
       var base64 = fs.readFileSync(path.join(iconPath, file), 'base64');
       sock.sendMessage(message.type, {
+        category: message.category,
         content: base64
       });
     }

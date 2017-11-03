@@ -41,6 +41,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         //modifyData()
         DataManager.shared.fetchCategories()
         categoryList = DataManager.shared.categoryList
+        categoryList.sort { (a, b) -> Bool in
+            return a.name! > b.name!
+        }
+        
         DataManager.shared.fetchMails()
         mailList = DataManager.shared.mailList
         mailUnreadList = mailList.filter { (mail) -> Bool in
@@ -58,6 +62,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         mailUnreadList.append(mail)
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
+            categoryList.sort { (a, b) -> Bool in
+                return a.name! > b.name!
+            }
         }
         
         tableView.reloadData()

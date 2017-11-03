@@ -259,7 +259,7 @@ const downloadCategoryIcon = (sock, message, clients) => {
   //  https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j
 
   fs.readdirSync(iconPath).forEach(file => {
-    if (file.startsWith(message.category)) {
+    if (message.category.startsWith(file.split('.')[0])) {
       found = true;
 
       //  https://stackoverflow.com/questions/24523532/how-do-i-convert-an-image-to-a-base64-encoded-data-url-in-sails-js-or-generally

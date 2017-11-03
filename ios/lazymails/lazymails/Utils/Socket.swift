@@ -521,6 +521,8 @@ class Socket: NSObject, StreamDelegate {
                 print("Can not save data : \(saveError)")
             }
             
+            sendDownloadIconMessage(categoryName: categoryName)
+            
             if let mailCallback = mailCallback {
                 mailCallback(newMail)
             }
@@ -532,6 +534,12 @@ class Socket: NSObject, StreamDelegate {
             }
             break
         case "download_category_icon":
+            
+            if let error = getErrorMessage(message: message) {
+                print(error)
+                break
+            }
+            
             let categoryName = message["category"] as! String
             let icon = message["content"] as! String
             

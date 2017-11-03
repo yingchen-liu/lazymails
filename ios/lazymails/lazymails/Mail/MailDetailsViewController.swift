@@ -19,7 +19,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     var selectedMail : Mail?
     var mailContentDictionary: Dictionary<String, String> = [:]
     var filterDictionary: Dictionary<String, String> = [:]
-    var delegate : removeMailDelegate?
+    var delegate : RemoveMailDelegate?
     
    
     override func viewDidLoad() {

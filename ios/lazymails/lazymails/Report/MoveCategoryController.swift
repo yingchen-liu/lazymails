@@ -17,7 +17,7 @@ class MoveCategoryController: UITableViewController {
     var currentMail : Mail?
     var categoryList = DataManager.shared.categoryList
     var filteredCategoryList: [Category] = []
-    var delegate: removeMailDelegate?
+    var delegate: RemoveMailDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

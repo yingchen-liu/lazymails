@@ -12,7 +12,7 @@ class ReportIssuesViewController: UITableViewController {
 
     var currentMail : Mail?
     var mainContentDictionary : Dictionary<String, String> = [:]
-    var delegate : removeMailDelegate?
+    var delegate : RemoveMailDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
 

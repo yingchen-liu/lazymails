@@ -83,7 +83,8 @@ def mailSendingMonitor():
       if filename.endswith(filesConfig['mail']):
         sending += 1
 
-    print(sending, secondSendingKeepTheSameFor)
+    if sending > 0:
+      print('mails:', sending, 'time:', secondSendingKeepTheSameFor)
     if sending != 0 and secondSendingKeepTheSameFor >= 60:
       secondSendingKeepTheSameFor = 0
       print('Spending too long to send a mail to the server')

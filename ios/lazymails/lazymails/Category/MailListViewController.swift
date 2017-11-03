@@ -117,11 +117,11 @@ class MailListViewController: UITableViewController, removeMailDelegate {
             cell.imgLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
             cell.imgLabel.textColor = UIColor.white
             //cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
-        if isDateInToday(date: mail.receivedAt!) {
+        if isDateInToday(date: mail.receivedAt) {
             //print ("receiveeeeeee:\(mail.receivedAt)")
-            cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt!)
+            cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt)
         }else {
-            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt!)
+            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt)
         }
         
         

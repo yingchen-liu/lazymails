@@ -48,6 +48,8 @@ class Socket: NSObject, StreamDelegate {
     
     var categoryName = ""
     
+    var connected = false
+    
     
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
@@ -164,6 +166,35 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    func sendCheckMails() {
+        if let newestMail = DataManager.shared.fetchNewestMail() {
+            let after = convertDateToString(date: newestMail.receivedAt)
+        
+            print("Checking mails")
+            let message = ["end": "app", "type": "check_mails", "after": after]
+            
+            sendMessage(message: message)
+        }
+    }
+    
+    func sendReportCategory(category: String) {
+        let message = ["end": "app", "type": "report", "issueType": "category", "reportedCategory": category]
+        
+        sendMessage(message: message)
+    }
+    
+    func sendReportPhoto() {
+        let message = ["end": "app", "type": "report", "issueType": "photo"]
+        
+        sendMessage(message: message)
+    }
+    
+    func sendReportRecognition() {
+        let message = ["end": "app", "type": "report", "issueType": "recognition"]
+        
+        sendMessage(message: message)
+    }
+    
     func sendMessage(message: Dictionary<String, Any>) {
         
         //  https://stackoverflow.com/questions/29625133/convert-dictionary-to-json-in-swift
@@ -180,6 +211,7 @@ class Socket: NSObject, StreamDelegate {
     }
     
     func close() {
+        connected = false
         inputStream.close()
         outputStream.close()
     }
@@ -295,6 +327,8 @@ class Socket: NSObject, StreamDelegate {
         setting.isEnergySavingOn = isEnergySavingOn
         
         setting.save()
+        
+        connected = true
     }
     
     func getErrorMessage(message: Dictionary<String, Any>) -> String? {
@@ -326,6 +360,9 @@ class Socket: NSObject, StreamDelegate {
             if let loginCallback = loginCallback {
                 loginCallback(nil, message)
             }
+            
+            sendCheckMails()
+            
             break
         case "update_mailbox":
             if let responseCallback = responseCallback {
@@ -337,6 +374,11 @@ class Socket: NSObject, StreamDelegate {
             break
         case "mailbox_offline":
             print("Your mailbox goes offline just now")
+            break
+        case "check_mails":
+            print("Found unreceived mails")
+            let mails = message["mails"] as! NSArray as! Array<NSDictionary>
+            print(mails.count)
             break
         case "mail":
             print("You have received a mail just now")
@@ -515,6 +557,7 @@ class Socket: NSObject, StreamDelegate {
             return value
         }
     }
+    
     // convert String date to Date
     func convertStringToDate(str : String) -> Date {
         let dateFormatter = DateFormatter()
@@ -523,5 +566,13 @@ class Socket: NSObject, StreamDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.date(from: str)
         return date!
+    }
+    
+    func convertDateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter.string(from: date)
     }
 }

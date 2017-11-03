@@ -9,13 +9,13 @@
     </entity>
     <entity name="Mail" representedClassName="Mail" syncable="YES">
         <attribute name="boxImage" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="didRead" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="didRead" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="info" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isImportant" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isImportant" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="mainText" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="receivedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="receivedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="showFullImage" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="mail" inverseEntity="Category" syncable="YES"/>

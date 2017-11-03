@@ -218,7 +218,7 @@ def frameAvailable(self, image, i):
 
       if framesLeft > 0:
         # only send per n frames or the first frame when live started
-        print(i)
+        # print(i)
         if i % liveConfig['sendPerFrames'] == 0 or framesLeft == liveConfig['sendPerFrames']:
           print('live to {}, {} remains'.format(email, lives[email]))
 

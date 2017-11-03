@@ -736,6 +736,9 @@
                                     <state key="normal" title="Submit">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="submitButtonTapped:" destination="rrD-uh-lXd" eventType="touchUpInside" id="sLY-60-Dq2"/>
+                                    </connections>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="8Cy-B5-h2o">
                                     <rect key="frame" x="24" y="36" width="16" height="16"/>
@@ -847,6 +850,9 @@
                                     <state key="normal" title="Submit">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="submitButtonTapped:" destination="Bjf-cu-JDw" eventType="touchUpInside" id="sa5-Tw-eWh"/>
+                                    </connections>
                                 </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="UrG-NV-2Mw">
                                     <rect key="frame" x="24" y="36" width="16" height="16"/>

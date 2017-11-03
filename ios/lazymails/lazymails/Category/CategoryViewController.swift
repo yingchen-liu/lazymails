@@ -377,7 +377,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
                 let selectedRow = tableView.indexPathForSelectedRow?.row
                 print (selectedRow)
                 var currentMails = categoryList[selectedRow!].mail?.allObjects as! [Mail]
-                currentMails = currentMails.sorted { $0.receivedAt! > $1.receivedAt!}
+                currentMails = currentMails.sorted { $0.receivedAt > $1.receivedAt}
                 destination.currentMails = currentMails
             }
             

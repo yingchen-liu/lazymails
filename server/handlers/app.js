@@ -10,6 +10,29 @@ const mailboxes = db.get('mailboxes');
 const mails = db.get('mails');
 const users = db.get('users');
 
+
+const report = (sock, message, clients) => {
+  const update = {};
+  switch (message.issueType) {
+    case 'category':
+      update.reportedCategory = message.reportedCategory;
+      break;
+    case 'photo':
+      update.reportedPhoto = true;
+      break;
+    case 'recognition':
+      update.reportedRecognition = true;
+      break;
+    default:
+      break;
+  }
+
+  mails.update({ _id: message.id, $set: update})
+    .then(() => {
+      sock.sendMessage(message.type, {});
+    });
+};
+
 const register = (sock, message, clients) => {
   users.findOne({ email: message.email })
     .then((user) => {
@@ -255,6 +278,7 @@ const downloadCategoryIcon = (sock, message, clients) => {
 
 
 module.exports = {
+  report,
   register,
   connect,
   checkMails,

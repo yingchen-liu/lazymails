@@ -65,7 +65,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
-        receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt!)!)
+        receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt)!)
         
         if indexPath.row == 0 {
             cell.detailsTitleLabel.text = "Category"

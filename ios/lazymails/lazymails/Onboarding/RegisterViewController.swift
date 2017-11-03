@@ -60,7 +60,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
-        mailboxIdField.isUserInteractionEnabled = false
+        //mailboxIdField.isUserInteractionEnabled = false
         
     }
 
@@ -113,6 +113,13 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     
     @IBAction func nextButtonTapped(_ sender: Any) {
         validator.validate(self)
+        
+    }
+    
+    
+    func validationSuccessful() {
+        //self.nextButton.isEnabled = true
+        self.nextButton.backgroundColor = UIColor(red: 122/255, green: 195/255, blue: 246/255, alpha: 1)
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
@@ -148,7 +155,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
             socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
                 guard error == nil else {
                     print("register: \(error!)")
-                    self.emailErrorLabel.text = "Email already exists."
+                    //self.emailErrorLabel.text = "Email already exists."
                     return
                 }
                 
@@ -171,15 +178,22 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 print("registered!")
             })
         }
-    }
-    
-    
-    func validationSuccessful() {
+        
         return
+    }
+    @IBAction func idInputChanged(_ sender: Any) {
+        self.mailboxIdErrorLabel.text = ""
+        if (sender as! UITextField).text != "" {
+            self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
+        }else {
+            self.validator.unregisterField(mailboxIdField)
+        }
     }
     
     func validationFailed(_ errors: [(Validatable, ValidationError)]) {
-        
+        self.emailErrorLabel.text = ""
+        self.psdErrorLabel.text = ""
+        self.mailboxIdErrorLabel.text = ""
         for (field, error) in errors {
             if let field = field as? UITextField {
                 
@@ -192,18 +206,18 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 label.isHidden = false
             }
         }
+        //self.nextButton.isEnabled = false
         self.nextButton.backgroundColor = UIColor.darkGray
+        
     }
     
     /**
      Init validation
      */
     func initValidation() {
-        self.validator.registerField(emailField, errorLabel: emailErrorLabel , rules: [RequiredRule(message: "Please enter your Email!")])
+        self.validator.registerField(emailField, errorLabel: emailErrorLabel , rules: [RequiredRule(message: "Please enter your Email!"),EmailRule(message: "Invalid email")])
         
-        self.validator.registerField(passwordField,errorLabel: psdErrorLabel, rules: [RequiredRule(message: "Please enter your password!")])
-        
-//        self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [RequiredRule(message: "error?")])
+        self.validator.registerField(passwordField,errorLabel: psdErrorLabel, rules: [RequiredRule(message: "Please enter your password!"),MinLengthRule(length: 6,message: "Should be more than 6 digits")])
     }
     
     @IBAction func nextTapped(_ sender: Any) {

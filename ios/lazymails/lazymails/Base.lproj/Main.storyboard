@@ -1300,6 +1300,9 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" spellCheckingType="no"/>
+                                <connections>
+                                    <action selector="idInputChanged:" destination="9x7-6c-b7N" eventType="editingChanged" id="UK1-Ck-lUa"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mailbox ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5f-go-orS">
                                 <rect key="frame" x="16" y="239" width="80" height="21"/>
@@ -1415,6 +1418,7 @@
                         <outlet property="emailField" destination="o1F-Bq-FCM" id="FEg-RH-aw4"/>
                         <outlet property="mailboxIdErrorLabel" destination="1ii-ep-Ei3" id="l18-AA-Ulg"/>
                         <outlet property="mailboxIdField" destination="Mer-Td-PEd" id="72C-xL-XGI"/>
+                        <outlet property="nextButton" destination="HAB-Mz-OuB" id="hnC-vr-8Om"/>
                         <outlet property="passwordField" destination="WUV-Vc-m7u" id="cdQ-kC-pfG"/>
                         <outlet property="psdErrorLabel" destination="aqm-nF-8v1" id="JDV-Kk-U8o"/>
                     </connections>

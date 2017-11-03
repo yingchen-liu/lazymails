@@ -69,7 +69,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         
         if indexPath.row == 0 {
             cell.detailsTitleLabel.text = "Category"
-            cell.detailsValueLabel.text = selectedMail?.category?.name
+            cell.detailsValueLabel.text = selectedMail?.category.name
         } else {
             var keys = mailContentDictionary?.allKeys
             cell.detailsTitleLabel.text = keys?[indexPath.row - 1] as? String

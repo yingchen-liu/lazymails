@@ -23,7 +23,7 @@ class MoveCategoryController: UITableViewController {
         super.viewDidLoad()
         
         filteredCategoryList = categoryList.filter { (category) -> Bool in
-            return currentMail?.category?.id != category.id
+            return currentMail?.category.id != category.id
         }
         
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
@@ -133,7 +133,7 @@ class MoveCategoryController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCategoryCell", for: indexPath) as! CurrentCategoryViewCell
             //set the data here
             //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
-            cell.currentCategoryLabel.text = currentMail?.category?.name
+            cell.currentCategoryLabel.text = currentMail?.category.name
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "targetCategoryCell", for: indexPath) as! MoveToCagetoryViewCell
@@ -158,7 +158,7 @@ class MoveCategoryController: UITableViewController {
     }
     
     @IBAction func moveCategory(_ sender: Any) {
-        currentMail?.category?.removeFromMail(currentMail!)
+        currentMail?.category.removeFromMail(currentMail!)
         filteredCategoryList[checked!].addToMail(currentMail!)
         do {
             try DataManager.shared.save()

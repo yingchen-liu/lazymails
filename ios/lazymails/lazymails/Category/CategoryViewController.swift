@@ -50,15 +50,17 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             return mail.isImportant
         }
         
-        
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        Socket.shared.mailCallback = mailCallback
     }
     
+    func mailCallback(mail: Mail) {
+        mailUnreadList.append(mail)
+        if !categoryList.contains(mail.category) {
+            categoryList.append(mail.category)
+        }
+        
+        tableView.reloadData()
+    }
     
 
     override func didReceiveMemoryWarning() {
@@ -240,7 +242,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
 //                    mail.info = jsonString
 //                }
                 if mail.id == "6" {
-                    let jsonObj = ["Category":mail.category?.name,"Text": "Feel hotter in city? This is because of the Urban Heat Island Effect, visit to our website to learn more about this issues.", "Website":"http://www.coolmelb.ml/"]
+                    let jsonObj = ["Category":mail.category.name,"Text": "Feel hotter in city? This is because of the Urban Heat Island Effect, visit to our website to learn more about this issues.", "Website":"http://www.coolmelb.ml/"]
                     let jsonData = try! JSONSerialization.data(withJSONObject: jsonObj, options: JSONSerialization.WritingOptions())
                     let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
                     print(jsonString)

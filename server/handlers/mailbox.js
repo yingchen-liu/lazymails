@@ -75,61 +75,64 @@ const receiveMail = (sock, message, clients) => {
             // https://github.com/oliver-moran/jimp
             jimp.read(mailFilename).then((lenna) => {
               lenna.rotate(rotateDeg)
-                .write(mailFilename);
+                .write(mailFilename)
+                .then(() => {
+                  // request mail info
+                  const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
+                  google.request(mailBase64, mailbox.names, mailbox.address, (err, result) => {
+                    if (err) return console.error(err);
 
-              // request mail info
-              const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
-              google.request(mailBase64, mailbox.names, mailbox.address, (err, result) => {
-                if (err) return console.error(err);
+                    console.log(JSON.stringify(result, null, 2));
 
-                console.log(JSON.stringify(result, null, 2));
+                    // save to db
+                    result.code = code;
+                    result.mailbox = mailbox._id;
+                    result.serverReceivedAt = moment();
+                    result.mailboxReceivedAt = moment(message.receivedAt);
+                    result.croppedPoints = message.croppedPoints;
+                    result.sentTo = [];
 
-                // save to db
-                result.code = code;
-                result.mailbox = mailbox._id;
-                result.serverReceivedAt = moment();
-                result.mailboxReceivedAt = moment(message.receivedAt);
-                result.croppedPoints = message.croppedPoints;
-                result.sentTo = [];
-
-                mails.insert(result)
-                  .then((mail) => {
-                    // reply mailbox
-                    sock.sendMessage('mail', {
-                      mail: {
-                        receivedAt: message.receivedAt
-                      }
-                    });
-
-                    // notify users
-                    delete mail.sentTo
-
-                    users.find({ mailbox: monk.id(result.mailbox) })
-                      .then((users) => {
-                        users.map((user) => {
-                          if (clients.getSockByClientId(user.email)) {
-                            clients.getSockByClientId(user.email).sendMessage('mail', {
-                              info: mail,
-                              mail: {
-                                content: mailBase64,
-                                size: imageSize(mailFilename)
-                              },
-                              mailbox: {
-                                content: message.mailbox.content,
-                                size: imageSize(mailboxFilename)
-                              }
-                            });
+                    mails.insert(result)
+                      .then((mail) => {
+                        // reply mailbox
+                        sock.sendMessage('mail', {
+                          mail: {
+                            receivedAt: message.receivedAt
                           }
                         });
+
+                        // notify users
+                        delete mail.sentTo
+
+                        users.find({ mailbox: monk.id(result.mailbox) })
+                          .then((users) => {
+                            users.map((user) => {
+                              if (clients.getSockByClientId(user.email)) {
+                                clients.getSockByClientId(user.email).sendMessage('mail', {
+                                  info: mail,
+                                  mail: {
+                                    content: mailBase64,
+                                    size: imageSize(mailFilename)
+                                  },
+                                  mailbox: {
+                                    content: message.mailbox.content,
+                                    size: imageSize(mailboxFilename)
+                                  }
+                                });
+                              }
+                            });
+                          })
+                          .catch((err) => {
+                            console.error(err);
+                          });
                       })
                       .catch((err) => {
                         console.error(err);
                       });
-                  })
-                  .catch((err) => {
-                    console.error(err);
                   });
-              });
+                });
+
+              
             }).catch((err) => {
               console.error(err);
             });

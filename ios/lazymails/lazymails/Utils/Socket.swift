@@ -44,6 +44,8 @@ class Socket: NSObject, StreamDelegate {
     
     var requestIconCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
     
+    var mailCallback: ((_ mail: Mail) -> Void)?
+    
     var categoryName = ""
     
     
@@ -469,7 +471,9 @@ class Socket: NSObject, StreamDelegate {
                 print("Can not save data : \(saveError)")
             }
             
-            
+            if let mailCallback = mailCallback {
+                mailCallback(newMail)
+            }
             
             break
         case "live":

@@ -27,6 +27,6 @@ extension Mail {
     @NSManaged public var receivedAt: Date?
     @NSManaged public var showFullImage: Bool
     @NSManaged public var title: String?
-    @NSManaged public var category: Category?
+    @NSManaged public var category: Category
 
 }

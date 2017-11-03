@@ -262,6 +262,10 @@
 		6526B9801F921B2200C01D39 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				18E5CDA21F95B763003F0AB8 /* Category+CoreDataClass.swift */,
+				18E5CDA31F95B763003F0AB8 /* Category+CoreDataProperties.swift */,
+				18E5CDA41F95B763003F0AB8 /* Mail+CoreDataClass.swift */,
+				18E5CDA51F95B763003F0AB8 /* Mail+CoreDataProperties.swift */,
 				6526B9811F921B2200C01D39 /* Address.swift */,
 				6526B9821F921B2200C01D39 /* Receiver+CoreDataClass.swift */,
 				6526B9831F921B2200C01D39 /* Receiver+CoreDataProperties.swift */,
@@ -305,10 +309,6 @@
 		6541AD5E1F81E1C6003A28E2 = {
 			isa = PBXGroup;
 			children = (
-				18E5CDA21F95B763003F0AB8 /* Category+CoreDataClass.swift */,
-				18E5CDA31F95B763003F0AB8 /* Category+CoreDataProperties.swift */,
-				18E5CDA41F95B763003F0AB8 /* Mail+CoreDataClass.swift */,
-				18E5CDA51F95B763003F0AB8 /* Mail+CoreDataProperties.swift */,
 				6541AD691F81E1C6003A28E2 /* lazymails */,
 				6541AD831F81E1C6003A28E2 /* lazymailsTests */,
 				6541AD681F81E1C6003A28E2 /* Products */,

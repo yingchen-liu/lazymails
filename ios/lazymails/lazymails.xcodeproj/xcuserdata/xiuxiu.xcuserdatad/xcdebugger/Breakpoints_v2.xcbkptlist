@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "193"
             endingLineNumber = "193"
-            landmarkName = "readBytes(stream:)"
+            landmarkName = "stream(_:handle:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -27,7 +27,7 @@ const report = (sock, message, clients) => {
       break;
   }
 
-  mails.update({ _id: message.id, $set: update})
+  mails.update({ _id: monk.id(message.id), $set: update})
     .then(() => {
       sock.sendMessage(message.type, {});
     });

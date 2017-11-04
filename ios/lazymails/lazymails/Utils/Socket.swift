@@ -15,8 +15,8 @@ class Socket: NSObject, StreamDelegate {
     
     static let shared = Socket()
     
-    let host = "localhost"
-//    let host = "socket.lazymails.com"
+//    let host = "localhost"
+    let host = "socket.lazymails.com"
     
     let port = 6969
     

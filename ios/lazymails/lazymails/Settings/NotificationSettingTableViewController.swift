@@ -24,6 +24,11 @@ class NotificationSettingTableViewController: UITableViewController {
         Socket.shared.mailCallbacks.append(newMailReceived)
     }
     
+    /**
+     Add new category of received mail to categorylist
+     - Parameters:
+         - mail: Mail
+     */
     func newMailReceived(mail: Mail) {
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
@@ -63,7 +68,7 @@ class NotificationSettingTableViewController: UITableViewController {
             let image = UIImage(data: data)
             cell.categoryIconImage.image = image
         }
-        
+        // config UISwitch
         cell.categoryNotificationSwitch.isOn = categoryList[indexPath.row].notified
         cell.categoryNotificationSwitch.tag = indexPath.row
         cell.categoryNotificationSwitch.addTarget(self, action: #selector(notificationTriggerd(sender:)), for: .valueChanged)
@@ -72,8 +77,10 @@ class NotificationSettingTableViewController: UITableViewController {
     
     @objc func notificationTriggerd(sender: UISwitch) {
         if sender.isOn {
+            // set category notification
             categoryList[sender.tag].notified = true
         }else {
+            // set category no notification
             categoryList[sender.tag].notified = false
         }
         do {

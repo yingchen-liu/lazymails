@@ -36,7 +36,7 @@ class PhotoIncorrectViewController: UITableViewController {
         
         
     }
-    
+    // report agreement checkbox 
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
         checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")

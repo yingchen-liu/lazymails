@@ -20,7 +20,6 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     var socket = Socket.shared
     
     var readAndImportantList = ["Unread","Important"]
-    //var categoryList = ["card","bills","statements"]
     var categoryList: [Category] = []
     var mailList : [Mail] = []
     var specificMailList : [Mail] = []
@@ -36,9 +35,6 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //createData()
-        //saveToCoreData()
-        //modifyData()
         DataManager.shared.fetchCategories()
         categoryList = DataManager.shared.categoryList
         categoryList.sort { (a, b) -> Bool in
@@ -70,6 +66,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         }
         tableView.reloadData()
     }
+    
     
     func mailCallback(mail: Mail) {
         mailList.append(mail)
@@ -119,7 +116,8 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             cell.cateNameLabel.text = readAndImportantList[indexPath.row]
             if cell.cateNameLabel.text == readAndImportantList[0] {
                 cell.cateUnreadNoLabel.text = String(mailUnreadList.count)
-                
+                // ✴️ Attributes:
+                // Stackoverflow: Swift: Programmatically make UILabel bold without changing its size?
                 // https://stackoverflow.com/questions/39999093/swift-programmatically-make-uilabel-bold-without-changing-its-size
                 
                 if (mailUnreadList.count > 0) {
@@ -176,46 +174,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         return 44
     }
     
-    func fetchCategories(){
-        let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
-        do {
-            categoryList = try self.managedObjectContext.fetch(fetchRequest)
-            
-        } catch {
-            let fetchError = error as NSError
-            print(fetchError)
-        }
-        fetchReadOrImportantMail()
-    }
- 
-    func fetchReadOrImportantMail (){
-        let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
-        var mailList : [Mail] = []
-        do {
-            mailList = try self.managedObjectContext.fetch(fetchRequest)
-            for mail in mailList {
-                if mail.didRead == false {
-                    mailUnreadList.append(mail)
-                }
-                if mail.isImportant == true {
-                    mailImportantList.append(mail)
-                }
-            }
-        } catch {
-            let fetchError = error as NSError
-            print(fetchError)
-        }
-    }
-    
-    func saveToCoreData() {
-        do {
-            try managedObjectContext.save()
-            
-        }catch {
-            print("Can not save data to core data")
-        }
-    }
-    
+
     override func prepare(for segue: UIStoryboardSegue,sender: Any?) {
         if segue.identifier == "showOneCategorySegue" {
             let destination : MailListViewController = segue.destination as! MailListViewController
@@ -230,12 +189,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
                     destination.currentMails = mailImportantList
                     destination.title = "Important"
                 }
-               
             }
             
             if selectedRowIndexPath?.section == 1 {
                 let selectedRow = tableView.indexPathForSelectedRow?.row
-//                print (selectedRow)
                 var currentMails = categoryList[selectedRow!].mail?.allObjects as! [Mail]
                 currentMails = currentMails.sorted { $0.receivedAt > $1.receivedAt}
                 destination.currentMails = currentMails
@@ -244,19 +201,22 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             
         }
     }
-    func didRead (mail: Mail) {
+
+    func didRead(mail: Mail) {
         if let index = mailUnreadList.index(of: mail) {
             mailUnreadList.remove(at: index)
         }
         tableView.reloadData()
     }
     
-    func addImportant (mail: Mail) {
+
+    func addImportant(mail: Mail) {
         if !mailImportantList.contains(mail) {
             mailImportantList.append(mail)
         }
         tableView.reloadData()
     }
+    
     func removeImportant(mail: Mail) {
         if let index = mailImportantList.index(of: mail) {
             mailImportantList.remove(at: index)

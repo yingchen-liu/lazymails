@@ -54,6 +54,7 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
     
     override func viewDidAppear(_ animated: Bool) {
         
+        // ✴️ Attributes:
         // StackOverflow: ios - How can I make a function execute every second in swift? - Stack Overflow
         //      https://stackoverflow.com/questions/30090309/how-can-i-make-a-function-execute-every-second-in-swift
         
@@ -86,13 +87,16 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
             
             // Calculate mean latency
             if let lastReceivedFrameAt = self.lastReceivedFrameAt {
+                // ✴️ Attributes:
+                // Website: iPhone: How to get current milliseconds?
                 //  https://stackoverflow.com/questions/358207/iphone-how-to-get-current-milliseconds
                 
                 let delay = self.timeBetweenTwoFrames.count > 0 ? (self.timeBetweenTwoFrames.average + (CACurrentMediaTime() - lastReceivedFrameAt)) / 2 : (CACurrentMediaTime() - lastReceivedFrameAt)
                 
                 self.timeBetweenTwoFrames.append(delay)
-                
-                //      https://stablekernel.com/swift-subarrays-array-and-arrayslice/
+                // ✴️ Attributes:
+                // Website: swift subarrays: array and arrayslice
+                // https://stablekernel.com/swift-subarrays-array-and-arrayslice/
                 
                 var start = self.timeBetweenTwoFrames.count - 5
                 start = start >= 0 ? start : 0
@@ -126,9 +130,7 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
         
     }
     
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.liveImageView
-    }
+    
     
     @objc func imageDoubleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         //dismiss(animated: true) { }
@@ -138,7 +140,13 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
             scrollView.setZoomScale(1, animated: true)
         }
     }
+    // ✴️ Attributes:
+    // Website: How to Zoom In/Out Photo on double Tap in the iPhone WWDC 2010 - 104 PhotoScroller
     // https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.liveImageView
+    }
+    
     func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
         var zoomRect = CGRect.zero
         zoomRect.size.height = liveImageView.frame.size.height / scale
@@ -148,7 +156,8 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
         zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
         return zoomRect
     }
-    
+    // ✴️ Attributes:
+    // Website: UIScrollView Zooming & contentInset
     // https://stackoverflow.com/questions/39460256/uiscrollview-zooming-contentinset
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
@@ -176,8 +185,8 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
     
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        // StackOverflow: swift3 - Using Swift 3 Stopping a scheduledTimer, Timer continue firing even if timer is nil - Stack Overflow
+        // ✴️ Attributes:
+        // Website: Using Swift 3 Stopping a scheduledTimer, Timer continue firing even if timer is nil
         //      https://stackoverflow.com/questions/40081574/using-swift-3-stopping-a-scheduledtimer-timer-continue-firing-even-if-timer-is
         
         loadingDotsTimer?.invalidate()

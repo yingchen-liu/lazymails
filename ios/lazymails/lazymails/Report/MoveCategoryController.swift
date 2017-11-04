@@ -37,6 +37,11 @@ class MoveCategoryController: UITableViewController {
         self.submitButton.isEnabled = false
     }
     
+    /**
+     Received new mail
+     - Parameters:
+         - mail: Mail
+     */
     func newMailReceived(mail: Mail) {
         if !filteredCategoryList.contains(mail.category) {
             filteredCategoryList.append(mail.category)
@@ -95,13 +100,12 @@ class MoveCategoryController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCategoryCell", for: indexPath) as! CurrentCategoryViewCell
-            //set the data here
-            //cell.lazyMailIcon.image = UIImage(named: "mailboxImg")
+            //display mail's current category name
             cell.currentCategoryLabel.text = currentMail?.category.name
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "targetCategoryCell", for: indexPath) as! MoveToCagetoryViewCell
-            //set the data here
+            //display other categories' names
             cell.categoryNameLabel.text = filteredCategoryList[indexPath.row].name
             if checked != nil {
                 cell.moveCheckBoxImgView.image = UIImage(named: checked == indexPath.row ? "checkbox-checked" : "checkbox")

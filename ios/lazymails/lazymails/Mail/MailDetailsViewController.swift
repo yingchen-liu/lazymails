@@ -45,7 +45,6 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             title = selectedMail?.title
         }
         
-        
         //show mail photo
         let base64 = selectedMail?.image
         if let data = Data(base64Encoded: base64!, options: .ignoreUnknownCharacters) {
@@ -80,14 +79,19 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
         receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt)!)
-        
+        // ✴️ Attributes:
+        // Stackoverflow: Can't make URL clickable in UITextView
         //  https://stackoverflow.com/questions/14387024/cant-make-url-clickable-in-uitextview
         
+        // ✴️ Attributes:
+        // Stackoverflow: how to make UITextView height dynamic according to text length?
         //  https://stackoverflow.com/questions/38714272/how-to-make-uitextview-height-dynamic-according-to-text-length
         
         cell.detailsValueLabel.translatesAutoresizingMaskIntoConstraints = false
         cell.detailsValueLabel.isScrollEnabled = false
         
+        // ✴️ Attributes:
+        // Stackoverflow: How to lose margin/padding in UITextView?
         //  https://stackoverflow.com/questions/746670/how-to-lose-margin-padding-in-uitextview
         
         cell.detailsValueLabel.textContainerInset = .zero
@@ -112,6 +116,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return cell
     }
     
+    // ✴️ Attributes:
+    // Stackoverflow: How to get a user's time zone?
     //  https://stackoverflow.com/questions/27053135/how-to-get-a-users-time-zone
     
     func convertDateToString(date : Date) -> String {
@@ -123,7 +129,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return str
     }
     
-    
+    // ✴️ Attributes:
+    // Stackoverflow: How to convert a JSON string to a dictionary?
     //https://stackoverflow.com/questions/30480672/how-to-convert-a-json-string-to-a-dictionary
     func convertToDictionary(text: String) -> [String: String]? {
         if let data = text.data(using: .utf8) {

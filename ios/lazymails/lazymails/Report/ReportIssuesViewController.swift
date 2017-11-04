@@ -42,6 +42,8 @@ class ReportIssuesViewController: UITableViewController {
         return 44
     }
     
+
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "incorrectCategorySegue" {

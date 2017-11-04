@@ -93,8 +93,6 @@ class Socket: NSObject, StreamDelegate {
                 }
             })
         }
-        
-        sendCheckMails()
     }
     
     func reconnect() {
@@ -613,6 +611,7 @@ class Socket: NSObject, StreamDelegate {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.locale = NSLocale.current
+//        dateFormatter.timeZone = NSTimeZone.init(abbreviation: "UTC") as TimeZone!
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter.string(from: date)
     }

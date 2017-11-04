@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "lazymails/Utils/Socket.swift"
-            timestampString = "531468338.687594"
+            timestampString = "531473397.96323"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "sendMessage(message:)"
             landmarkType = "7">
          </BreakpointContent>

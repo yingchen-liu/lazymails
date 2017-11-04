@@ -25,12 +25,24 @@ class Notification: NSObject {
         
     }
     
+    /**
+     Monitor mail
+     - Parameters:
+         - categoryName: category name
+         - mailTitle: mail title
+     */
     func monitorMail(categoryName: String, mailTitle: String) {
         let title = "New Mail: \(mailTitle) (\(categoryName))"
         let message = ""
         notify(title: title, message: message)
     }
     
+    /**
+      Mail notification
+     - Parameters:
+         - title: title shows in notification
+         - message: message shows in notification
+     */
     func notify(title: String, message: String) {
         
         // In-app notification

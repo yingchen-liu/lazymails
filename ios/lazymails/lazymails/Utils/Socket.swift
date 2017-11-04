@@ -179,6 +179,8 @@ class Socket: NSObject, StreamDelegate {
     func sendCheckMails() {
         if let newestMail = DataManager.shared.fetchNewestMail() {
             let after = convertDateToString(date: newestMail.receivedAt)
+            
+            print(after)
         
             print("Checking mails")
             let message = ["end": "app", "type": "check_mails", "after": after]
@@ -526,7 +528,7 @@ class Socket: NSObject, StreamDelegate {
                 print("Can not save data : \(saveError)")
             }
             
-            if newMail.category.icon == nil {
+            if newMail.category.icon == "" {
                 sendDownloadIconMessage(categoryName: categoryName)
             }
             

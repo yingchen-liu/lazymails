@@ -164,35 +164,38 @@ def disconnected(self):
   print('Disconnected')
 
 def processMessage(self, message):
-  if message['type'] == 'connect':
-    global light
-    light = Light(app)
-    light.connect()
-    light.switchOn()
-    print('Connected to server')
-    
-  elif message['type'] == 'update_settings':
-    app['settings'] = message['settings']
-    print('Setting updated', app['settings'])
+  try:
+    if message['type'] == 'connect':
+      global light
+      light = Light(app)
+      light.connect()
+      light.switchOn()
+      print('Connected to server')
+      
+    elif message['type'] == 'update_settings':
+      app['settings'] = message['settings']
+      print('Setting updated', app['settings'])
 
-  elif message['type'] == 'start_live':
-    app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
-    print('Start live to', message['email'])
+    elif message['type'] == 'start_live':
+      app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
+      print('Start live to', message['email'])
 
-  elif message['type'] == 'live_heartbeat':
-    app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
-    print('Keep live to', message['email'])
+    elif message['type'] == 'live_heartbeat':
+      app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
+      print('Keep live to', message['email'])
 
-  elif message['type'] == 'stop_live':
-    if message['email'] in app['status']['lives']:
-      del app['status']['lives'][message['email']]
-      print('Stop live to', message['email'])
+    elif message['type'] == 'stop_live':
+      if message['email'] in app['status']['lives']:
+        del app['status']['lives'][message['email']]
+        print('Stop live to', message['email'])
 
-  elif message['type'] == 'mail':
-    filenames = os.listdir()
-    for filename in filenames:
-      if message['mail']['receivedAt'] in filename:
-        os.remove(filename)
+    elif message['type'] == 'mail':
+      filenames = os.listdir()
+      for filename in filenames:
+        if message['mail']['receivedAt'] in filename:
+          os.remove(filename)
+  except Exception as e:
+    print('Unable to process message:', e)
 
 def mailDetected(self):
   try:
@@ -250,6 +253,11 @@ try:
   _thread.start_new_thread(mailSendingMonitor, ())
 except Exception as e:
   print('Unable to start thread for mail sending monitor:', e)
+
+try:
+  _thread.start_new_thread(sock.heartbeat, ())
+except Exception as e:
+  print('Unable to start thread for sending heartbeat:', e)
 
 while True:
   if app['settings']['isEnergySavingOn']:

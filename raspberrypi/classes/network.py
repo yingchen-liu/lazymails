@@ -2,7 +2,7 @@ import socket
 import time
 import json
 import _thread
-
+import threading
 
 class Network:
   
@@ -13,40 +13,47 @@ class Network:
     self._disconnected = disconnected
     self._receivedMessage = receivedMessage
     self._isConnected = False
+    self._mutex = threading.Lock()
 
     try:
       # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
       _thread.start_new_thread(self.receiveMessage, ())
-      _thread.start_new_thread(self.heartbeat, ())
     except Exception as e:
       print('Unable to start thread for receiving message:', e)
 
   def heartbeat(self):
-    message = {
-      'type': 'heartbeat',
-      'end': 'mailbox'
-    }
-
-    self.sendMessage(message)
-
-    time.sleep(60)
+    while True:
+      message = {
+        'type': 'heartbeat',
+        'end': 'mailbox'
+      }
+      try:
+        self.sendMessage(message)
+      except Exception as e:
+        print('Unable to send heartbeat', e)
+      time.sleep(20)
 
   def sendMessage(self, message):
-    
-    networkConfig = self._app['config']['network']
+    if self._mutex.acquire(60):
+      print('send message', message['type'])
+      
+      networkConfig = self._app['config']['network']
 
-    try:
-      # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
-      self._sock.sendall((json.dumps(message) + networkConfig['endSymbol']).encode('utf-8'))
-    except Exception as e:
-      print('Failed to send the message', e)
+      try:
+        # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+        self._sock.sendall((json.dumps(message) + networkConfig['endSymbol']).encode('utf-8'))
+      except Exception as e:
+        print('Failed to send the message', e)
+
+      print('sent message', message['type'])
+      self._mutex.release()
 
   def connect(self):
     
     networkConfig = self._app['config']['network']
 
-    print('Connection ...')
+    print('Connecting ...')
 
     while True:
       try:
@@ -70,6 +77,7 @@ class Network:
     while True:
       if not self._sock or not self._isConnected:
         print('Not connected')
+        time.sleep(3)
         continue
 
       data = ''
@@ -104,15 +112,18 @@ class Network:
 
         self.connect()
 
-      messages = data.split(networkConfig['endSymbol'])
+      try:
+        messages = data.split(networkConfig['endSymbol'])
 
-      for message in messages:
-        if message != '':
-          print('Received message from the server', message)
-          message = json.loads(message)
+        for message in messages:
+          if message != '':
+            print('Received message from the server', message)
+            message = json.loads(message)
 
-          if message['type'] == 'heartbeat':
-            print('heartbeat')
-          
-          if self._receivedMessage:
-            self._receivedMessage(self, message)
+            if message['type'] == 'heartbeat':
+              print('heartbeat')
+            
+            if self._receivedMessage:
+              self._receivedMessage(self, message)
+      except Exception as e:
+        print(e)

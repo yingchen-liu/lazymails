@@ -117,7 +117,6 @@ const connect = (sock, message, clients) => {
 const checkMails = (sock, message, clients) => {
   console.log(new Date(moment(message.after).toISOString()));
 
-
   mails.find({ serverReceivedAt: { $gte: new Date(moment(message.after).toISOString()) } })
     .then((mails) => {
       console.log('found', mails.length);

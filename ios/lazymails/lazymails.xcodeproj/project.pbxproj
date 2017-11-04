@@ -57,9 +57,9 @@
 		6541AD6B1F81E1C6003A28E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AD6A1F81E1C6003A28E2 /* AppDelegate.swift */; };
 		6541AD751F81E1C6003A28E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6541AD731F81E1C6003A28E2 /* Main.storyboard */; };
 		6541AD771F81E1C6003A28E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6541AD761F81E1C6003A28E2 /* Assets.xcassets */; };
-		6541AD7A1F81E1C6003A28E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6541AD781F81E1C6003A28E2 /* LaunchScreen.storyboard */; };
 		6541AD851F81E1C6003A28E2 /* lazymailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AD841F81E1C6003A28E2 /* lazymailsTests.swift */; };
 		654234A81FAD19C600F6D0CC /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654234A71FAD19C600F6D0CC /* AboutViewController.swift */; };
+		657A52561FADA70100033BC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 657A52551FADA70100033BC8 /* LaunchScreen.storyboard */; };
 		65F9064F1F9C90870012C665 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F9064E1F9C90870012C665 /* ArrayExtension.swift */; };
 		65F906511F9CC0540012C665 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F906501F9CC0540012C665 /* RegisterViewController.swift */; };
 		A264503ED6EC7A7D678A3A4E /* Pods_lazymails.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61EE05348203020DDFAF14E1 /* Pods_lazymails.framework */; };
@@ -129,12 +129,12 @@
 		6541AD6A1F81E1C6003A28E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6541AD741F81E1C6003A28E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6541AD761F81E1C6003A28E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6541AD791F81E1C6003A28E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6541AD7B1F81E1C6003A28E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6541AD801F81E1C6003A28E2 /* lazymailsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = lazymailsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6541AD841F81E1C6003A28E2 /* lazymailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lazymailsTests.swift; sourceTree = "<group>"; };
 		6541AD861F81E1C6003A28E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		654234A71FAD19C600F6D0CC /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		657A52551FADA70100033BC8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		65F9064E1F9C90870012C665 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		65F906501F9CC0540012C665 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		D7C1D0D141EB75D386CCA162 /* Pods-lazymails.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lazymails.release.xcconfig"; path = "Pods/Target Support Files/Pods-lazymails/Pods-lazymails.release.xcconfig"; sourceTree = "<group>"; };
@@ -344,11 +344,11 @@
 				6541AD6A1F81E1C6003A28E2 /* AppDelegate.swift */,
 				6541AD731F81E1C6003A28E2 /* Main.storyboard */,
 				6541AD761F81E1C6003A28E2 /* Assets.xcassets */,
-				6541AD781F81E1C6003A28E2 /* LaunchScreen.storyboard */,
 				6541AD7B1F81E1C6003A28E2 /* Info.plist */,
 				6526B9581F920C8100C01D39 /* lazymails.xcdatamodeld */,
 				18E4985E1FA59A610083BEA2 /* Notification.swift */,
 				654234A71FAD19C600F6D0CC /* AboutViewController.swift */,
+				657A52551FADA70100033BC8 /* LaunchScreen.storyboard */,
 			);
 			path = lazymails;
 			sourceTree = "<group>";
@@ -463,8 +463,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6541AD7A1F81E1C6003A28E2 /* LaunchScreen.storyboard in Resources */,
 				6541AD771F81E1C6003A28E2 /* Assets.xcassets in Resources */,
+				657A52561FADA70100033BC8 /* LaunchScreen.storyboard in Resources */,
 				6541AD751F81E1C6003A28E2 /* Main.storyboard in Resources */,
 				18B348601F8F6BC5002B3F9E /* CheckboxView.xib in Resources */,
 			);
@@ -622,14 +622,6 @@
 				6541AD741F81E1C6003A28E2 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		6541AD781F81E1C6003A28E2 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6541AD791F81E1C6003A28E2 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

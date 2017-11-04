@@ -4,6 +4,9 @@ const router = express.Router();
 const db = require('../db');
 const users = db.get('users');
 
+/**
+ * Get user list page
+ */
 router.get('/', (req, res, next) => {
   users.find({})
     .then((users) => {
@@ -14,7 +17,9 @@ router.get('/', (req, res, next) => {
     .catch(next);
 })
 
-/* Register an user */
+/**
+ * Register a user
+ */
 router.post('/', (req, res, next) => {
   users.insert({
     email: req.body.email,
@@ -28,7 +33,9 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
-/* Get an user */
+/**
+ * Get a user
+ */
 router.get('/:email', (req, res, next) => {
   users.findOne({ email: req.params.email })
     .then((user) => {
@@ -39,7 +46,9 @@ router.get('/:email', (req, res, next) => {
     .catch(next);
 });
 
-/* Update an user */
+/**
+ * Update a user
+ */
 router.post('/:email', (req, res, next) => {
   delete req.body.email;
 

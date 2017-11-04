@@ -18,6 +18,10 @@ const ROAD_TYPES = {
   'STREET': ['st', 'street']
 }
 
+
+/**
+ * Connect a mailbox
+ */
 const connect = (sock, message, clients) => {
   console.log('Mailbox connected', message.id);
   
@@ -49,6 +53,9 @@ const connect = (sock, message, clients) => {
     });
 };
 
+/** 
+ * Receive a mail
+ */
 const receiveMail = (sock, message, clients) => {
   mailboxes.findOne({ _id: monk.id(message.id) })
     .then((mailbox) => {
@@ -61,6 +68,7 @@ const receiveMail = (sock, message, clients) => {
 
       // save images
       // https://stackoverflow.com/questions/6926016/nodejs-saving-a-base64-encoded-image-to-disk
+
       fs.writeFile(mailFilename, message.mail.content, 'base64', (err) => {
         if (err) return console.error(err);
 
@@ -73,6 +81,7 @@ const receiveMail = (sock, message, clients) => {
             console.log('rotateDeg', rotateDeg);
 
             // https://github.com/oliver-moran/jimp
+
             jimp.read(mailFilename).then((lenna) => {
               lenna.rotate(rotateDeg)
                 .write(mailFilename, () => {
@@ -144,6 +153,9 @@ const receiveMail = (sock, message, clients) => {
     });
 };
 
+/**
+ * Live
+ */
 const live = (sock, message, clients) => {
   if (clients.getSockByClientId(message.email)) {
     clients.getSockByClientId(message.email).sendMessage('live', {

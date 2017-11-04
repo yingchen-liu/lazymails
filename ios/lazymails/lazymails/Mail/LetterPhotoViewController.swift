@@ -49,10 +49,36 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.photoImgView
     }
+    
+    
     @objc func imageSingleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) { }
         
     }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if scrollView.zoomScale > 1 {
+            
+            if let image = photoImgView.image {
+                
+                let ratioW = photoImgView.frame.width / image.size.width
+                let ratioH = photoImgView.frame.height / image.size.height
+                
+                let ratio = ratioW < ratioH ? ratioW:ratioH
+                
+                let newWidth = image.size.width*ratio
+                let newHeight = image.size.height*ratio
+                
+                let left = 0.5 * (newWidth * scrollView.zoomScale > photoImgView.frame.width ? (newWidth - photoImgView.frame.width) : (scrollView.frame.width - scrollView.contentSize.width))
+                let top = 0.5 * (newHeight * scrollView.zoomScale > photoImgView.frame.height ? (newHeight - photoImgView.frame.height) : (scrollView.frame.height - scrollView.contentSize.height))
+                
+                scrollView.contentInset = UIEdgeInsetsMake(top, left, top, left)
+            }
+        } else {
+            scrollView.contentInset = UIEdgeInsets.zero
+        }
+    }
+    
     @objc func imageDoubleTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         //dismiss(animated: true) { }
         if scrollView.zoomScale == 1 {
@@ -60,6 +86,10 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         } else {
             scrollView.setZoomScale(1, animated: true)
         }
+        
+        
+        
+        
     }
     
     func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {

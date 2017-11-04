@@ -32,6 +32,8 @@ class PhotoIncorrectViewController: UITableViewController {
             let image = UIImage(data: data)
             self.fullImageView.image = image
         }
+        self.submitButton.isEnabled = false
+        
         
     }
     
@@ -39,6 +41,10 @@ class PhotoIncorrectViewController: UITableViewController {
         checked = !checked
         checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
         submitButton.backgroundColor = checked ? UIColor(red: 1, green: 102.0/255, blue: 82.0/255, alpha: 1) : UIColor.lightGray
+        if checked {
+            self.submitButton.isEnabled = true
+        }
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

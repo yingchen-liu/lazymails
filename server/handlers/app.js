@@ -12,7 +12,6 @@ const users = db.get('users');
 
 
 const report = (sock, message, clients) => {
-  console.log(message)
   const update = {};
   switch (message.issueType) {
     case 'category':
@@ -28,7 +27,6 @@ const report = (sock, message, clients) => {
       break;
   }
 
-  console.log(update)
   mails.update({ _id: monk.id(message.id) }, { $set: update })
     .then(() => {
       sock.sendMessage(message.type, {});
@@ -117,8 +115,12 @@ const connect = (sock, message, clients) => {
 };
 
 const checkMails = (sock, message, clients) => {
+  console.log(new Date(moment(message.after).toISOString()));
+
+
   mails.find({ serverReceivedAt: { $gte: new Date(moment(message.after).toISOString()) } })
     .then((mails) => {
+      console.log('found', mails.length);
       mails = mails.map((mail) => {
         delete mail.sentTo;
 

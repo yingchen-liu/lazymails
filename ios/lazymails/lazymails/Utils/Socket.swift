@@ -594,25 +594,10 @@ class Socket: NSObject, StreamDelegate {
             
             // notification
             data.fetchCategories()
-            if data.categoryList.count != 0 {
-                var categoryExist : Bool = false
-                
-                for category in data.categoryList{
-                    if category.name == categoryName {
-                        categoryExist = true
-                        if category.notified {
-                            print("which category notified\(category.name)")
-                            Notification.shared.monitorMail(id : mailId, categoryName: categoryName)
-                        }
-                    }
-                }
-                
-                if !categoryExist {
-                     Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
-                }
-            } else {
-                Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
-            }
+            
+            Notification.shared.monitorMail(categoryName: categoryName, mailTitle: title)
+            
+            
             
             
             // insert new Mail

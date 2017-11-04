@@ -105,20 +105,43 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             //set the data here
             cell.cateNameLabel.text = readAndImportantList[indexPath.row]
             if cell.cateNameLabel.text == readAndImportantList[0] {
-                cell.cateUnreadNoLabel.text = String( mailUnreadList.count)
+                cell.cateUnreadNoLabel.text = String(mailUnreadList.count)
+                
+                // https://stackoverflow.com/questions/39999093/swift-programmatically-make-uilabel-bold-without-changing-its-size
+                
+                if (mailUnreadList.count > 0) {
+                    cell.cateNameLabel.font = UIFont.boldSystemFont(ofSize: cell.cateNameLabel.font.pointSize)
+                    cell.cateUnreadNoLabel.font = UIFont.boldSystemFont(ofSize: cell.cateUnreadNoLabel.font.pointSize)
+                } else {
+                    cell.cateNameLabel.font = UIFont.systemFont(ofSize: cell.cateNameLabel.font.pointSize, weight: UIFont.Weight.regular)
+                    cell.cateUnreadNoLabel.font = UIFont.systemFont(ofSize: cell.cateUnreadNoLabel.font.pointSize, weight: UIFont.Weight.regular)
+                }
+                
                 cell.cateIconImgView.image = UIImage(named: "unread")
                 print ( mailUnreadList.count)
-            }else {
-                cell.cateUnreadNoLabel.text = String( mailImportantList.count)
+            } else if cell.cateNameLabel.text == readAndImportantList[1] {
+                cell.cateUnreadNoLabel.text = String(mailImportantList.count)
                 cell.cateIconImgView.image = UIImage(named: "star-outline")
             }
-            
             
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
             //set the data here
             cell.cateNameLabel.text = categoryList[indexPath.row].name
+            
+            let unread = mailList.filter({ (mail) -> Bool in
+                return mail.category.name == cell.cateNameLabel.text && !mail.didRead
+            }).count
+            
+            if unread > 0 {
+                cell.cateNameLabel.font = UIFont.boldSystemFont(ofSize: cell.cateNameLabel.font.pointSize)
+                cell.cateUnreadNoLabel.font = UIFont.boldSystemFont(ofSize: cell.cateUnreadNoLabel.font.pointSize)
+                cell.cateUnreadNoLabel.isHidden = false
+            } else {
+                cell.cateNameLabel.font = UIFont.systemFont(ofSize: cell.cateNameLabel.font.pointSize, weight: UIFont.Weight.regular)
+                cell.cateUnreadNoLabel.isHidden = true
+            }
             
             if let icon = categoryList[indexPath.row].icon {
                 if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
@@ -127,6 +150,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
                     cell.cateIconImgView.image = image
                 }
             }
+            
             return cell
         }
     }

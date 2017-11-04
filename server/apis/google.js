@@ -398,17 +398,15 @@ const request = (mailBase64, names, address, callback) => {
         score: 1
       });
     }
-    if (result.nameSimilarity < 0.5) {
+    if (result.nameSimilarity < 0.5 && result.receiver) {
       result.categories.push({
         name: 'Not for You',
         score: 10
       });
-      if (result.receiver) {
-        result.categories.push({
-          name: result.receiver,
-          score: 10
-        });
-      }
+      result.categories.push({
+        name: result.receiver,
+        score: 10
+      });
     }
 
     result.categories.sort((a, b) => {

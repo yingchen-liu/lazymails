@@ -132,6 +132,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         textfield.layer.borderWidth = 0
     }
     func addTextfieldBorder(textfield : UITextField) {
+        textfield.layer.borderColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1).cgColor
         textfield.layer.borderWidth = 1.0
     }
     
@@ -275,9 +276,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         for (field, error) in errors {
             print(field, error)
             if let field = field as? UITextField {
-                
-                field.layer.borderColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1).cgColor
-                field.layer.borderWidth = 1.0
+                addTextfieldBorder(textfield: field)
             }
             
             if let label = error.errorLabel {

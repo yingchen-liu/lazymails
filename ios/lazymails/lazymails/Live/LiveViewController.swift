@@ -147,6 +147,29 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
         return zoomRect
     }
     
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if scrollView.zoomScale > 1 {
+            
+            if let image = liveImageView.image {
+                
+                let ratioW = liveImageView.frame.width / image.size.width
+                let ratioH = liveImageView.frame.height / image.size.height
+                
+                let ratio = ratioW < ratioH ? ratioW:ratioH
+                
+                let newWidth = image.size.width*ratio
+                let newHeight = image.size.height*ratio
+                
+                let left = 0.5 * (newWidth * scrollView.zoomScale > liveImageView.frame.width ? (newWidth - liveImageView.frame.width) : (scrollView.frame.width - scrollView.contentSize.width))
+                let top = 0.5 * (newHeight * scrollView.zoomScale > liveImageView.frame.height ? (newHeight - liveImageView.frame.height) : (scrollView.frame.height - scrollView.contentSize.height))
+                
+                scrollView.contentInset = UIEdgeInsetsMake(top, left, top, left)
+            }
+        } else {
+            scrollView.contentInset = UIEdgeInsets.zero
+        }
+    }
+    
     
     
     override func viewWillDisappear(_ animated: Bool) {

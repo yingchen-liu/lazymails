@@ -52,6 +52,10 @@ class Socket: NSObject, StreamDelegate {
     
     var connected = false
     
+    override init() {
+        super.init()
+        Timer.scheduledTimer(timeInterval: 20.0, target: self, selector: #selector(sendHeartbeatMessage), userInfo: nil, repeats: true)
+    }
     
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
@@ -170,6 +174,12 @@ class Socket: NSObject, StreamDelegate {
         let message = ["end": "app", "type": "stop_live"]
         
         liveCallback = nil
+        
+        sendMessage(message: message)
+    }
+    
+    @objc func sendHeartbeatMessage() {
+        let message = ["end": "app", "type": "heartbeat"]
         
         sendMessage(message: message)
     }

@@ -17,8 +17,6 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     @IBOutlet weak var receivedAtLabel: UILabel!
     
     
-    var categoryDetailsList = []
-    
     var selectedMail: Mail?
     
     var mailContentDictionary: Dictionary<String, String> = [:]
@@ -138,16 +136,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return nil
     }
     
-
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "reportSegue" {
             let destination : ReportIssuesViewController = segue.destination as! ReportIssuesViewController

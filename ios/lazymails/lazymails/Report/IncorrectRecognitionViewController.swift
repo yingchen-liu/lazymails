@@ -14,9 +14,8 @@ class IncorrectRecognitionViewController: UITableViewController {
     
     @IBOutlet weak var submitButton: UIButton!
     
-    var checked = false
     
-    var contentList = []
+    var checked = false
     
     var currentMail: Mail?
     

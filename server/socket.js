@@ -102,6 +102,9 @@ const processMessage = (sock, message) => {
       case 'report':
         app.report(sock, message, clients);
         break;
+      case 'heartbeat':
+        sock.sendMessage(message.type, {});
+        break;
       default:
         sock.sendError(new Error('Cannot understand the message'));
         break;

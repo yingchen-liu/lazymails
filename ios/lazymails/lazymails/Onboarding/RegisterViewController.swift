@@ -30,7 +30,15 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     
     @IBOutlet weak var mailboxIdErrorLabel: UILabel!
     
+    @IBOutlet weak var mailboxIdLabel: UILabel!
+    
+    @IBOutlet weak var scanCodeButton: UIButton!
+    
     @IBOutlet weak var nextButton: UIButton!
+    
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
+    
     let socket = Socket.shared
     
     let setting = Setting.shared
@@ -61,6 +69,12 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
         //mailboxIdField.isUserInteractionEnabled = false
+        loginButton.layer.borderWidth = 1;
+        registerButton.layer.borderWidth = 1;
+        
+        loginButton.layer.borderColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1).cgColor
+        registerButton.layer.borderColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1).cgColor
+        
         
     }
 
@@ -116,73 +130,141 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         
     }
     
+    func removeTextfieldBorder(textfield : UITextField) {
+        textfield.layer.borderWidth = 0
+    }
+    func addTextfieldBorder(textfield : UITextField) {
+        textfield.layer.borderWidth = 1.0
+    }
     
-    func validationSuccessful() {
-        //self.nextButton.isEnabled = true
-        self.nextButton.backgroundColor = UIColor(red: 122/255, green: 195/255, blue: 246/255, alpha: 1)
+    @IBAction func loginButtonTapped(_ sender: Any) {
+        self.reset()
+        
+        (sender as! UIButton).backgroundColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1)
+        (sender as! UIButton).setTitleColor(UIColor.white, for:.normal)
+        
+        self.registerButton.setTitleColor(UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1), for:.normal)
+        self.registerButton.backgroundColor = UIColor.white
+        
+        
+        self.mailboxIdLabel.isHidden = true
+        self.mailboxIdErrorLabel.isHidden = true
+        self.mailboxIdField.isHidden = true
+        self.scanCodeButton.isHidden = true
+        self.nextButton.setTitle( "Login", for: .normal )
+        
+        self.validator.unregisterField(mailboxIdField)
+        
+    }
+    
+    func reset() {
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
-        
+        removeTextfieldBorder(textfield: emailField)
+        removeTextfieldBorder(textfield: passwordField)
+        removeTextfieldBorder(textfield: mailboxIdField)
+        self.nextButton.backgroundColor = UIColor(red:122/255,green:195/255, blue: 246/255, alpha: 1)
+    }
+    
+    func login(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let email = emailField.text
         let password = passwordField.text
         let mailboxId = mailboxIdField.text
-        
-        if mailboxId == "" {
-            // Login
-            if email != "" && password != "" {
-                socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
-                    guard error == nil else {
-                        print("login error: \(error!)")
-                        self.psdErrorLabel.text = "Incorrect Email or Password"
-                        return
-                    }
-                    
-                    self.setting.inited = true
-                    self.setting.email = email
-                    self.setting.password = password
-                    self.setting.save()
-                    
-                    let mainBarViewController = storyboard.instantiateViewController(withIdentifier: "mainTabBarController")
-                    self.present(mainBarViewController, animated: true, completion: nil)
-                })
+        socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
+            guard error == nil else {
+                print("login error: \(error!)")
+                self.psdErrorLabel.text = "Incorrect Email or Password"
+                self.addTextfieldBorder(textfield: self.emailField)
+                self.addTextfieldBorder(textfield: self.passwordField)
+                
+                return
             }
             
-        } else {
-            // Register
+            self.setting.inited = true
+            self.setting.email = email
+            self.setting.password = password
+            self.setting.save()
             
-            socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
+            let mainBarViewController = storyboard.instantiateViewController(withIdentifier: "mainTabBarController")
+            self.present(mainBarViewController, animated: true, completion: nil)
+        })
+    }
+    
+    func register () {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let email = emailField.text
+        let password = passwordField.text
+        let mailboxId = mailboxIdField.text
+        socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
+            guard error == nil else {
+                print("register: \(error!)")
+                if (error?.contains ("Incorrect mailbox ID"))!{
+                    self.mailboxIdErrorLabel.text = "Incorrect mailbox ID."
+                }
+                if (error?.contains ("Email already exists"))! {
+                    self.emailErrorLabel.text = "Email address Exist."
+                }
+                
+                
+                return
+            }
+            
+            self.setting.inited = true
+            self.setting.email = email
+            self.setting.password = password
+            self.setting.mailbox = mailboxId
+            self.setting.save()
+            
+            self.socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
                 guard error == nil else {
-                    print("register: \(error!)")
-                    //self.emailErrorLabel.text = "Email already exists."
+                    print("connect: \(error!)")
                     return
                 }
                 
-                self.setting.inited = true
-                self.setting.email = email
-                self.setting.password = password
-                self.setting.mailbox = mailboxId
-                self.setting.save()
-                
-                self.socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
-                    guard error == nil else {
-                        print("connect: \(error!)")
-                        return
-                    }
-                    
-                    let mainBarViewController = storyboard.instantiateViewController(withIdentifier: "mainTabBarController")
-                    self.present(mainBarViewController, animated: true, completion: nil)
-                })
-                
-                print("registered!")
+                let mainBarViewController = storyboard.instantiateViewController(withIdentifier: "mainTabBarController")
+                self.present(mainBarViewController, animated: true, completion: nil)
             })
-        }
+            
+            print("registered!")
+        })
+    }
+    
+    @IBAction func registerButtonTapped(_ sender: Any) {
+        self.reset()
+        (sender as! UIButton).backgroundColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1)
+        (sender as! UIButton).setTitleColor(UIColor.white, for:.normal)
         
+        self.loginButton.setTitleColor(UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1), for:.normal)
+        self.loginButton.backgroundColor = UIColor.white
+        self.mailboxIdLabel.isHidden = false
+        self.mailboxIdErrorLabel.isHidden = false
+        self.mailboxIdField.isHidden = false
+        self.scanCodeButton.isHidden = false
+        self.nextButton.setTitle( "Register", for: .normal )
+        self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
+        
+    }
+    
+    
+    func validationSuccessful() {
+        //self.nextButton.isEnabled = true
+        reset()
+        
+        if nextButton.currentTitle == "Login" {
+            // Login
+            login()
+            
+        }else {
+            register()
+        }
         return
     }
+    
     @IBAction func idInputChanged(_ sender: Any) {
         self.mailboxIdErrorLabel.text = ""
+        validator.validate(self)
         if (sender as! UITextField).text != "" {
             self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
         }else {
@@ -191,10 +273,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     }
     
     func validationFailed(_ errors: [(Validatable, ValidationError)]) {
-        self.emailErrorLabel.text = ""
-        self.psdErrorLabel.text = ""
-        self.mailboxIdErrorLabel.text = ""
+        reset()
         for (field, error) in errors {
+            print(field, error)
             if let field = field as? UITextField {
                 
                 field.layer.borderColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1).cgColor
@@ -206,8 +287,6 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 label.isHidden = false
             }
         }
-        //self.nextButton.isEnabled = false
-        self.nextButton.backgroundColor = UIColor.darkGray
         
     }
     

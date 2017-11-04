@@ -9,6 +9,10 @@ const mailboxes = db.get('mailboxes');
 const users = db.get('users');
 const mails = db.get('mails');
 
+
+/**
+ * Get mailbox list
+ */
 router.get('/', (req, res, next) => {
   mailboxes.aggregate([
     {
@@ -35,7 +39,9 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
-/* Get mails in a mailbox */
+/**
+ * Get mails in a mailbox 
+ */
 router.get('/:id/mails', (req, res, next) => {
   mails.find({ mailbox: monk.id(req.params.id) })
     .then((mails) => {
@@ -47,7 +53,9 @@ router.get('/:id/mails', (req, res, next) => {
     .catch(next);
 });
 
-/* Add a mailbox */
+/** 
+ * Add a mailbox 
+ */
 router.post('/', (req, res, next) => {
   mailboxes.insert({})
     .then((mailbox) => {
@@ -58,7 +66,9 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
-/* Update a mailbox */
+/** 
+ * Update a mailbox 
+ */
 router.post('/:id', (req, res, next) => {
   mailboxes.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })
     .then((mailbox) => {

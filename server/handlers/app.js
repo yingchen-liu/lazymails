@@ -11,6 +11,9 @@ const mails = db.get('mails');
 const users = db.get('users');
 
 
+/**
+ * Report mail incorrection
+ */
 const report = (sock, message, clients) => {
   const update = {};
   switch (message.issueType) {
@@ -36,6 +39,9 @@ const report = (sock, message, clients) => {
     });
 };
 
+/**
+ * Register a user
+ */
 const register = (sock, message, clients) => {
   users.findOne({ email: message.email })
     .then((user) => {
@@ -73,6 +79,10 @@ const register = (sock, message, clients) => {
     });
 };
 
+
+/**
+ * Login a user
+ */
 const connect = (sock, message, clients) => {
   console.log('App connected');
 
@@ -114,6 +124,9 @@ const connect = (sock, message, clients) => {
     });
 };
 
+/**
+ * Check mails from a particular time to now
+ */
 const checkMails = (sock, message, clients) => {
   console.log(moment(message.after).toISOString());
 
@@ -149,7 +162,9 @@ const checkMails = (sock, message, clients) => {
     });
 };
 
-// TODO: to be tested
+/**
+ * Update user's information
+ */
 const updateUser = (sock, message, clients) => {
   delete req.body.email;
   
@@ -166,7 +181,9 @@ const updateUser = (sock, message, clients) => {
     });
 };
 
-// TODO: to be tested
+/**
+ * Update mailbox settings
+ */
 const updateMailbox = (sock, message, clients) => {
   // get the mailbox id by user email
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
@@ -211,7 +228,9 @@ const updateMailbox = (sock, message, clients) => {
     });
 };
 
-// TODO: to be tested
+/**
+ * Start live
+ */
 const startLive = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
@@ -226,7 +245,9 @@ const startLive = (sock, message, clients) => {
     });
 };
 
-// TODO: to be tested
+/** 
+ * Stop live
+ */
 const stopLive = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
@@ -241,7 +262,9 @@ const stopLive = (sock, message, clients) => {
     });
 };
 
-// TODO: to be tested
+/**
+ * Live heartbeat
+ */
 const liveHeartbeat = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
     .then((user) => {
@@ -256,6 +279,9 @@ const liveHeartbeat = (sock, message, clients) => {
     });
 };
 
+/**
+ * Download category icon
+ */
 const downloadCategoryIcon = (sock, message, clients) => {
 
   const iconPath = path.join(__dirname, '../public/images/icons/');

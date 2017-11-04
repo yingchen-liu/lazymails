@@ -526,7 +526,9 @@ class Socket: NSObject, StreamDelegate {
                 print("Can not save data : \(saveError)")
             }
             
-            sendDownloadIconMessage(categoryName: categoryName)
+            if newMail.category.icon == nil {
+                sendDownloadIconMessage(categoryName: categoryName)
+            }
             
             for callback in mailCallbacks {
                 callback(newMail)

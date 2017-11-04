@@ -59,6 +59,11 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        for category in categoryList {
+            if category.icon == "" {
+            socket.sendDownloadIconMessage(categoryName: category.name!)
+            }
+        }
         tableView.reloadData()
     }
     

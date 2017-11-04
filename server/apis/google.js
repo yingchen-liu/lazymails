@@ -400,9 +400,15 @@ const request = (mailBase64, names, address, callback) => {
     }
     if (result.nameSimilarity < 0.5) {
       result.categories.push({
-        name: 'Others',
+        name: 'Not for You',
         score: 10
       });
+      if (result.receiver) {
+        result.categories.push({
+          name: result.receiver,
+          score: 10
+        });
+      }
     }
 
     result.categories.sort((a, b) => {

@@ -1213,7 +1213,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfa-dn-hay">
-                                <rect key="frame" x="87.5" y="489" width="200" height="36"/>
+                                <rect key="frame" x="87.5" y="469" width="200" height="36"/>
                                 <color key="backgroundColor" red="0.47843137250000001" green="0.76470588240000004" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="ntr-0U-35s"/>
@@ -1227,7 +1227,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information and send photo of your letters to Google for recognition." lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68T-ZR-aVx">
-                                <rect key="frame" x="68" y="575" width="267" height="51"/>
+                                <rect key="frame" x="68" y="555" width="267" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="51" id="roj-co-dmP"/>
                                 </constraints>
@@ -1236,7 +1236,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-small" translatesAutoresizingMaskIntoConstraints="NO" id="aUa-hF-Z0d">
-                                <rect key="frame" x="40" y="577" width="16" height="16"/>
+                                <rect key="frame" x="40" y="557" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="HYL-Hc-bEv"/>
                                     <constraint firstAttribute="height" constant="16" id="ujT-sf-Uoe"/>
@@ -1250,7 +1250,7 @@
                             <constraint firstItem="f5Q-Uc-6Hn" firstAttribute="leading" secondItem="l7i-gu-0aF" secondAttribute="leading" constant="70" id="Gyt-qW-jyM"/>
                             <constraint firstItem="aUa-hF-Z0d" firstAttribute="top" secondItem="zfa-dn-hay" secondAttribute="bottom" constant="52" id="Hoh-eW-cmN"/>
                             <constraint firstItem="zfa-dn-hay" firstAttribute="centerX" secondItem="FYT-3Y-ZgT" secondAttribute="centerX" id="Kf7-15-Kis"/>
-                            <constraint firstItem="zfa-dn-hay" firstAttribute="top" secondItem="AEj-7K-OVz" secondAttribute="bottom" constant="30" id="Mtm-2I-ywk"/>
+                            <constraint firstItem="zfa-dn-hay" firstAttribute="top" secondItem="AEj-7K-OVz" secondAttribute="bottom" constant="10" id="Mtm-2I-ywk"/>
                             <constraint firstItem="68T-ZR-aVx" firstAttribute="top" secondItem="zfa-dn-hay" secondAttribute="bottom" constant="50" id="PkM-v3-nbs"/>
                             <constraint firstItem="l7i-gu-0aF" firstAttribute="trailing" secondItem="AEj-7K-OVz" secondAttribute="trailing" constant="16" id="Qws-IC-fqU"/>
                             <constraint firstItem="f5Q-Uc-6Hn" firstAttribute="top" secondItem="xpc-WC-vpK" secondAttribute="bottom" constant="30" id="RDw-Rk-ARd"/>

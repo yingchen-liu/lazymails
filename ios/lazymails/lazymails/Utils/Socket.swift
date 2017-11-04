@@ -458,7 +458,7 @@ class Socket: NSObject, StreamDelegate {
                 
                 for i in 0...urls.count - 1 {
                     let url = urls[i] as String
-                    website = website + "," + url
+                    website = website + "\n" + url
                 }
                 website.remove(at: website.startIndex)
             }else if urls.count == 1 {

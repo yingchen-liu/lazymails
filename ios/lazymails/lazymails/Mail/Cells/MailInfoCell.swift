@@ -11,7 +11,9 @@ import UIKit
 class MailInfoCell: UITableViewCell {
 
     @IBOutlet weak var detailsTitleLabel: UILabel!
-    @IBOutlet weak var detailsValueLabel: UILabel!
+    
+    @IBOutlet weak var detailsValueLabel: UITextView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

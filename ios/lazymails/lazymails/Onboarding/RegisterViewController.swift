@@ -171,6 +171,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         let email = emailField.text
         let password = passwordField.text
         let mailboxId = mailboxIdField.text
+
         socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
             guard error == nil else {
                 print("login error: \(error!)")
@@ -205,8 +206,6 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 if (error?.contains ("Email already exists"))! {
                     self.emailErrorLabel.text = "Email address Exist."
                 }
-                
-                
                 return
             }
             

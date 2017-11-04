@@ -70,7 +70,7 @@ class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDa
         super.viewDidLayoutSubviews()
         for subView in view.subviews {
             if subView is UIPageControl {
-                subView.frame.origin.y = self.view.frame.size.height - 164
+                subView.frame.origin.y = 515
             }
         }
     }

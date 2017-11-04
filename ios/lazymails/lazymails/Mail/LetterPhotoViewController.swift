@@ -43,6 +43,9 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         
         self.scrollView.minimumZoomScale = 1.0
         self.scrollView.maximumZoomScale = 6.0
+        // hide scrollview scrollbar
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         
     }
     
@@ -55,7 +58,7 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         dismiss(animated: true) { }
         
     }
-    
+    //https://stackoverflow.com/questions/39460256/uiscrollview-zooming-contentinset
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
             

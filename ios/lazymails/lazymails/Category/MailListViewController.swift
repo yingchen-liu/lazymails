@@ -32,6 +32,10 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         Socket.shared.mailCallbacks.append(newMailArrived)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     func newMailArrived(mail: Mail) {
         if mail.category == category || isUnread {
             currentMails.insert(mail, at: 0)

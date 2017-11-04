@@ -42,6 +42,8 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
 
         self.timeLabel.text = ""
         
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         
      }
 
@@ -147,6 +149,7 @@ class LiveViewController: UIViewController, UIScrollViewDelegate{
         return zoomRect
     }
     
+    // https://stackoverflow.com/questions/39460256/uiscrollview-zooming-contentinset
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
             

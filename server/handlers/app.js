@@ -127,21 +127,21 @@ const checkMails = (sock, message, clients) => {
         const mailBase64 = fs.readFileSync(mailFilename).toString('base64');
         const mailboxBase64 = fs.readFileSync(mailFilename).toString('base64');
 
-        return {
+        sock.sendMessage('mail', {
           info: mail,
           mail: {
             content: mailBase64,
             size: imageSize(mailFilename)
           },
           mailbox: {
-            content: mailboxBase64,
+            content: message.mailbox.content,
             size: imageSize(mailboxFilename)
           }
-        };
+        });
       });
-      sock.sendMessage(message.type, {
-        mails
-      });
+      // sock.sendMessage(message.type, {
+      //   mails
+      // });
     })
     .catch((err) => {
       sock.sendError(message.type, err);

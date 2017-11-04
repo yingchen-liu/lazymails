@@ -115,8 +115,7 @@ const connect = (sock, message, clients) => {
 };
 
 const checkMails = (sock, message, clients) => {
-  console.log(new Date(moment(message.after).toISOString()));
-
+  console.log(moment(message.after).toISOString());
 
   mails.find({ serverReceivedAt: { $gte: new Date(moment(message.after).toISOString()) } })
     .then((mails) => {
@@ -153,7 +152,6 @@ const checkMails = (sock, message, clients) => {
 // TODO: to be tested
 const updateUser = (sock, message, clients) => {
   delete req.body.email;
-  
   
   users.findOneAndUpdate({ email: clients.getClientIdByKey(sock.getClientKey()) }, { $set: message.user })
     .then((user) => {

@@ -96,8 +96,6 @@ class Socket: NSObject, StreamDelegate {
                 }
             })
         }
-        
-        sendCheckMails()
     }
     
     /**
@@ -234,6 +232,8 @@ class Socket: NSObject, StreamDelegate {
     func sendCheckMails() {
         if let newestMail = DataManager.shared.fetchNewestMail() {
             let after = convertDateToString(date: newestMail.receivedAt)
+            
+            print(after)
         
             print("Checking mails")
             let message = ["end": "app", "type": "check_mails", "after": after]
@@ -628,8 +628,10 @@ class Socket: NSObject, StreamDelegate {
                 let saveError = error as NSError
                 print("Can not save data : \(saveError)")
             }
-            // redownload category icon if no icon data
-            if newMail.category.icon == nil {
+
+            
+            if newMail.category.icon == "" {
+
                 sendDownloadIconMessage(categoryName: categoryName)
             }
             
@@ -753,6 +755,7 @@ class Socket: NSObject, StreamDelegate {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.locale = NSLocale.current
+//        dateFormatter.timeZone = NSTimeZone.init(abbreviation: "UTC") as TimeZone!
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter.string(from: date)
     }

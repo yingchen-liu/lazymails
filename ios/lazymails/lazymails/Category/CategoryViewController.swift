@@ -84,6 +84,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         tableView.reloadData()
     }
     
+    /**
+     Reload tableview when category icon received
+     
+     */
     func categoryIconReceived() {
         tableView.reloadData()
     }
@@ -201,7 +205,12 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             
         }
     }
-
+    
+    /**
+     Remove readed mail from unreadlist
+     - Parameters:
+         - mail: Mail
+     */
     func didRead(mail: Mail) {
         if let index = mailUnreadList.index(of: mail) {
             mailUnreadList.remove(at: index)
@@ -209,7 +218,11 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         tableView.reloadData()
     }
     
-
+    /**
+     Mark important mail and add to  importantlist
+     - Parameters:
+         - mail: Mail
+     */
     func addImportant(mail: Mail) {
         if !mailImportantList.contains(mail) {
             mailImportantList.append(mail)
@@ -217,6 +230,11 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         tableView.reloadData()
     }
     
+    /**
+     remove unimportant mail from importantlist
+     - Parameters:
+         - mail: Mail
+     */
     func removeImportant(mail: Mail) {
         if let index = mailImportantList.index(of: mail) {
             mailImportantList.remove(at: index)

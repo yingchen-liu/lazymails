@@ -73,13 +73,27 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         
         
     }
+    /**
+     get first character of string and return as a string
+     - Parameters:
+         - str: String input
+     - Returns: a string
+     */
     func firstChar(str:String) -> String {
         return String(Array(str)[0])
     }
+    
+    /**
+     Convert string to charatersets
+     - Parameters:
+         - str: String input
+     - Returns: CharacterSet
+     */
     func setCharacterRange(str : String) -> CharacterSet {
         
         return CharacterSet(charactersIn: str)
     }
+    
     var checked: Int? = nil
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailCell", for: indexPath) as! MailCell
@@ -120,13 +134,14 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         }
             cell.imgLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
             cell.imgLabel.textColor = UIColor.white
-            //cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
+        
+        // check if date is today
         if isDateInToday(date: mail.receivedAt) {
-            //print ("receiveeeeeee:\(mail.receivedAt)")
+            // today shows time
             cell.receiveDateLabel.text = mail.receivedAt.formatDateAndTime()
-            //cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt)
+            
         } else {
-            //cell.receiveDateLabel.text = formatDate(date: mail.receivedAt)
+            // before today shows date
             cell.receiveDateLabel.text = mail.receivedAt.formatDate()
         }
         
@@ -145,7 +160,6 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         }
         
         // mark important
-        
         cell.letterMarkImgView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_sender:))))
 
         cell.letterMarkImgView.isUserInteractionEnabled = true
@@ -154,6 +168,12 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         return cell
     }
     
+    /**
+     Check whether date is today
+     - Parameters:
+         - date: a date
+     - Returns: date is today or not
+     */
     func isDateInToday(date: Date) -> Bool {
         //let today = NSDate()
         var calendar = NSCalendar.current
@@ -162,6 +182,7 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         return calendar.isDateInToday(date)
     }
     
+    // tap star to mark important
     @objc func tapped(_sender : AnyObject ) {
         let index = _sender.view.tag
         let mail = currentMails[index]
@@ -200,6 +221,10 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         }
     }
     
+    /**
+     Remove mail from tableview
+     
+     */
     func removeMail() {
         currentMails.remove(at: selectedRow!)
         tableView.reloadData()

@@ -18,8 +18,19 @@ class Network:
       # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
       _thread.start_new_thread(self.receiveMessage, ())
+      _thread.start_new_thread(self.heartbeat, ())
     except Exception as e:
       print('Unable to start thread for receiving message:', e)
+
+  def heartbeat(self):
+    message = {
+      'type': 'heartbeat',
+      'end': 'mailbox'
+    }
+
+    self.sendMessage(message)
+
+    time.sleep(60)
 
   def sendMessage(self, message):
     
@@ -99,6 +110,9 @@ class Network:
         if message != '':
           print('Received message from the server', message)
           message = json.loads(message)
+
+          if message['type'] == 'heartbeat':
+            print('heartbeat')
           
           if self._receivedMessage:
             self._receivedMessage(self, message)

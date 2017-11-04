@@ -66,6 +66,9 @@ const processMessage = (sock, message) => {
       case 'live':
         mailbox.live(sock, message, clients);
         break;
+      case 'heartbeat':
+        sock.sendMessage(message.type, {});
+        break;
     }
   } else if (message.end === 'app') {
     switch (message.type) {

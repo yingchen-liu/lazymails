@@ -10,6 +10,34 @@ const mailboxes = db.get('mailboxes');
 const mails = db.get('mails');
 const users = db.get('users');
 
+
+const report = (sock, message, clients) => {
+  console.log(message)
+  const update = {};
+  switch (message.issueType) {
+    case 'category':
+      update.reportedCategory = message.reportedCategory;
+      break;
+    case 'photo':
+      update.reportedPhoto = true;
+      break;
+    case 'recognition':
+      update.reportedRecognition = true;
+      break;
+    default:
+      break;
+  }
+
+  console.log(update)
+  mails.update({ _id: monk.id(message.id) }, { $set: update })
+    .then(() => {
+      sock.sendMessage(message.type, {});
+    })
+    .catch((err) => {
+      sock.sendError(message.type, err);
+    });
+};
+
 const register = (sock, message, clients) => {
   users.findOne({ email: message.email })
     .then((user) => {
@@ -236,13 +264,14 @@ const downloadCategoryIcon = (sock, message, clients) => {
   //  https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j
 
   fs.readdirSync(iconPath).forEach(file => {
-    if (file.startsWith(message.category)) {
+    if (message.category.startsWith(file.split('.')[0])) {
       found = true;
 
       //  https://stackoverflow.com/questions/24523532/how-do-i-convert-an-image-to-a-base64-encoded-data-url-in-sails-js-or-generally
 
       var base64 = fs.readFileSync(path.join(iconPath, file), 'base64');
       sock.sendMessage(message.type, {
+        category: message.category,
         content: base64
       });
     }
@@ -255,6 +284,7 @@ const downloadCategoryIcon = (sock, message, clients) => {
 
 
 module.exports = {
+  report,
   register,
   connect,
   checkMails,

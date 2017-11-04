@@ -96,6 +96,9 @@ const processMessage = (sock, message) => {
       case 'download_category_icon':
         app.downloadCategoryIcon(sock, message, clients);
         break;
+      case 'report':
+        app.report(sock, message, clients);
+        break;
       default:
         sock.sendError(new Error('Cannot understand the message'));
         break;

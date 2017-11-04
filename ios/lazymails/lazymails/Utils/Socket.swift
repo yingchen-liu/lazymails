@@ -15,8 +15,8 @@ class Socket: NSObject, StreamDelegate {
     
     static let shared = Socket()
     
-//    let host = "localhost"
-    let host = "socket.lazymails.com"
+    let host = "localhost"
+//    let host = "socket.lazymails.com"
     
     let port = 6969
     
@@ -44,9 +44,13 @@ class Socket: NSObject, StreamDelegate {
     
     var requestIconCallback: ((_ error: String?, _ message: Dictionary<String, Any>) -> Void)?
     
-    var mailCallback: ((_ mail: Mail) -> Void)?
+    var mailCallbacks: [(_ mail: Mail) -> Void] = []
+    
+    var iconDownloadCallbacks: [() -> Void] = []
     
     var categoryName = ""
+    
+    var connected = false
     
     
     func connect() {
@@ -142,6 +146,12 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    func sendDownloadIconMessage(categoryName: String) {
+        let message = ["end": "app", "type": "download_category_icon", "category": categoryName]
+        
+        sendMessage(message: message)
+    }
+    
     func sendStartLiveMessage(callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         let message = ["end": "app", "type": "start_live"]
         
@@ -164,6 +174,35 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    func sendCheckMails() {
+        if let newestMail = DataManager.shared.fetchNewestMail() {
+            let after = convertDateToString(date: newestMail.receivedAt)
+        
+            print("Checking mails")
+            let message = ["end": "app", "type": "check_mails", "after": after]
+            
+            sendMessage(message: message)
+        }
+    }
+    
+    func sendReportCategory(id: String, category: String) {
+        let message = ["end": "app", "type": "report", "issueType": "category", "reportedCategory": category, "id": id]
+        
+        sendMessage(message: message)
+    }
+    
+    func sendReportPhoto(id: String) {
+        let message = ["end": "app", "type": "report", "issueType": "photo", "id": id]
+        
+        sendMessage(message: message)
+    }
+    
+    func sendReportRecognition(id: String) {
+        let message = ["end": "app", "type": "report", "issueType": "recognition", "id": id]
+        
+        sendMessage(message: message)
+    }
+    
     func sendMessage(message: Dictionary<String, Any>) {
         
         //  https://stackoverflow.com/questions/29625133/convert-dictionary-to-json-in-swift
@@ -180,6 +219,7 @@ class Socket: NSObject, StreamDelegate {
     }
     
     func close() {
+        connected = false
         inputStream.close()
         outputStream.close()
     }
@@ -295,6 +335,8 @@ class Socket: NSObject, StreamDelegate {
         setting.isEnergySavingOn = isEnergySavingOn
         
         setting.save()
+        
+        connected = true
     }
     
     func getErrorMessage(message: Dictionary<String, Any>) -> String? {
@@ -326,6 +368,9 @@ class Socket: NSObject, StreamDelegate {
             if let loginCallback = loginCallback {
                 loginCallback(nil, message)
             }
+            
+            sendCheckMails()
+            
             break
         case "update_mailbox":
             if let responseCallback = responseCallback {
@@ -337,6 +382,11 @@ class Socket: NSObject, StreamDelegate {
             break
         case "mailbox_offline":
             print("Your mailbox goes offline just now")
+            break
+        case "check_mails":
+            print("Found unreceived mails")
+            let mails = message["mails"] as! NSArray as! Array<NSDictionary>
+            print(mails.count)
             break
         case "mail":
             print("You have received a mail just now")
@@ -355,10 +405,9 @@ class Socket: NSObject, StreamDelegate {
             
             // get title
             var title = ""
-            let logosArray = infoDic["logos"] as! NSArray as! Array<NSDictionary>
-            if logosArray.count != 0 {
-                let eachLogoDic = logosArray[0] as! NSDictionary as! Dictionary<String, Any>
-                title = eachLogoDic["desc"] as! String
+            let titleArray = infoDic["titles"] as! NSArray as! Array<NSDictionary>
+            if let titleDict = titleArray.first {
+                title = titleDict["name"] as! String
             }
             print ("title : \(title)")
 
@@ -464,6 +513,10 @@ class Socket: NSObject, StreamDelegate {
             // add new Mail to category
             addMailToCategory(mail: newMail)
             
+            if !DataManager.shared.categoryList.contains(newMail.category) {
+                DataManager.shared.categoryList.append(newMail.category)
+            }
+            
             do {
                 try DataManager.shared.save()
             } catch {
@@ -471,8 +524,10 @@ class Socket: NSObject, StreamDelegate {
                 print("Can not save data : \(saveError)")
             }
             
-            if let mailCallback = mailCallback {
-                mailCallback(newMail)
+            sendDownloadIconMessage(categoryName: categoryName)
+            
+            for callback in mailCallbacks {
+                callback(newMail)
             }
             
             break
@@ -480,10 +535,32 @@ class Socket: NSObject, StreamDelegate {
             if let liveCallback = liveCallback {
                 liveCallback(getErrorMessage(message: message), message)
             }
+            break
         case "download_category_icon":
-            if let requestIconCallback = requestIconCallback {
-                requestIconCallback(getErrorMessage(message: message), message)
+            
+            if let error = getErrorMessage(message: message) {
+                print(error)
+                break
             }
+            
+            let categoryName = message["category"] as! String
+            let icon = message["content"] as! String
+            
+            if let category = DataManager.shared.fetchCategoryByName(name: categoryName).first {
+                category.icon = icon
+                
+                do {
+                    try DataManager.shared.save()
+                } catch {
+                    let saveError = error as NSError
+                    print("Can not save data : \(saveError)")
+                }
+            }
+            
+            for callback in iconDownloadCallbacks {
+                callback()
+            }
+            break
         default:
             break
         }
@@ -515,6 +592,7 @@ class Socket: NSObject, StreamDelegate {
             return value
         }
     }
+    
     // convert String date to Date
     func convertStringToDate(str : String) -> Date {
         let dateFormatter = DateFormatter()
@@ -523,5 +601,13 @@ class Socket: NSObject, StreamDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.date(from: str)
         return date!
+    }
+    
+    func convertDateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter.string(from: date)
     }
 }

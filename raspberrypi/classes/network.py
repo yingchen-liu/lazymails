@@ -58,6 +58,7 @@ class Network:
 
     while True:
       if not self._sock or not self._isConnected:
+        print('Not connected')
         continue
 
       data = ''

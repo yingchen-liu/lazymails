@@ -41,6 +41,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         //modifyData()
         DataManager.shared.fetchCategories()
         categoryList = DataManager.shared.categoryList
+        categoryList.sort { (a, b) -> Bool in
+            return a.name! > b.name!
+        }
+        
         DataManager.shared.fetchMails()
         mailList = DataManager.shared.mailList
         mailUnreadList = mailList.filter { (mail) -> Bool in
@@ -50,18 +54,25 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             return mail.isImportant
         }
         
-        Socket.shared.mailCallback = mailCallback
+        Socket.shared.iconDownloadCallbacks.append(categoryIconReceived)
+        Socket.shared.mailCallbacks.append(mailCallback)
     }
     
     func mailCallback(mail: Mail) {
         mailUnreadList.append(mail)
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
+            categoryList.sort { (a, b) -> Bool in
+                return a.name! > b.name!
+            }
         }
         
         tableView.reloadData()
     }
     
+    func categoryIconReceived() {
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -91,16 +102,27 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             cell.cateNameLabel.text = readAndImportantList[indexPath.row]
             if cell.cateNameLabel.text == readAndImportantList[0] {
                 cell.cateUnreadNoLabel.text = String( mailUnreadList.count)
+                cell.cateIconImgView.image = UIImage(named: "unread")
                 print ( mailUnreadList.count)
             }else {
                 cell.cateUnreadNoLabel.text = String( mailImportantList.count)
+                cell.cateIconImgView.image = UIImage(named: "star-outline")
             }
+            
             
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
             //set the data here
             cell.cateNameLabel.text = categoryList[indexPath.row].name
+            
+            if let icon = categoryList[indexPath.row].icon {
+                if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
+                    let image = UIImage(data: data)
+                    
+                    cell.cateIconImgView.image = image
+                }
+            }
             return cell
         }
     }
@@ -112,54 +134,6 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
-    
-    
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     func fetchCategories(){
         let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
@@ -367,8 +341,11 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             if selectedRowIndexPath?.section == 0 {
                 if selectedRowIndexPath?.row == 0 {
                     destination.currentMails = mailUnreadList
+                    destination.isUnread = true
+                    destination.title = "Unread"
                 }else {
                     destination.currentMails = mailImportantList
+                    destination.title = "Important"
                 }
                
             }
@@ -377,8 +354,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
                 let selectedRow = tableView.indexPathForSelectedRow?.row
                 print (selectedRow)
                 var currentMails = categoryList[selectedRow!].mail?.allObjects as! [Mail]
-                currentMails = currentMails.sorted { $0.receivedAt! > $1.receivedAt!}
+                currentMails = currentMails.sorted { $0.receivedAt > $1.receivedAt}
                 destination.currentMails = currentMails
+                destination.category = categoryList[selectedRow!]
             }
             
         }

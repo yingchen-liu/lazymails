@@ -35,6 +35,7 @@ class DataManager: NSObject {
             throw error
         }
     }
+    
     func fetchCategories() {
         let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
         do {
@@ -45,6 +46,7 @@ class DataManager: NSObject {
             print(fetchError)
         }
     }
+    
     func fetchCategoryByName(name: String) -> [Category] {
         let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
         fetchRequest.predicate = NSPredicate(format: "name == %@", name)
@@ -57,6 +59,20 @@ class DataManager: NSObject {
             print(fetchError)
         }
         return category
+    }
+    
+    func fetchNewestMail() -> Mail? {
+        let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "receivedAt", ascending: false)]
+        fetchRequest.fetchLimit = 1
+        do {
+            mailList = try self.managedObjectContext.fetch(fetchRequest)
+            return mailList.first
+        } catch {
+            let fetchError = error as NSError
+            print(fetchError)
+        }
+        return nil
     }
     
     func fetchMails() {

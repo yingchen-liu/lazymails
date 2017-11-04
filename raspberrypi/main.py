@@ -21,8 +21,8 @@ from classes.utils import toBase64
 app = {
   'config': {
     'network': {
-      'host': 'socket.lazymails.com',
-      # 'host': '192.168.0.3',
+      # 'host': 'socket.lazymails.com',
+      'host': '192.168.0.3',
       'port': 6969,
       'endSymbol': '[^END^]'
     },
@@ -83,7 +83,8 @@ def mailSendingMonitor():
       if filename.endswith(filesConfig['mail']):
         sending += 1
 
-    print(sending, secondSendingKeepTheSameFor)
+    if sending > 0:
+      print('mails:', sending, 'time:', secondSendingKeepTheSameFor)
     if sending != 0 and secondSendingKeepTheSameFor >= 60:
       secondSendingKeepTheSameFor = 0
       print('Spending too long to send a mail to the server')
@@ -218,7 +219,7 @@ def frameAvailable(self, image, i):
 
       if framesLeft > 0:
         # only send per n frames or the first frame when live started
-        print(i)
+        # print(i)
         if i % liveConfig['sendPerFrames'] == 0 or framesLeft == liveConfig['sendPerFrames']:
           print('live to {}, {} remains'.format(email, lives[email]))
 

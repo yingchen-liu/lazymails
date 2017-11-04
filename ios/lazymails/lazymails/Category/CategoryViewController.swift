@@ -50,6 +50,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         mailUnreadList = mailList.filter { (mail) -> Bool in
             return !mail.didRead
         }
+        mailUnreadList.sort { (a, b) -> Bool in
+            return a.receivedAt > b.receivedAt
+        }
+        
         mailImportantList = mailList.filter { (mail) -> Bool in
             return mail.isImportant
         }
@@ -70,6 +74,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     func mailCallback(mail: Mail) {
         mailList.append(mail)
         mailUnreadList.append(mail)
+        mailUnreadList.sort { (a, b) -> Bool in
+            return a.receivedAt > b.receivedAt
+        }
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
             categoryList.sort { (a, b) -> Bool in

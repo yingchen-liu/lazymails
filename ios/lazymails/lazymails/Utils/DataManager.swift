@@ -36,6 +36,10 @@ class DataManager: NSObject {
         }
     }
     
+    /**
+     Fetch all Categories from Core Data
+     
+     */
     func fetchCategories() {
         let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
         do {
@@ -47,6 +51,14 @@ class DataManager: NSObject {
         }
     }
     
+    /**
+     Fetch category by name
+     
+     - Parameters:
+         - name: category name
+     
+     - Returns: a category list
+     */
     func fetchCategoryByName(name: String) -> [Category] {
         let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
         fetchRequest.predicate = NSPredicate(format: "name == %@", name)
@@ -61,6 +73,11 @@ class DataManager: NSObject {
         return category
     }
     
+    /**
+     Fetch the newest mail from Core Data
+     
+     - Returns: the newest mail
+     */
     func fetchNewestMail() -> Mail? {
         let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "receivedAt", ascending: false)]
@@ -75,6 +92,10 @@ class DataManager: NSObject {
         return nil
     }
     
+    /**
+     Fetch the newest mail from Core Data
+     
+     */
     func fetchMails() {
         let fetchRequest = NSFetchRequest<Mail>(entityName: "Mail")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "receivedAt", ascending: false)]

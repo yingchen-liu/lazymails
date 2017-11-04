@@ -25,38 +25,13 @@ class Notification: NSObject {
         
     }
     
-    func monitorMail(id: String, categoryName: String) {
-        let identifier = id
-        let title = "You got a new Mail in Category \(categoryName)"
+    func monitorMail(categoryName: String, mailTitle: String) {
+        let title = "New Mail: \(mailTitle) (\(categoryName))"
         let message = ""
-     
-        notify(title: title, message: message, identifier: identifier)
+        notify(title: title, message: message)
     }
     
-    func monitorNewCategoryMail(id: String, categoryName: String) {
-        let identifier = id
-        let title = "LazyMail has a new Category \(categoryName)"
-        let message = ""
-        
-        notify(title: title, message: message, identifier: identifier)
-    }
-    
-    func notify(title: String, message: String, identifier: String) {
-        // ✴️ Attributes:
-        
-        // Website: How to Make Local Notifications in iOS 10
-        //      https://makeapppie.com/2016/08/08/how-to-make-local-notifications-in-ios-10/
-        
-        let content = UNMutableNotificationContent()
-        
-        content.title = title
-        content.sound = UNNotificationSound.default()
-        content.body = message
-        content.categoryIdentifier = identifier
-        content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
-        
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    func notify(title: String, message: String) {
         
         // In-app notification
         // ✴️ Attribute:
@@ -66,8 +41,4 @@ class Notification: NSObject {
         let murmur = Murmur(title: title)
         Whisper.show(whistle: murmur, action: .show(5))
     }
-    
-    
-    
-    
 }

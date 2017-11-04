@@ -69,11 +69,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
         //mailboxIdField.isUserInteractionEnabled = false
-        loginButton.layer.borderWidth = 1;
-        registerButton.layer.borderWidth = 1;
         
-        loginButton.layer.borderColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1).cgColor
-        registerButton.layer.borderColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1).cgColor
+        
+        
         
         
     }

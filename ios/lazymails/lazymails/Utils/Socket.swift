@@ -52,7 +52,10 @@ class Socket: NSObject, StreamDelegate {
     
     var connected = false
     
-    
+    /**
+     Connect to server
+ 
+     */
     func connect() {
         var readStream: Unmanaged<CFReadStream>?
         var writeStream: Unmanaged<CFWriteStream>?
@@ -97,6 +100,10 @@ class Socket: NSObject, StreamDelegate {
         sendCheckMails()
     }
     
+    /**
+     Reconnect to server
+     
+     */
     func reconnect() {
         Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (timer) in
             self.connect()
@@ -105,6 +112,14 @@ class Socket: NSObject, StreamDelegate {
         })
     }
     
+    /**
+     Send user register message to server
+     - Parameters:
+         - email: User email address
+         - password: User password
+         - mailbox: User mailbox id
+         - callback: the callback of receiving register results
+     */
     func sendRegisterMessage(email: String, password: String, mailbox: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         let message = ["end": "app", "type": "register", "email": email, "password": password, "mailbox": mailbox]
         
@@ -112,7 +127,13 @@ class Socket: NSObject, StreamDelegate {
         
         sendMessage(message: message)
     }
-    // send category icon request
+    
+    /**
+     Send category icon message to server
+     - Parameters:
+         - category: Category name
+         - callback: the callback of receiving category icon results
+     */
     func sendCategoryIconMessage(category: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         let message = ["end": "app", "type": "download_category_icon", "category": category]
         
@@ -121,6 +142,13 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Send login message to server
+     - Parameters:
+         - email: User email address
+         - password: User password
+         - callback: the callback of receiving login results
+     */
     func sendConnectMessage(email: String, password: String, callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         print("Connecting with email \(email), password \(password)")
         let message = ["end": "app", "type": "connect", "email": email, "password": password]
@@ -130,6 +158,11 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Update the settings of mailbox to server
+     - Parameters:
+         - callback: the callback of receiving update mailbox results
+     */
     func sendUpdateMailboxMessage(callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         var receivers: [Dictionary<String, String>] = []
         let _receivers = Receiver.fetchAll()
@@ -148,12 +181,22 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Send download category icon message to server
+     - Parameters:
+         - categoryName: Category name
+     */
     func sendDownloadIconMessage(categoryName: String) {
         let message = ["end": "app", "type": "download_category_icon", "category": categoryName]
         
         sendMessage(message: message)
     }
     
+    /**
+     Send mailbox live message to server
+     - Parameters:
+         - callback: the callback of receiving mailbox live results
+     */
     func sendStartLiveMessage(callback: @escaping (_ error: String?, _ message: Dictionary<String, Any>) -> Void) {
         let message = ["end": "app", "type": "start_live"]
         
@@ -162,12 +205,20 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Send heartbeat message to live
+     
+     */
     func sendLiveHeartbeatMessage() {
         let message = ["end": "app", "type": "live_heartbeat"]
         
         sendMessage(message: message)
     }
     
+    /**
+     Send stop live message
+     
+     */
     func sendStopLiveMessage() {
         let message = ["end": "app", "type": "stop_live"]
         
@@ -176,6 +227,10 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Send check mails and receive the newest mail when app online
+     
+     */
     func sendCheckMails() {
         if let newestMail = DataManager.shared.fetchNewestMail() {
             let after = convertDateToString(date: newestMail.receivedAt)
@@ -187,24 +242,45 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
+    /**
+     Send report incorrect category message to server
+     - Parameters:
+         - id: the id of reported category
+         - category: the name of reported category
+     */
     func sendReportCategory(id: String, category: String) {
         let message = ["end": "app", "type": "report", "issueType": "category", "reportedCategory": category, "id": id]
         
         sendMessage(message: message)
     }
     
+    /**
+     Send report incorrect display of category photo message to server
+     - Parameters:
+         - id: the id of reported category
+     */
     func sendReportPhoto(id: String) {
         let message = ["end": "app", "type": "report", "issueType": "photo", "id": id]
         
         sendMessage(message: message)
     }
     
+    /**
+     Send report incorrect reconition of category message to server
+     - Parameters:
+         - id: the id of reported category
+     */
     func sendReportRecognition(id: String) {
         let message = ["end": "app", "type": "report", "issueType": "recognition", "id": id]
         
         sendMessage(message: message)
     }
     
+    /**
+     Send message request to server
+     - Parameters:
+         - message: the messages that wants to send
+     */
     func sendMessage(message: Dictionary<String, Any>) {
         
         //  https://stackoverflow.com/questions/29625133/convert-dictionary-to-json-in-swift
@@ -220,12 +296,22 @@ class Socket: NSObject, StreamDelegate {
         print("sent message \(message["type"] as! String)")
     }
     
+    /**
+     Send close request to server
+     
+     */
     func close() {
         connected = false
         inputStream.close()
         outputStream.close()
     }
     
+    /**
+     Handle stream
+     - Parameters:
+         - aStream: Stream
+         - eventCode: EventCode
+     */
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         switch eventCode {
         case Stream.Event.hasBytesAvailable:
@@ -247,6 +333,11 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
+    /**
+     ReadBytes
+     - Parameters:
+         - stream: Stream
+     */
     func readBytes(stream: InputStream) {
         
         //  In order to receive long messages,
@@ -286,13 +377,18 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
+    /**
+     Process login result message from server
+     - Parameters:
+         - message: Login result message
+     */
     func processConnectMessage(message: Dictionary<String, Any>) {
         let _receivers = Receiver.fetchAll()
         for _receiver in _receivers {
             data.delete(object: _receiver)
         }
         
-        print(message)
+        //print(message)
         
         let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
         let receivers = mailbox["names"] as! NSArray as! Array<NSDictionary>
@@ -341,6 +437,12 @@ class Socket: NSObject, StreamDelegate {
         connected = true
     }
     
+    /**
+     get error message from server
+     - Parameters:
+         - message: server error result message
+     - Returns: error message
+     */
     func getErrorMessage(message: Dictionary<String, Any>) -> String? {
         var errorMessage: String?
         if let error = message["error"] {
@@ -350,13 +452,20 @@ class Socket: NSObject, StreamDelegate {
         return errorMessage
     }
     
+    /**
+     process message result from server
+     - Parameters:
+         - message: server response message
+     */
     func processMessage(message: Dictionary<String, Any>) {
         switch message["type"] as! String {
+        // process register result
         case "register":
             if let registerCallback = registerCallback {
                 registerCallback(getErrorMessage(message: message), message)
             }
             break
+        // process login result
         case "connect":
             let error = getErrorMessage(message: message)
             guard error == nil else {
@@ -372,38 +481,41 @@ class Socket: NSObject, StreamDelegate {
             }
             
             sendCheckMails()
-            
             break
+        // process update mailbox result
         case "update_mailbox":
             if let responseCallback = responseCallback {
                 responseCallback(getErrorMessage(message: message), message)
             }
             break
+        
         case "mailbox_online":
             print("Your mailbox is now online")
             break
         case "mailbox_offline":
             print("Your mailbox goes offline just now")
             break
+        //process check mails result
         case "check_mails":
             print("Found unreceived mails")
             let mails = message["mails"] as! NSArray as! Array<NSDictionary>
             print(mails.count)
             break
+        // process mail result
         case "mail":
             print("You have received a mail just now")
-            print(message["info"])
             let mail = message["mail"] as! NSDictionary as! Dictionary<String, Any>
+            //get mail photo data
             let mailContent = mail["content"] as! String
             let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
+            //get mailbox photo data
             let mailboxContent = mailbox["content"] as! String
-            //print ("mailContent :\(mailContent)")
-            //print ("mailboxContent :\(mailboxContent)")
             
+            // get information of mail
             let infoDic = message["info"] as! NSDictionary as! Dictionary<String, Any>
+            
             // get mail id
             let mailId = infoDic["_id"] as! String
-            print ("mailId : \(mailId)")
             
             // get title
             var title = ""
@@ -411,8 +523,6 @@ class Socket: NSObject, StreamDelegate {
             if let titleDict = titleArray.first {
                 title = titleDict["name"] as! String
             }
-            print ("title : \(title)")
-
             // get receive date
             let receivedAtStr = infoDic["mailboxReceivedAt"] as! String
             print ("receivedAtStr : \(receivedAtStr) " )
@@ -430,7 +540,6 @@ class Socket: NSObject, StreamDelegate {
                     //print("maintext\(i) : \(text) " )
                     wholeText = wholeText + text
                 }
-                print ("wholeText : \(wholeText)")
             }
             
             // get from
@@ -439,7 +548,6 @@ class Socket: NSObject, StreamDelegate {
             if poPox != nil {
                 from = poPox as! String
             }
-            print ("from : \(from)")
             
             // get to
             let receiver = nullToNil(value: infoDic["receiver"] as AnyObject)
@@ -447,11 +555,9 @@ class Socket: NSObject, StreamDelegate {
             if receiver != nil {
                 to = receiver as! String
             }
-            print ("to : \(to)")
-
+            
             // get mail info
             let mailInfo = infoDic["text"] as! String
-            print ("mailInfo : \(mailInfo)")
             
             // get url
             var urls = infoDic["urls"] as! NSArray as! Array<String>
@@ -469,7 +575,6 @@ class Socket: NSObject, StreamDelegate {
             else  {
                 website = ""
             }
-            print ("website : \(website)")
             
             //get category name
             let categoriesDic = infoDic["categories"] as! NSArray as! Array<NSDictionary>
@@ -478,7 +583,7 @@ class Socket: NSObject, StreamDelegate {
                 let category = categoriesDic[0] as! NSDictionary as! Dictionary<String, Any>
                 categoryName = category["name"] as! String
             }
-            print ("categoryName : \(categoryName)")
+            
             // store from, to, wholetext, website to info
             let jsonObj = ["From": from, "To" : to, "Text": wholeText, "Website": website]
             let jsonData = try! JSONSerialization.data(withJSONObject: jsonObj, options: JSONSerialization.WritingOptions())
@@ -503,8 +608,6 @@ class Socket: NSObject, StreamDelegate {
                 if !categoryExist {
                      Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
                 }
-                
-                
             } else {
                 Notification.shared.monitorNewCategoryMail(id : mailId, categoryName: categoryName)
             }
@@ -525,7 +628,7 @@ class Socket: NSObject, StreamDelegate {
                 let saveError = error as NSError
                 print("Can not save data : \(saveError)")
             }
-            
+            // redownload category icon if no icon data
             if newMail.category.icon == nil {
                 sendDownloadIconMessage(categoryName: categoryName)
             }
@@ -535,11 +638,13 @@ class Socket: NSObject, StreamDelegate {
             }
             
             break
+        // process live result message
         case "live":
             if let liveCallback = liveCallback {
                 liveCallback(getErrorMessage(message: message), message)
             }
             break
+        // process download category icon result message
         case "download_category_icon":
             
             if let error = getErrorMessage(message: message) {
@@ -547,9 +652,11 @@ class Socket: NSObject, StreamDelegate {
                 break
             }
             
+            // get category name from server
             let categoryName = message["category"] as! String
             let icon = message["content"] as! String
             
+            // save icon data into Core Data
             if let category = DataManager.shared.fetchCategoryByName(name: categoryName).first {
                 category.icon = icon
                 
@@ -569,11 +676,29 @@ class Socket: NSObject, StreamDelegate {
             break
         }
     }
+    
+    /**
+     Insert new mail into core data
+     - Parameters:
+         - id: mail id
+         - title: mail title
+         - mainText: mail main text
+         - info: mail detailed information
+         - receivedAt: mail receive date
+         - image: mail photo
+         - boxImage: mailbox photo
+     - Returns: Mail
+     */
     func insertNewMail(id: String, title: String, mainText: String, info: String, receivedAt: Date, image: String, boxImage: String) -> Mail {
         let mail = Mail.insertNewObject(id: id, title: title, mainText: mainText, info: info, didRead: false, isImportant: false, receivedAt: receivedAt, image: image, boxImage: boxImage, showFullImage: false)
         return mail
     }
     
+    /**
+     Add mail into category
+     - Parameters:
+         - mail: Mail
+     */
     func addMailToCategory(mail : Mail){
         let uuid = NSUUID().uuidString
         if categoryName != "" {
@@ -589,6 +714,12 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
+    /**
+     Convert null to nil
+     - Parameters:
+         - value: AnyObject
+     - Returns: value
+     */
     func nullToNil(value : AnyObject?) -> AnyObject? {
         if value is NSNull {
             return nil
@@ -597,7 +728,12 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
-    // convert String date to Date
+    /**
+     Convert String date to Date
+     - Parameters:
+         - str: String format date
+     - Returns: Date in date type
+     */
     func convertStringToDate(str : String) -> Date {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -607,6 +743,12 @@ class Socket: NSObject, StreamDelegate {
         return date!
     }
     
+    /**
+     Convert date type to String Date
+     - Parameters:
+         - date: Date
+     - Returns: String Date
+     */
     func convertDateToString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX")

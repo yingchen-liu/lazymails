@@ -33,6 +33,7 @@ extension UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = .blue
     }
     
+    
     func showError(message: String) {
         let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         

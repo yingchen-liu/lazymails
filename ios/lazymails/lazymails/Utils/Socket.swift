@@ -231,8 +231,8 @@ class Socket: NSObject, StreamDelegate {
      */
     func sendCheckMails() {
         if let newestMail = DataManager.shared.fetchNewestMail() {
-            let after = convertDateToString(date: newestMail.receivedAt)
-            
+            //let after = convertDateToString(date: newestMail.receivedAt)
+            let after = newestMail.receivedAt.toStringDate()
             print(after)
         
             print("Checking mails")
@@ -526,7 +526,9 @@ class Socket: NSObject, StreamDelegate {
             // get receive date
             let receivedAtStr = infoDic["mailboxReceivedAt"] as! String
             print ("receivedAtStr : \(receivedAtStr) " )
-            let receivedAt = convertStringToDate(str: receivedAtStr)
+            let receivedAt = receivedAtStr.toDate()
+            
+            //let receivedAt = convertStringToDate(str: receivedAtStr)
             print ("receivedAt :\(receivedAt)")
             
             // get main text
@@ -730,33 +732,5 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
-    /**
-     Convert String date to Date
-     - Parameters:
-         - str: String format date
-     - Returns: Date in date type
-     */
-    func convertStringToDate(str : String) -> Date {
-        let dateFormatter = DateFormatter()
-        //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.locale = NSLocale.current
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let date = dateFormatter.date(from: str)
-        return date!
-    }
     
-    /**
-     Convert date type to String Date
-     - Parameters:
-         - date: Date
-     - Returns: String Date
-     */
-    func convertDateToString(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.locale = NSLocale.current
-//        dateFormatter.timeZone = NSTimeZone.init(abbreviation: "UTC") as TimeZone!
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return dateFormatter.string(from: date)
-    }
 }

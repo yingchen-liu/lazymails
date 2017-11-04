@@ -50,7 +50,7 @@ const connect = (sock, message, clients) => {
     });
 
   // notify users their that mailbox is online
-  users.find({ mailbox: message.id })
+  users.find({ mailbox: monk.id(message.id) })
     .then((users) => {
       users.map((user) => {
         if (clients.getSockByClientId(user.email)) {

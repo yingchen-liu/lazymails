@@ -10,6 +10,7 @@
 
 const net = require('net');
 const serializeError = require('serialize-error');
+const monk = require('monk');
 
 const config = require('./config');
 const mailbox = require('./handlers/mailbox');
@@ -207,7 +208,7 @@ const connect = () => {
       console.log(`Socket client disconnected: ${sock.remoteAddress}:${sock.remotePort}`);
       if (clients.isMailbox(sock.getClientKey())) {
         // notify users their that mailbox is offline
-        users.find({ mailbox: clientId })
+        users.find({ mailbox: monk.id(clientId) })
           .then((users) => {
             users.map((user) => {
               if (clients.getSockByClientId(user.email)) {

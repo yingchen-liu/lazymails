@@ -38,6 +38,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 filterDictionary[key] = value
             }
             print("\(filterDictionary)")
+        title = selectedMail?.title
         }
         
         

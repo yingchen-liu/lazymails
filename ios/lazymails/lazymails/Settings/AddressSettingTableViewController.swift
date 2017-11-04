@@ -29,7 +29,8 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // ✴️ Attributes:
+        // Video: Making a Search Bar to Search Words in a TableView (Swift 3)
         // https://www.youtube.com/watch?v=zgP_VHhkroE
         
         addressSearchBar.delegate = self
@@ -72,6 +73,12 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
         return 56
     }
     
+    /**
+     Search address
+     - Parameters:
+         - searchBar: UIsearchBar
+         - searchText: search text input
+     */
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         addresses.removeAll()
         unit = nil
@@ -82,8 +89,16 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
             completer.queryFragment = searchText
             
             do {
+                // ✴️ Attributes:
+                // Website: NSRegularExpression: How to match regular expressions in strings
                 //  https://www.hackingwithswift.com/example-code/strings/nsregularexpression-how-to-match-regular-expressions-in-strings
+                
+                // ✴️ Attributes:
+                // Website: NSRegular​Expression
                 //  http://nshipster.com/nsregularexpression/
+                
+                // ✴️ Attributes:
+                // Stackoverflow: NSRegularExpression cannot find capturing group matches
                 //  https://stackoverflow.com/questions/31499221/nsregularexpression-cannot-find-capturing-group-matches
                 
                 let addressRegex = try NSRegularExpression(pattern: AddressSettingTableViewController.addressPattern, options: .caseInsensitive)
@@ -101,6 +116,10 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
         tableView.reloadData()
     }
     
+    /**
+     Update address results
+     
+     */
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         for result in completer.results {
             let title = "\(unit != nil ? "Unit \(unit!) " : "")\(result.title)"
@@ -110,8 +129,11 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        // ✴️ Attributes:
+        // Website: Forward Geocoding With CLGeocoder
         // https://cocoacasts.com/forward-and-reverse-geocoding-with-clgeocoder-part-1/
+        // ✴️ Attributes:
+        // Apple: CLGeocoder
         // https://developer.apple.com/documentation/corelocation/clgeocoder
         
         let geocoder = CLGeocoder();
@@ -156,46 +178,15 @@ class AddressSettingTableViewController: UITableViewController, UISearchBarDeleg
         }
     }
     
+    /**
+     Show address is not valid
+     
+     */
     func showNotValidAddressToast() {
         let message = Message(title: "This is not a valid address, please input your street number.", backgroundColor: .red)
         
         Whisper.show(whisper: message, to: self.navigationController!, action: .show)
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     /*
     // MARK: - Navigation

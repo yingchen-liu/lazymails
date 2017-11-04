@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+// ✴️ Attributes:
+// StackOverflow: Making my function calculate average of array Swift
 //      https://stackoverflow.com/questions/28288148/making-my-function-calculate-average-of-array-swift
 
 extension Array where Element == Double {

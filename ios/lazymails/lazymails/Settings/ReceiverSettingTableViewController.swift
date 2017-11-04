@@ -89,6 +89,8 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
         tableView.reloadData()
     }
     
+    // ✴️ Attributes:
+    // Website: Insert Table Row
     // http://www.ryanwright.me/cookbook/ios/objc/uitableview/add-table-row
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -150,12 +152,22 @@ class ReceiverSettingTableViewController: UITableViewController, ReceiverSetting
         }
     }
     
+    /**
+     Add new receiver to tableview
+     - Parameters:
+         - receiver: Receiver
+     */
     func addReceiver(receiver: Receiver) {
         receivers.append(receiver)
         tableView.reloadData()
         settingTableDelegate?.addReceiver(receiver: receiver)
     }
     
+    /**
+     Edit new receiver
+     - Parameters:
+         - receiver: Receiver
+     */
     func editReceiver(receiver: Receiver) {
         tableView.reloadData()
         settingTableDelegate?.editReceiver(receiver: receiver)

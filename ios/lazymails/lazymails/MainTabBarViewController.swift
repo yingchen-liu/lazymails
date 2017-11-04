@@ -12,7 +12,8 @@ class MainTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // ✴️ Attributes:
+        // Stackoverflow: Setting the default tab when using storyboards
         //  https://stackoverflow.com/questions/13136699/setting-the-default-tab-when-using-storyboards
         
         selectedIndex = 1

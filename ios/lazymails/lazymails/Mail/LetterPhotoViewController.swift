@@ -17,7 +17,8 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // ✴️ Attributes:
+        // Stackoverflow: How to Zoom In/Out Photo on double Tap in the iPhone WWDC 2010 - 104 PhotoScroller
         //      https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
         
         // single tapped on the photo to go back
@@ -58,7 +59,9 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         dismiss(animated: true) { }
         
     }
-    //https://stackoverflow.com/questions/39460256/uiscrollview-zooming-contentinset
+    // ✴️ Attributes:
+    // Stackoverflow: UIScrollView Zooming & contentInset
+    //     https://stackoverflow.com/questions/39460256/uiscrollview-zooming-contentinset
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         if scrollView.zoomScale > 1 {
             
@@ -89,12 +92,10 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         } else {
             scrollView.setZoomScale(1, animated: true)
         }
-        
-        
-        
-        
     }
-    
+    // ✴️ Attributes:
+    // Stackoverflow: How to Zoom In/Out Photo on double Tap in the iPhone WWDC 2010 - 104 PhotoScroller
+    //      https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
     func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
         var zoomRect = CGRect.zero
         zoomRect.size.height = photoImgView.frame.size.height / scale

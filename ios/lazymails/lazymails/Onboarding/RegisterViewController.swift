@@ -56,11 +56,10 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // ✴️ Attributes:
+        // Website: How can I dismiss the keyboard if a user taps off the on-screen keyboard?
         //  https://stackoverflow.com/questions/5711434/how-can-i-dismiss-the-keyboard-if-a-user-taps-off-the-on-screen-keyboard
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        
         self.view.addGestureRecognizer(tap)
         
         // validate input user name and psd
@@ -68,13 +67,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
-        //mailboxIdField.isUserInteractionEnabled = false
-        
-        
-        
-        
-        
-    }
+     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -85,17 +78,6 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.view.endEditing(true)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     @IBAction func scanButtonTapped(_ sender: Any) {
         readerVC.delegate = self
         
@@ -135,7 +117,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         textfield.layer.borderColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1).cgColor
         textfield.layer.borderWidth = 1.0
     }
-    
+    // login mailbox button
     @IBAction func loginButtonTapped(_ sender: Any) {
         self.reset()
         
@@ -144,18 +126,19 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         
         self.registerButton.setTitleColor(UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1), for:.normal)
         self.registerButton.backgroundColor = UIColor.white
-        
-        
+        // hide mailbox id input
         self.mailboxIdLabel.isHidden = true
         self.mailboxIdErrorLabel.isHidden = true
         self.mailboxIdField.isHidden = true
         self.scanCodeButton.isHidden = true
         self.nextButton.setTitle( "Login", for: .normal )
-        
+        // unresgiter mailboxIdField
         self.validator.unregisterField(mailboxIdField)
         
     }
-    
+    /**
+     Clear the label text and remove border of textfield
+     */
     func reset() {
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
@@ -166,6 +149,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.nextButton.backgroundColor = UIColor(red:122/255,green:195/255, blue: 246/255, alpha: 1)
     }
     
+    /**
+     Login and send login message to server and validate
+     */
     func login(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let email = emailField.text
@@ -192,11 +178,15 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         })
     }
     
+    /**
+     Send register request to server
+     */
     func register () {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let email = emailField.text
         let password = passwordField.text
         let mailboxId = mailboxIdField.text
+        // send register request message to server for validation
         socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
             guard error == nil else {
                 print("register: \(error!)")
@@ -208,13 +198,13 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 }
                 return
             }
-            
             self.setting.inited = true
             self.setting.email = email
             self.setting.password = password
             self.setting.mailbox = mailboxId
             self.setting.save()
             
+            // send login request message to server for validation
             self.socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
                 guard error == nil else {
                     print("connect: \(error!)")
@@ -229,6 +219,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         })
     }
     
+    // register button clicked
     @IBAction func registerButtonTapped(_ sender: Any) {
         self.reset()
         (sender as! UIButton).backgroundColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1)
@@ -245,21 +236,21 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         
     }
     
-    
+    /**
+     all local validations successful
+     */
     func validationSuccessful() {
-        //self.nextButton.isEnabled = true
         reset()
         
         if nextButton.currentTitle == "Login" {
             // Login
             login()
-            
         }else {
             register()
         }
         return
     }
-    
+    // input mailbox id value changed
     @IBAction func idInputChanged(_ sender: Any) {
         self.mailboxIdErrorLabel.text = ""
         validator.validate(self)
@@ -269,7 +260,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
             self.validator.unregisterField(mailboxIdField)
         }
     }
-    
+    /**
+     local validation failed
+     */
     func validationFailed(_ errors: [(Validatable, ValidationError)]) {
         reset()
         for (field, error) in errors {

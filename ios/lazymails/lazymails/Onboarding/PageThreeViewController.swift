@@ -31,6 +31,7 @@ class OnboardingPageThreeViewController: UIViewController {
         checkboxImage.addGestureRecognizer(checkboxTapGestureRecognizer)
     }
     
+    // privacy request checkbox
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
         checkboxImage.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")

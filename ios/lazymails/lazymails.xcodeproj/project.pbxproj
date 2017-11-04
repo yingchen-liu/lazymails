@@ -10,8 +10,6 @@
 		1859CD161F90AF6200F01FE6 /* MailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1859CD151F90AF6200F01FE6 /* MailInfoCell.swift */; };
 		18B348551F8EFBFF002B3F9E /* CurrentCategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B348541F8EFBFF002B3F9E /* CurrentCategoryViewCell.swift */; };
 		18B348571F8EFC14002B3F9E /* MoveToCagetoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B348561F8EFC14002B3F9E /* MoveToCagetoryViewCell.swift */; };
-		18B3485C1F8F67D4002B3F9E /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B3485B1F8F67D3002B3F9E /* CheckboxView.swift */; };
-		18B348601F8F6BC5002B3F9E /* CheckboxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B3485F1F8F6BC5002B3F9E /* CheckboxView.xib */; };
 		18C1E3FA1F8C3A660034EE06 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C1E3F91F8C3A660034EE06 /* CategoryViewController.swift */; };
 		18C1E4011F8C3F6A0034EE06 /* SpecialCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C1E4001F8C3F6A0034EE06 /* SpecialCategoryCell.swift */; };
 		18C1E4031F8C41D30034EE06 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C1E4021F8C41D30034EE06 /* CategoryCell.swift */; };
@@ -81,8 +79,6 @@
 		1859CD151F90AF6200F01FE6 /* MailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailInfoCell.swift; sourceTree = "<group>"; };
 		18B348541F8EFBFF002B3F9E /* CurrentCategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentCategoryViewCell.swift; sourceTree = "<group>"; };
 		18B348561F8EFC14002B3F9E /* MoveToCagetoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToCagetoryViewCell.swift; sourceTree = "<group>"; };
-		18B3485B1F8F67D3002B3F9E /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
-		18B3485F1F8F6BC5002B3F9E /* CheckboxView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckboxView.xib; sourceTree = "<group>"; };
 		18C1E3F91F8C3A660034EE06 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		18C1E4001F8C3F6A0034EE06 /* SpecialCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialCategoryCell.swift; sourceTree = "<group>"; };
 		18C1E4021F8C41D30034EE06 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
@@ -169,15 +165,6 @@
 				1859CD151F90AF6200F01FE6 /* MailInfoCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		18B3485A1F8F67B7002B3F9E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				18B3485B1F8F67D3002B3F9E /* CheckboxView.swift */,
-				18B3485F1F8F6BC5002B3F9E /* CheckboxView.xib */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		18C1E3F81F8C3A300034EE06 /* Category */ = {
@@ -342,7 +329,6 @@
 				6526B96C1F921ABE00C01D39 /* Settings */,
 				6526B9611F9219F100C01D39 /* MainTabBarViewController.swift */,
 				18F7BD221F8A50FE00E91760 /* Report */,
-				18B3485A1F8F67B7002B3F9E /* Views */,
 				18C1E40C1F8CEC670034EE06 /* Mail */,
 				18C1E3F81F8C3A300034EE06 /* Category */,
 				6526EACD1F83333500CEF2FD /* Onboarding */,
@@ -472,7 +458,6 @@
 				6541AD771F81E1C6003A28E2 /* Assets.xcassets in Resources */,
 				657A52561FADA70100033BC8 /* LaunchScreen.storyboard in Resources */,
 				6541AD751F81E1C6003A28E2 /* Main.storyboard in Resources */,
-				18B348601F8F6BC5002B3F9E /* CheckboxView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -550,7 +535,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18B3485C1F8F67D4002B3F9E /* CheckboxView.swift in Sources */,
 				6526B97D1F921ABE00C01D39 /* NotificationSettingTableViewController.swift in Sources */,
 				18EC13241F8E15D600EC9CBC /* IssuesListViewCell.swift in Sources */,
 				6526EAD31F83395700CEF2FD /* PageTwoViewController.swift in Sources */,

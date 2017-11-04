@@ -14,7 +14,6 @@ class IncorrectRecognitionViewController: UITableViewController {
     @IBOutlet weak var submitButton: UIButton!
     
     var checked = false
-    var contentList = ["From:": "Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street","To:": "Monash University ","Websites:": "http://www.coolmelb.ml"]
     var currentMail : Mail?
     var mainContentDictionary : Dictionary<String, String> = [:]
     
@@ -29,6 +28,7 @@ class IncorrectRecognitionViewController: UITableViewController {
         self.submitButton.isEnabled = false
     }
     
+    // report agreement checkbox
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
         checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
@@ -71,6 +71,7 @@ class IncorrectRecognitionViewController: UITableViewController {
         return cell
     }
     
+    // submit report button
     @IBAction func submitButtonTapped(_ sender: Any) {
         if checked {
             Socket.shared.sendReportRecognition(id: currentMail!.id)

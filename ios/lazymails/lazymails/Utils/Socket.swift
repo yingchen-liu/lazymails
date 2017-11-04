@@ -282,7 +282,8 @@ class Socket: NSObject, StreamDelegate {
          - message: the messages that wants to send
      */
     func sendMessage(message: Dictionary<String, Any>) {
-        
+        // ✴️ Attributes:
+        // Websites: Convert Dictionary to JSON in Swift
         //  https://stackoverflow.com/questions/29625133/convert-dictionary-to-json-in-swift
         
         let jsonData = try? JSONSerialization.data(withJSONObject: message, options: [])
@@ -340,7 +341,8 @@ class Socket: NSObject, StreamDelegate {
      */
     func readBytes(stream: InputStream) {
         
-        //  In order to receive long messages,
+        // ✴️ Attributes:
+        // Websites: SwiftSocket: Can't send more than one TCP message
         //      https://stackoverflow.com/questions/42646159/swiftsocket-cant-send-more-than-one-tcp-message
         
         var buffer = Array<UInt8>(repeating: 0, count: maxReadLength)

@@ -5,6 +5,7 @@
 //  Created by YINGCHEN LIU on 3/10/17.
 //  Copyright © 2017 YINGCHEN LIU. All rights reserved.
 //
+// ✴️ Attributes:
 //  Website: iOS tutorial: Need to create an onboarding flow for your mobile app? Here's how to do it using UIPageViewController in Swift. - Thorn Technologies
 //      https://www.thorntech.com/2015/08/need-to-create-an-onboarding-flow-for-your-mobile-app-heres-how-to-do-it-using-uipageviewcontroller-in-swift/
 

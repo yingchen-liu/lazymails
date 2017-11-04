@@ -242,12 +242,20 @@
                                                 <constraint firstAttribute="width" secondItem="JUh-LC-wiQ" secondAttribute="height" multiplier="1:1" id="tqB-O9-Sgp"/>
                                             </constraints>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tzo-E1-IRI">
+                                            <rect key="frame" x="336.5" y="13" width="6.5" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="eSk-tB-8gS" firstAttribute="leading" secondItem="7Pf-dB-B1K" secondAttribute="leadingMargin" id="QOd-rO-5Hd"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="JUh-LC-wiQ" secondAttribute="trailing" id="Qlt-bP-LpA"/>
                                         <constraint firstItem="JUh-LC-wiQ" firstAttribute="centerY" secondItem="7Pf-dB-B1K" secondAttribute="centerY" id="WXA-bN-BD0"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="eSk-tB-8gS" secondAttribute="bottom" id="YrX-oh-MXD"/>
+                                        <constraint firstItem="Tzo-E1-IRI" firstAttribute="centerY" secondItem="7Pf-dB-B1K" secondAttribute="centerY" id="a6a-sQ-Ev7"/>
+                                        <constraint firstItem="JUh-LC-wiQ" firstAttribute="leading" secondItem="Tzo-E1-IRI" secondAttribute="trailing" constant="8" id="hXk-Db-O7l"/>
                                         <constraint firstItem="Qee-gJ-xEB" firstAttribute="centerY" secondItem="7Pf-dB-B1K" secondAttribute="centerY" id="pC9-1v-gxL"/>
                                         <constraint firstItem="eSk-tB-8gS" firstAttribute="top" secondItem="7Pf-dB-B1K" secondAttribute="topMargin" id="saO-qb-Uia"/>
                                         <constraint firstItem="Qee-gJ-xEB" firstAttribute="leading" secondItem="eSk-tB-8gS" secondAttribute="trailing" constant="8" id="ywT-1P-z9c"/>
@@ -256,6 +264,7 @@
                                 <connections>
                                     <outlet property="cateIconImgView" destination="eSk-tB-8gS" id="fwh-e5-bKP"/>
                                     <outlet property="cateNameLabel" destination="Qee-gJ-xEB" id="0I7-0F-Tig"/>
+                                    <outlet property="cateUnreadNoLabel" destination="Tzo-E1-IRI" id="1q6-ED-VrO"/>
                                     <segue destination="Jc7-xO-vLp" kind="show" identifier="showOneCategorySegue" id="j0U-Kk-F0z"/>
                                 </connections>
                             </tableViewCell>
@@ -832,7 +841,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="YJm-3g-iPi">
-                            <rect key="frame" x="0.0" y="253" width="375" height="160"/>
+                            <rect key="frame" x="0.0" y="303" width="375" height="160"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Lazy Mails to collect your personal information, including name and address, in order to improve our app." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVP-1U-bJ5">
@@ -885,15 +894,15 @@
                         <sections>
                             <tableViewSection id="ae4-la-rvf">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="200" id="FNz-zk-0FF">
-                                        <rect key="frame" x="0.0" y="35" width="375" height="200"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="250" id="FNz-zk-0FF">
+                                        <rect key="frame" x="0.0" y="35" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="FNz-zk-0FF" id="Mkv-9H-gNS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dai-QX-Aq5">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dai-QX-Aq5">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>

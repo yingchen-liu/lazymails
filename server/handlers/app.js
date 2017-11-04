@@ -1,3 +1,8 @@
+/**
+ * iOS Application Socket Handler
+ */
+
+
 const md5 = require('md5');
 const moment = require('moment');
 const fs = require('fs');
@@ -13,6 +18,12 @@ const users = db.get('users');
 
 /**
  * Report mail incorrection
+ * 
+ * {
+ *    type: report,
+ *    issueType: category|photo|recognition,
+ *    [reportedCategory: <category_name>]
+ * }
  */
 const report = (sock, message, clients) => {
   const update = {};
@@ -41,6 +52,12 @@ const report = (sock, message, clients) => {
 
 /**
  * Register a user
+ * {
+ *    type: register,
+ *    mailbox: <mailbox_id>,
+ *    email: <email>,
+ *    password: <password>
+ * }
  */
 const register = (sock, message, clients) => {
   users.findOne({ email: message.email })
@@ -82,6 +99,12 @@ const register = (sock, message, clients) => {
 
 /**
  * Login a user
+ * 
+ * {
+ *    type: connect,
+ *    email: <email>,
+ *    password: <password>
+ * }
  */
 const connect = (sock, message, clients) => {
   console.log('App connected');
@@ -126,6 +149,11 @@ const connect = (sock, message, clients) => {
 
 /**
  * Check mails from a particular time to now
+ * 
+ * {
+ *    type: check_mails,
+ *    after: <time_after>
+ * }
  */
 const checkMails = (sock, message, clients) => {
   console.log(moment(message.after).toISOString());
@@ -164,10 +192,15 @@ const checkMails = (sock, message, clients) => {
 
 /**
  * Update user's information
+ * 
+ * {
+ *    type: update_user
+ *    user: {
+ *      password: <password>
+ *    }
+ * }
  */
 const updateUser = (sock, message, clients) => {
-  delete req.body.email;
-  
   users.findOneAndUpdate({ email: clients.getClientIdByKey(sock.getClientKey()) }, { $set: message.user })
     .then((user) => {
       delete user.password;
@@ -183,6 +216,13 @@ const updateUser = (sock, message, clients) => {
 
 /**
  * Update mailbox settings
+ * 
+ * {
+ *    type: update_mailbox,
+ *    mailbox: {
+ *      // mailbox information
+ *    }
+ * }
  */
 const updateMailbox = (sock, message, clients) => {
   // get the mailbox id by user email
@@ -230,6 +270,11 @@ const updateMailbox = (sock, message, clients) => {
 
 /**
  * Start live
+ * 
+ * {
+ *    type: start_live
+ *    maibox: <mailbox_id>
+ * }
  */
 const startLive = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
@@ -247,6 +292,10 @@ const startLive = (sock, message, clients) => {
 
 /** 
  * Stop live
+ * {
+ *    type: stop_live
+ *    maibox: <mailbox_id>
+ * }
  */
 const stopLive = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
@@ -264,6 +313,11 @@ const stopLive = (sock, message, clients) => {
 
 /**
  * Live heartbeat
+ * 
+ * {
+ *    type: live_heartbeat
+ *    maibox: <mailbox_id>
+ * }
  */
 const liveHeartbeat = (sock, message, clients) => {
   users.findOne({ email: clients.getClientIdByKey(sock.getClientKey()) })
@@ -281,6 +335,11 @@ const liveHeartbeat = (sock, message, clients) => {
 
 /**
  * Download category icon
+ * 
+ * {
+ *    type: download_category_icon
+ *    category: <category_name>
+ * }
  */
 const downloadCategoryIcon = (sock, message, clients) => {
 

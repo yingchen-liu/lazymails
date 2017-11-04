@@ -1,3 +1,8 @@
+/**
+ * Mailbox Socket Handler
+ */
+
+
 const md5 = require('md5');
 const fs = require("fs");
 const path = require('path');
@@ -21,6 +26,11 @@ const ROAD_TYPES = {
 
 /**
  * Connect a mailbox
+ * 
+ * {
+ *    type: connect
+ *    id: <mailbox_id>
+ * }
  */
 const connect = (sock, message, clients) => {
   console.log('Mailbox connected', message.id);
@@ -55,6 +65,17 @@ const connect = (sock, message, clients) => {
 
 /** 
  * Receive a mail
+ * 
+ * {
+ *    type: mail
+ *    mail: {
+ *      content: <mail_in_base64>
+ *    },
+ *    mailbox: {
+ *      content: <mailbox_in_base64>
+ *    },
+ *    receivedAt: <mailbox_received_datetime>
+ * }
  */
 const receiveMail = (sock, message, clients) => {
   mailboxes.findOne({ _id: monk.id(message.id) })
@@ -155,6 +176,12 @@ const receiveMail = (sock, message, clients) => {
 
 /**
  * Live
+ * 
+ * {
+ *    type: live,
+ *    mailbox: <mailbox_in_base64>,
+ *    time: <current_datetime>
+ * }
  */
 const live = (sock, message, clients) => {
   if (clients.getSockByClientId(message.email)) {

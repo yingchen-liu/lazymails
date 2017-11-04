@@ -1,3 +1,7 @@
+/**
+ * User admin page
+ */
+
 const express = require('express');
 const router = express.Router();
 
@@ -6,6 +10,8 @@ const users = db.get('users');
 
 /**
  * Get user list page
+ * 
+ * GET /users/
  */
 router.get('/', (req, res, next) => {
   users.find({})
@@ -19,6 +25,8 @@ router.get('/', (req, res, next) => {
 
 /**
  * Register a user
+ * 
+ * POST /users/
  */
 router.post('/', (req, res, next) => {
   users.insert({
@@ -35,6 +43,8 @@ router.post('/', (req, res, next) => {
 
 /**
  * Get a user
+ * 
+ * GET /users/:email/
  */
 router.get('/:email', (req, res, next) => {
   users.findOne({ email: req.params.email })
@@ -48,6 +58,8 @@ router.get('/:email', (req, res, next) => {
 
 /**
  * Update a user
+ * 
+ * POST /users/:email
  */
 router.post('/:email', (req, res, next) => {
   delete req.body.email;

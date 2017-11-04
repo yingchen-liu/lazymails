@@ -6,6 +6,8 @@
  * TCP Socket Programming in Node.js
  *    https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
  */
+
+
 const net = require('net');
 const serializeError = require('serialize-error');
 
@@ -58,8 +60,11 @@ const clients = {
   }
 };
 
-
-
+/**
+ * Process socket message
+ * @param {Socket} sock    socket
+ * @param {Object} message message
+ */
 const processMessage = (sock, message) => {
   if (message.end === 'mailbox') {
     switch (message.type) {
@@ -118,6 +123,10 @@ const processMessage = (sock, message) => {
   }
 };
 
+
+/**
+ * Listening to clients
+ */
 const connect = () => {
   net.createServer((sock) => {
     console.log(`Socket client connected: ${sock.remoteAddress}:${sock.remotePort}`);
@@ -133,6 +142,8 @@ const connect = () => {
           const part = parts[i];
 
           try {
+            // parse message
+
             const message = JSON.parse(part);
             console.log(`Received message from ${message.end} [${clients.getClientIdByKey(sock.getClientKey())}]`);
           
@@ -149,10 +160,18 @@ const connect = () => {
       }
     });
 
+    /**
+     * Get the client id
+     */
     sock.getClientKey = () => {
       return sock.remoteAddress + ':' + sock.remotePort;
     },
     
+    /**
+     * Send a message
+     * @param {String} type    messaget type
+     * @param {Object} message    messaget payload
+     */
     sock.sendMessage = (type, message) => {
       message = message ? message : {};
       
@@ -161,6 +180,11 @@ const connect = () => {
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
 
+    /**
+     * Send an error
+     * @param {String} type    messaget type
+     * @param {Object} error    error payload
+     */
     sock.sendError = (type, error) => {
       error = serializeError(error);
       delete error.stack;
@@ -171,10 +195,12 @@ const connect = () => {
       sock.write(JSON.stringify(message) + SOCKET_END_SYMBOL);
     };
 
+    // when error occurs
     sock.on('error', (err) => {
       console.log('Socket error', err);
     });
 
+    // when it has been closed 
     sock.on('close', (data) => {
       var clientId = clients.getClientIdByKey(sock.getClientKey());
 

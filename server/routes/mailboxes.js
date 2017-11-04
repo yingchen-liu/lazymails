@@ -1,3 +1,8 @@
+/**
+ * Mailbox admin page
+ */
+
+
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
@@ -12,6 +17,8 @@ const mails = db.get('mails');
 
 /**
  * Get mailbox list
+ * 
+ * GET /mailboxes/
  */
 router.get('/', (req, res, next) => {
   mailboxes.aggregate([
@@ -41,6 +48,8 @@ router.get('/', (req, res, next) => {
 
 /**
  * Get mails in a mailbox 
+ * 
+ * GET /mailboxes/:id/mails
  */
 router.get('/:id/mails', (req, res, next) => {
   mails.find({ mailbox: monk.id(req.params.id) })
@@ -55,6 +64,8 @@ router.get('/:id/mails', (req, res, next) => {
 
 /** 
  * Add a mailbox 
+ * 
+ * POST /mailboxes/
  */
 router.post('/', (req, res, next) => {
   mailboxes.insert({})
@@ -68,6 +79,8 @@ router.post('/', (req, res, next) => {
 
 /** 
  * Update a mailbox 
+ * 
+ * POST /mailboxes/:id/
  */
 router.post('/:id', (req, res, next) => {
   mailboxes.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })

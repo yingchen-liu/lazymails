@@ -328,26 +328,27 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Unit 5 5 Moodie Street Caulfield East, VIC 3145 uNIT" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u5p-dv-612">
-                                                    <rect key="frame" x="116" y="8" width="251" height="21"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Address" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YcJ-wU-47I">
+                                                    <rect key="frame" x="116" y="8" width="251" height="21.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                                </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="u5p-dv-612" secondAttribute="trailing" id="0Jo-Zc-Iwo"/>
-                                                <constraint firstItem="u5p-dv-612" firstAttribute="top" secondItem="l2t-wc-Lzb" secondAttribute="topMargin" id="Lgm-qc-Ma8"/>
-                                                <constraint firstItem="u5p-dv-612" firstAttribute="leading" secondItem="mcU-F5-b0m" secondAttribute="trailing" constant="8" id="VZy-io-XMw"/>
+                                                <constraint firstItem="YcJ-wU-47I" firstAttribute="leading" secondItem="mcU-F5-b0m" secondAttribute="trailing" constant="8" id="31q-L9-BO5"/>
+                                                <constraint firstItem="YcJ-wU-47I" firstAttribute="top" secondItem="l2t-wc-Lzb" secondAttribute="top" constant="8" id="Box-dR-rZ1"/>
                                                 <constraint firstItem="mcU-F5-b0m" firstAttribute="top" secondItem="l2t-wc-Lzb" secondAttribute="topMargin" id="by9-rj-ju3"/>
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="mcU-F5-b0m" secondAttribute="bottom" id="l8J-ka-xHn"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="u5p-dv-612" secondAttribute="bottom" id="v8z-gF-aDf"/>
+                                                <constraint firstAttribute="bottom" secondItem="YcJ-wU-47I" secondAttribute="bottom" constant="8" id="mdB-NR-aaf"/>
+                                                <constraint firstAttribute="trailing" secondItem="YcJ-wU-47I" secondAttribute="trailing" constant="8" id="sfO-as-QQj"/>
                                                 <constraint firstItem="mcU-F5-b0m" firstAttribute="leading" secondItem="l2t-wc-Lzb" secondAttribute="leadingMargin" id="zHU-gK-36S"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="detailsTitleLabel" destination="mcU-F5-b0m" id="whZ-yf-JFj"/>
-                                            <outlet property="detailsValueLabel" destination="u5p-dv-612" id="2U5-TP-LQX"/>
+                                            <outlet property="detailsValueLabel" destination="YcJ-wU-47I" id="EvH-ip-1sV"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

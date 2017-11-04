@@ -76,6 +76,18 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailInfoCell")! as! MailInfoCell
         receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt)!)
         
+        //  https://stackoverflow.com/questions/14387024/cant-make-url-clickable-in-uitextview
+        
+        //  https://stackoverflow.com/questions/38714272/how-to-make-uitextview-height-dynamic-according-to-text-length
+        
+        cell.detailsValueLabel.translatesAutoresizingMaskIntoConstraints = false
+        cell.detailsValueLabel.isScrollEnabled = false
+        
+        //  https://stackoverflow.com/questions/746670/how-to-lose-margin-padding-in-uitextview
+        
+        cell.detailsValueLabel.textContainerInset = .zero
+        cell.detailsValueLabel.textContainer.lineFragmentPadding = 0
+        
         if indexPath.row == 0 {
             cell.detailsTitleLabel.text = "Category"
             cell.detailsValueLabel.text = selectedMail?.category.name
@@ -83,6 +95,9 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             var keys = Array(filterDictionary.keys)
             
             cell.detailsTitleLabel.text = keys[indexPath.row - 1]
+            
+            
+            
             var values = Array(filterDictionary.values)
             cell.detailsValueLabel.text = values[indexPath.row - 1]
         }
@@ -90,10 +105,12 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return cell
     }
     
+    //  https://stackoverflow.com/questions/27053135/how-to-get-a-users-time-zone
+    
     func convertDateToString(date : Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = NSLocale.current
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let str = formatter.string(from: date)
         return str

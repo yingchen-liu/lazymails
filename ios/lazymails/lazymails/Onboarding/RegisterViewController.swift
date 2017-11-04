@@ -134,7 +134,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
             if email != "" && password != "" {
                 socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
                     guard error == nil else {
-                        print("login error: \(error!)")
+//                        print("login error: \(error!)")
                         self.psdErrorLabel.text = "Incorrect Email or Password"
                         return
                     }
@@ -167,7 +167,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 
                 self.socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
                     guard error == nil else {
-                        print("connect: \(error!)")
+//                        print("connect: \(error!)")
                         return
                     }
                     
@@ -175,7 +175,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                     self.present(mainBarViewController, animated: true, completion: nil)
                 })
                 
-                print("registered!")
+//                print("registered!")
             })
         }
         

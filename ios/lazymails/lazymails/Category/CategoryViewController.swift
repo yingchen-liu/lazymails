@@ -63,6 +63,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     }
     
     func mailCallback(mail: Mail) {
+        mailList.append(mail)
         mailUnreadList.append(mail)
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
@@ -380,7 +381,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             
             if selectedRowIndexPath?.section == 1 {
                 let selectedRow = tableView.indexPathForSelectedRow?.row
-                print (selectedRow)
+//                print (selectedRow)
                 var currentMails = categoryList[selectedRow!].mail?.allObjects as! [Mail]
                 currentMails = currentMails.sorted { $0.receivedAt > $1.receivedAt}
                 destination.currentMails = currentMails

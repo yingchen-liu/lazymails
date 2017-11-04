@@ -162,9 +162,9 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         return calendar.isDateInToday(date)
     }
     
-    func tapped(_sender : AnyObject ) {
-        var index = _sender.view.tag
-        var mail = currentMails[index]
+    @objc func tapped(_sender : AnyObject ) {
+        let index = _sender.view.tag
+        let mail = currentMails[index]
         if !mail.isImportant  {
             mail.isImportant = true
             mailboxDelegate?.addImportant(mail: mail)

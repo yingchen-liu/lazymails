@@ -60,18 +60,15 @@ const report = (sock, message, clients) => {
  * }
  */
 const register = (sock, message, clients) => {
-  console.log(message);
   users.findOne({ email: message.email })
     .then((user) => {
       if (user) {
-        console.log(user);
         // user already exists
         sock.sendError(message.type, new Error('Email already exists'));
       } else {
 
         mailboxes.findOne({ _id: monk.id(message.mailbox) })
           .then((mailbox) => {
-            console.log(mailbox)
             if (mailbox) {
               users.insert({
                 email: message.email,

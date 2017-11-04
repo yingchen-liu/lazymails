@@ -377,20 +377,12 @@ const request = (mailBase64, names, address, callback) => {
       }
     }
 
-    // order categories
+    // Generate categories
     result.categories = [];
     for (category in result.category) {
       result.categories.push({
         name: category,
         score: result.category[category]
-      });
-    }
-
-    result.titles = [];
-    for (title in result.title) {
-      result.titles.push({
-        name: title,
-        score: result.title[title]
       });
     }
 
@@ -400,18 +392,29 @@ const request = (mailBase64, names, address, callback) => {
         score: 0.1
       });
     }
-
-    result.categories.sort((a, b) => {
-      return b.score - a.score; // desc
-    });
-    result.titles.sort((a, b) => {
-      return b.score - a.score; // desc
-    });
-
     if (result.categories.length == 0) {
       result.categories.push({
         name: 'ADs',
         score: 1
+      });
+    }
+    if (result.nameSimilarity < 0.5) {
+      result.categories.push({
+        name: 'Others',
+        score: 10
+      });
+    }
+
+    result.categories.sort((a, b) => {
+      return b.score - a.score; // desc
+    });
+
+    // Generate titles
+    result.titles = [];
+    for (title in result.title) {
+      result.titles.push({
+        name: title,
+        score: result.title[title]
       });
     }
     if (result.titles.length == 0) {
@@ -420,6 +423,9 @@ const request = (mailBase64, names, address, callback) => {
         score: 1
       });
     }
+    result.titles.sort((a, b) => {
+      return b.score - a.score; // desc
+    });
 
     delete result.category;
     delete result.title;

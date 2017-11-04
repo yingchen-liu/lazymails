@@ -37,6 +37,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     
     @IBOutlet weak var registerButton: UIButton!
     
+    @IBOutlet weak var activityIndicator: UIView!
+    
+    
     let socket = Socket.shared
     
     let setting = Setting.shared
@@ -56,7 +59,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         super.viewDidLoad()
         // ✴️ Attributes:
         // Website: How can I dismiss the keyboard if a user taps off the on-screen keyboard?
-        //  https://stackoverflow.com/questions/5711434/how-can-i-dismiss-the-keyboard-if-a-user-taps-off-the-on-screen-keyboard
+        //      https://stackoverflow.com/questions/5711434/how-can-i-dismiss-the-keyboard-if-a-user-taps-off-the-on-screen-keyboard
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         self.view.addGestureRecognizer(tap)
         
@@ -112,10 +115,12 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     func removeTextfieldBorder(textfield : UITextField) {
         textfield.layer.borderWidth = 0
     }
+    
     func addTextfieldBorder(textfield : UITextField) {
         textfield.layer.borderColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1).cgColor
         textfield.layer.borderWidth = 1.0
     }
+    
     // login mailbox button
     @IBAction func loginButtonTapped(_ sender: Any) {
         self.reset()
@@ -135,6 +140,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.validator.unregisterField(mailboxIdField)
         
     }
+    
     /**
      Clear the label text and remove border of textfield
      */
@@ -148,7 +154,6 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.nextButton.backgroundColor = UIColor(red: 122/255, green: 195/255, blue: 246/255, alpha: 1)
     }
     
-
     /**
      Login and send login message to server and validate
      */
@@ -158,6 +163,8 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         let password = passwordField.text
 
         socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
+            self.activityIndicator.isHidden = true
+            
             guard error == nil else {
                 print("login error: \(error!)")
                 self.psdErrorLabel.text = "Incorrect Email or Password"
@@ -180,15 +187,17 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     /**
      Send register request to server
      */
-    func register () {
+    func register() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let email = emailField.text
         let password = passwordField.text
         let mailboxId = mailboxIdField.text
         // send register request message to server for validation
         socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
+            
             guard error == nil else {
-                print("register: \(error!)")
+                self.activityIndicator.isHidden = true
+                
                 if (error?.contains("Incorrect mailbox ID"))! {
                     self.mailboxIdErrorLabel.text = "\(error!)"
                 }
@@ -206,6 +215,8 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
             
             // send login request message to server for validation
             self.socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
+                self.activityIndicator.isHidden = true
+                
                 guard error == nil else {
                     print("connect: \(error!)")
                     return
@@ -242,24 +253,27 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     func validationSuccessful() {
         reset()
         
+        activityIndicator.isHidden = false
+        
         if nextButton.currentTitle == "Login" {
             login()
-
         } else {
             register()
         }
         return
     }
+    
     // input mailbox id value changed
     @IBAction func idInputChanged(_ sender: Any) {
         self.mailboxIdErrorLabel.text = ""
-        validator.validate(self)
+//        validator.validate(self)
         if (sender as! UITextField).text != "" {
             self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 characters")])
         } else {
             self.validator.unregisterField(mailboxIdField)
         }
     }
+    
     /**
      local validation failed
      */
@@ -283,13 +297,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
      Init validation
      */
     func initValidation() {
-        self.validator.registerField(emailField, errorLabel: emailErrorLabel , rules: [RequiredRule(message: "Please enter your Email!"),EmailRule(message: "Invalid email")])
+        self.validator.registerField(emailField, errorLabel: emailErrorLabel , rules: [RequiredRule(message: "Please enter your Email"),EmailRule(message: "Invalid email")])
         
-        self.validator.registerField(passwordField,errorLabel: psdErrorLabel, rules: [RequiredRule(message: "Please enter your password!"),MinLengthRule(length: 6,message: "Should be more than 6 digits")])
-    }
-    
-    @IBAction func nextTapped(_ sender: Any) {
-        validator.validate(self)
+        self.validator.registerField(passwordField,errorLabel: psdErrorLabel, rules: [RequiredRule(message: "Please enter your password"),MinLengthRule(length: 6,message: "Should be more than 6 charaters")])
     }
     
     

@@ -93,6 +93,8 @@ class Socket: NSObject, StreamDelegate {
                 }
             })
         }
+        
+        sendCheckMails()
     }
     
     func reconnect() {

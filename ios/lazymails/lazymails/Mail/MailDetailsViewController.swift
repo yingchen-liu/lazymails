@@ -96,7 +96,9 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             
             cell.detailsTitleLabel.text = keys[indexPath.row - 1]
             
-            
+            if cell.detailsTitleLabel.text == "Website" {
+                cell.detailsValueLabel.isSelectable = true
+            }
             
             var values = Array(filterDictionary.values)
             cell.detailsValueLabel.text = values[indexPath.row - 1]

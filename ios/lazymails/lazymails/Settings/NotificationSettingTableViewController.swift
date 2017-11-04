@@ -57,6 +57,13 @@ class NotificationSettingTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "notificationCell", for: indexPath) as! NotificationSettingTableViewCell
 
         cell.categoryNameLabel.text = categoryList[indexPath.row].name
+        
+        //show category icon
+        if let data = Data(base64Encoded:categoryList[indexPath.row].icon!, options: .ignoreUnknownCharacters) {
+            let image = UIImage(data: data)
+            cell.categoryIconImage.image = image
+        }
+        
         cell.categoryNotificationSwitch.isOn = categoryList[indexPath.row].notified
         cell.categoryNotificationSwitch.tag = indexPath.row
         cell.categoryNotificationSwitch.addTarget(self, action: #selector(notificationTriggerd(sender:)), for: .valueChanged)

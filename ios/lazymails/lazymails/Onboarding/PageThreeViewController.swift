@@ -14,6 +14,7 @@ class OnboardingPageThreeViewController: UIViewController {
     
     @IBOutlet weak var checkboxImage: UIImageView!
     
+    @IBOutlet weak var privacyLabel: UILabel!
     
     var checked = false
     
@@ -29,6 +30,9 @@ class OnboardingPageThreeViewController: UIViewController {
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImage.isUserInteractionEnabled = true
         checkboxImage.addGestureRecognizer(checkboxTapGestureRecognizer)
+        
+        privacyLabel.isUserInteractionEnabled = true
+        privacyLabel.addGestureRecognizer(checkboxTapGestureRecognizer)
     }
     
     // privacy request checkbox

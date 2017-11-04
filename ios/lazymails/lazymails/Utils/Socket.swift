@@ -509,20 +509,20 @@ class Socket: NSObject, StreamDelegate {
             break
         
         case "mailbox_online":
-            print("Your mailbox is now online")
+            Notification.shared.notifyMailboxOnline()
             break
         case "mailbox_offline":
-            print("Your mailbox goes offline just now")
+            Notification.shared.notifyMailboxOffline()
             break
         //process check mails result
         case "check_mails":
-            print("Found unreceived mails")
-            let mails = message["mails"] as! NSArray as! Array<NSDictionary>
-            print(mails.count)
+//            print("Found unreceived mails")
+//            let mails = message["mails"] as! NSArray as! Array<NSDictionary>
+//            print(mails.count)
             break
         // process mail result
         case "mail":
-            print("You have received a mail just now")
+//            print("You have received a mail just now")
             let mail = message["mail"] as! NSDictionary as! Dictionary<String, Any>
             //get mail photo data
             let mailContent = mail["content"] as! String
@@ -544,11 +544,11 @@ class Socket: NSObject, StreamDelegate {
             }
             // get receive date
             let receivedAtStr = infoDic["mailboxReceivedAt"] as! String
-            print ("receivedAtStr : \(receivedAtStr) " )
+//            print ("receivedAtStr : \(receivedAtStr) " )
             let receivedAt = receivedAtStr.toDate()
             
             //let receivedAt = convertStringToDate(str: receivedAtStr)
-            print ("receivedAt :\(receivedAt)")
+//            print ("receivedAt :\(receivedAt)")
             
             // get main text
             var wholeText = ""
@@ -578,7 +578,7 @@ class Socket: NSObject, StreamDelegate {
             }
             
             // get mail info
-            let mailInfo = infoDic["text"] as! String
+//            let mailInfo = infoDic["text"] as! String
             
             // get url
             var urls = infoDic["urls"] as! NSArray as! Array<String>
@@ -610,14 +610,6 @@ class Socket: NSObject, StreamDelegate {
             let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
             let info = jsonString
             
-            // notification
-            data.fetchCategories()
-            
-            Notification.shared.monitorMail(categoryName: categoryName, mailTitle: title)
-            
-            
-            
-            
             // insert new Mail
             let newMail = insertNewMail(id: mailId, title: title, mainText: wholeText, info: info, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent)
             // add new Mail to category
@@ -638,6 +630,16 @@ class Socket: NSObject, StreamDelegate {
             if newMail.category.icon == "" {
 
                 sendDownloadIconMessage(categoryName: categoryName)
+            }
+            
+            // notification
+            data.fetchCategories()
+            for category in data.categoryList {
+                if category.name == categoryName {
+                    if category.notified {
+                        Notification.shared.notifyMail(categoryName: categoryName, mailTitle: title)
+                    }
+                }
             }
             
             for callback in mailCallbacks {

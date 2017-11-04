@@ -150,6 +150,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             }).count
             
             if unread > 0 {
+                cell.cateUnreadNoLabel.text = "\(unread)"
                 cell.cateNameLabel.font = UIFont.boldSystemFont(ofSize: cell.cateNameLabel.font.pointSize)
                 cell.cateUnreadNoLabel.font = UIFont.boldSystemFont(ofSize: cell.cateUnreadNoLabel.font.pointSize)
                 cell.cateUnreadNoLabel.isHidden = false

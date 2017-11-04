@@ -1091,7 +1091,7 @@
                                 <color key="textColor" red="0.1529411765" green="0.1529411765" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receives mails for you " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5jz-bD-In4">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receives mails on iPhone without checking" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5jz-bD-In4">
                                 <rect key="frame" x="16" y="411" width="343" height="23.5"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -1104,7 +1104,7 @@
                                     <constraint firstAttribute="width" secondItem="Z1u-KX-Efb" secondAttribute="height" multiplier="1:1" id="tiY-41-89T"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="and your family members" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDV-Fn-bkj">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mailbox outside your house." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDV-Fn-bkj">
                                 <rect key="frame" x="16" y="434.5" width="343" height="23.5"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -1152,7 +1152,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="utility bills and bank statements" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RAH-6B-nMI">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="utility bills and bank statements." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RAH-6B-nMI">
                                 <rect key="frame" x="16" y="435" width="343" height="24"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -1212,19 +1212,19 @@
                                 <color key="textColor" red="0.1529411765" green="0.1529411765" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gets notifications when you receives" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KwI-u0-WiP">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gets mail notifications " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KwI-u0-WiP">
                                 <rect key="frame" x="16" y="411" width="343" height="24"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="letters of specific kinds" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEj-7K-OVz">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="only of your intrest." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEj-7K-OVz">
                                 <rect key="frame" x="16" y="435" width="343" height="24"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onboarding-0" translatesAutoresizingMaskIntoConstraints="NO" id="f5Q-Uc-6Hn">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onboarding-2" translatesAutoresizingMaskIntoConstraints="NO" id="f5Q-Uc-6Hn">
                                 <rect key="frame" x="70" y="146" width="235" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="235" id="ROd-ua-s6N"/>
@@ -1288,6 +1288,7 @@
                     <connections>
                         <outlet property="checkboxImage" destination="aUa-hF-Z0d" id="Eg5-Cg-4Tu"/>
                         <outlet property="getStartedButton" destination="zfa-dn-hay" id="QnK-Cr-g5m"/>
+                        <outlet property="privacyLabel" destination="68T-ZR-aVx" id="TQI-RQ-cQs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xUN-Jv-1Ca" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1972,14 +1973,6 @@
                                     <action selector="whisperTapped:" destination="nBk-6G-Xmv" eventType="touchUpInside" id="GxX-Rf-Ua9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="urx-ds-p4e">
-                                <rect key="frame" x="124" y="394" width="235" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="ExW-NE-EwC"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Toast-Swift"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -2003,9 +1996,7 @@
                             <constraint firstItem="6fq-c0-bkd" firstAttribute="leading" secondItem="d2z-b6-7bU" secondAttribute="leading" id="JRw-1H-SnA"/>
                             <constraint firstItem="d2z-b6-7bU" firstAttribute="top" secondItem="Hqq-gM-fnd" secondAttribute="bottom" constant="8" id="LNv-u1-Htz"/>
                             <constraint firstItem="io3-A6-V0D" firstAttribute="trailing" secondItem="d2z-b6-7bU" secondAttribute="trailing" constant="16" id="Lmj-yo-eVd"/>
-                            <constraint firstItem="urx-ds-p4e" firstAttribute="leading" secondItem="cEs-HW-pei" secondAttribute="leading" id="PDJ-dz-l0N"/>
                             <constraint firstItem="VPF-2E-aVb" firstAttribute="leading" secondItem="io3-A6-V0D" secondAttribute="leading" constant="16" id="PGW-yz-R2i"/>
-                            <constraint firstItem="io3-A6-V0D" firstAttribute="trailing" secondItem="urx-ds-p4e" secondAttribute="trailing" constant="16" id="Pwm-6a-2fG"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="AHe-tP-SCf" secondAttribute="trailing" constant="20" symbolic="YES" id="WZ6-4H-teY"/>
                             <constraint firstItem="gCG-Fe-NrZ" firstAttribute="leading" secondItem="io3-A6-V0D" secondAttribute="leading" constant="16" id="ZsC-Iv-yrl"/>
                             <constraint firstItem="ZGR-OY-57Z" firstAttribute="top" secondItem="AEy-Dc-QQl" secondAttribute="top" id="apz-Mj-3YF"/>
@@ -2015,7 +2006,6 @@
                             <constraint firstItem="cEs-HW-pei" firstAttribute="leading" secondItem="d2z-b6-7bU" secondAttribute="leading" id="f88-y4-jA3"/>
                             <constraint firstItem="Cic-yt-m1Q" firstAttribute="leading" secondItem="gCG-Fe-NrZ" secondAttribute="trailing" constant="8" id="feo-dY-JHU"/>
                             <constraint firstItem="sep-gS-MDl" firstAttribute="top" secondItem="ZGR-OY-57Z" secondAttribute="bottom" constant="8" id="ibB-86-eQn"/>
-                            <constraint firstItem="urx-ds-p4e" firstAttribute="top" secondItem="cEs-HW-pei" secondAttribute="bottom" constant="8" id="pDf-CL-vJf"/>
                             <constraint firstItem="oUM-Ij-T5t" firstAttribute="leading" secondItem="sep-gS-MDl" secondAttribute="leading" id="ri5-Nn-7oa"/>
                             <constraint firstItem="io3-A6-V0D" firstAttribute="trailing" secondItem="sep-gS-MDl" secondAttribute="trailing" constant="16" id="wbA-zX-oKd"/>
                             <constraint firstItem="AEy-Dc-QQl" firstAttribute="leading" secondItem="io3-A6-V0D" secondAttribute="leading" constant="16" id="wom-8O-RlI"/>
@@ -2366,6 +2356,7 @@
         <image name="notification" width="64" height="64"/>
         <image name="onboarding-0" width="340" height="340"/>
         <image name="onboarding-1" width="340" height="339"/>
+        <image name="onboarding-2" width="340" height="340"/>
         <image name="settings" width="30" height="30"/>
         <image name="star" width="32" height="32"/>
     </resources>

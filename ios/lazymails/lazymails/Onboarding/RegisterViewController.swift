@@ -189,11 +189,11 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
             guard error == nil else {
                 print("register: \(error!)")
-                if (error?.contains ("Incorrect mailbox ID"))! {
-                    self.mailboxIdErrorLabel.text = "Incorrect mailbox ID."
+                if (error?.contains("Incorrect mailbox ID"))! {
+                    self.mailboxIdErrorLabel.text = "\(error!)"
                 }
-                if (error?.contains ("Email already exists"))! {
-                    self.emailErrorLabel.text = "Email address Exist."
+                if (error?.contains("Email already exists"))! {
+                    self.emailErrorLabel.text = "\(error!)"
                 }
                 return
             }
@@ -232,7 +232,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.mailboxIdField.isHidden = false
         self.scanCodeButton.isHidden = false
         self.nextButton.setTitle("Register", for: .normal)
-        self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
+        self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 characters")])
         
     }
     
@@ -255,7 +255,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.mailboxIdErrorLabel.text = ""
         validator.validate(self)
         if (sender as! UITextField).text != "" {
-            self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
+            self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 characters")])
         } else {
             self.validator.unregisterField(mailboxIdField)
         }

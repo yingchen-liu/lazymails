@@ -12,6 +12,7 @@ const users = db.get('users');
 
 
 const report = (sock, message, clients) => {
+  console.log(message)
   const update = {};
   switch (message.issueType) {
     case 'category':
@@ -27,9 +28,13 @@ const report = (sock, message, clients) => {
       break;
   }
 
-  mails.update({ _id: monk.id(message.id), $set: update})
+  console.log(update)
+  mails.update({ _id: monk.id(message.id) }, { $set: update })
     .then(() => {
       sock.sendMessage(message.type, {});
+    })
+    .catch((err) => {
+      sock.sendError(message.type, err);
     });
 };
 

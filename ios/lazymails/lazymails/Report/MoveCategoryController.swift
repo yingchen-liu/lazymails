@@ -25,11 +25,27 @@ class MoveCategoryController: UITableViewController {
         filteredCategoryList = categoryList.filter { (category) -> Bool in
             return currentMail?.category.id != category.id
         }
+        filteredCategoryList.sort { (a, b) -> Bool in
+            return a.name! > b.name!
+        }
         
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
-        
+    
+        Socket.shared.mailCallbacks.append(newMailReceived)
+    }
+    
+    func newMailReceived(mail: Mail) {
+        if !filteredCategoryList.contains(mail.category) {
+            filteredCategoryList.append(mail.category)
+            
+            filteredCategoryList.sort { (a, b) -> Bool in
+                return a.name! > b.name!
+            }
+            
+            tableView.reloadData()
+        }
     }
     
     
@@ -116,7 +132,7 @@ class MoveCategoryController: UITableViewController {
         delegate?.removeMail()
         
         if reportChecked {
-            Socket.shared.sendReportCategory(category: filteredCategoryList[checked!].name!)
+            Socket.shared.sendReportCategory(id: currentMail!.id, category: filteredCategoryList[checked!].name!)
         }
         
         self.navigationController?.popViewController(animated: true)

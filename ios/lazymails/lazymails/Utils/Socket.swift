@@ -15,8 +15,8 @@ class Socket: NSObject, StreamDelegate {
     
     static let shared = Socket()
     
-//    let host = "localhost"
-    let host = "socket.lazymails.com"
+    let host = "localhost"
+//    let host = "socket.lazymails.com"
     
     let port = 6969
     
@@ -185,20 +185,20 @@ class Socket: NSObject, StreamDelegate {
         }
     }
     
-    func sendReportCategory(category: String) {
-        let message = ["end": "app", "type": "report", "issueType": "category", "reportedCategory": category]
+    func sendReportCategory(id: String, category: String) {
+        let message = ["end": "app", "type": "report", "issueType": "category", "reportedCategory": category, "id": id]
         
         sendMessage(message: message)
     }
     
-    func sendReportPhoto() {
-        let message = ["end": "app", "type": "report", "issueType": "photo"]
+    func sendReportPhoto(id: String) {
+        let message = ["end": "app", "type": "report", "issueType": "photo", "id": id]
         
         sendMessage(message: message)
     }
     
-    func sendReportRecognition() {
-        let message = ["end": "app", "type": "report", "issueType": "recognition"]
+    func sendReportRecognition(id: String) {
+        let message = ["end": "app", "type": "report", "issueType": "recognition", "id": id]
         
         sendMessage(message: message)
     }
@@ -405,10 +405,9 @@ class Socket: NSObject, StreamDelegate {
             
             // get title
             var title = ""
-            let logosArray = infoDic["logos"] as! NSArray as! Array<NSDictionary>
-            if logosArray.count != 0 {
-                let eachLogoDic = logosArray[0] as! NSDictionary as! Dictionary<String, Any>
-                title = eachLogoDic["desc"] as! String
+            let titleArray = infoDic["titles"] as! NSArray as! Array<NSDictionary>
+            if let titleDict = titleArray.first {
+                title = titleDict["name"] as! String
             }
             print ("title : \(title)")
 
@@ -513,6 +512,10 @@ class Socket: NSObject, StreamDelegate {
             let newMail = insertNewMail(id: mailId, title: title, mainText: wholeText, info: info, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent)
             // add new Mail to category
             addMailToCategory(mail: newMail)
+            
+            if !DataManager.shared.categoryList.contains(newMail.category) {
+                DataManager.shared.categoryList.append(newMail.category)
+            }
             
             do {
                 try DataManager.shared.save()

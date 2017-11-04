@@ -28,21 +28,15 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         if let category = category {
             title = category.name
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+        
         Socket.shared.mailCallbacks.append(newMailArrived)
     }
-
+    
     func newMailArrived(mail: Mail) {
         if mail.category == category || isUnread {
             currentMails.insert(mail, at: 0)
         }
         tableView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        let _ = Socket.shared.mailCallbacks.popLast()
     }
     
     override func didReceiveMemoryWarning() {

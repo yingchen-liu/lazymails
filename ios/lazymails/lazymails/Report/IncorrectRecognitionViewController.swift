@@ -69,7 +69,7 @@ class IncorrectRecognitionViewController: UITableViewController {
     
     @IBAction func submitButtonTapped(_ sender: Any) {
         if checked {
-            Socket.shared.sendReportRecognition()
+            Socket.shared.sendReportRecognition(id: currentMail!.id)
         }
         navigationController?.popViewController(animated: true)
     }

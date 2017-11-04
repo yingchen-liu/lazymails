@@ -14,15 +14,16 @@ const categories = [{
   labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink']
 }, {
   name: 'ADs - Properties',
-  labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window']
+  labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window'],
+  mainTexts: ['Woodards']
 }, {
   name: 'Bank Statements',
   logos: ['anz', 'commonwealth'],
-  mainTexts: ['anz', 'commonwealth']
+  mainTexts: ['ANZ', 'Commonwealth', 'Commonwealth Bank']
 }, {
   name: 'Utility Bills',
-  logos: ['vodafone', 'agl'],
-  mainTexts: ['agl', 'bill', 'vodafone', 'origin', 'optus', 'telstra']
+  logos: ['vodafone', 'agl', 'tpg'],
+  mainTexts: ['AGL', 'Bill', 'Vodafone', 'Origin', 'Optus', 'Telstra', 'iinet', 'TPG']
 }];
 
 const extractPoBox = (fullText) => {
@@ -154,6 +155,7 @@ const request = (mailBase64, names, address, callback) => {
       labels: [],
       logos: [],
       category: {},
+      title: {},
       mainText: [],
       text: '',
       urls: []
@@ -190,6 +192,13 @@ const request = (mailBase64, names, address, callback) => {
         const logoDesc = logo.description.toLowerCase();
         const logoScore = logo.score;
 
+        // title
+        if (!result.title[logo.description]) {
+          result.title[logo.description] = 0;
+        }
+        result.title[logo.description] += logoScore;
+
+
         // find out category
         categories.map((category) => {
           if (category.logos) {
@@ -200,7 +209,9 @@ const request = (mailBase64, names, address, callback) => {
                 if (!result.category[category.name]) {
                   result.category[category.name] = 0;
                 }
+                
                 result.category[category.name] += logoScore;
+                
               }
             }
           }
@@ -327,13 +338,17 @@ const request = (mailBase64, names, address, callback) => {
         categories.map((category) => {
           if (category.mainTexts) {
             for (let i = 0; i < category.mainTexts.length; i++) {
-              const _mainText = category.mainTexts[i];
+              const _mainText = category.mainTexts[i].toLowerCase();
 
               if (mainText.indexOf(_mainText) >= 0) {
                 if (!result.category[category.name]) {
                   result.category[category.name] = 0;
                 }
+                if (!result.title[category.mainTexts[i]]) {
+                  result.title[category.mainTexts[i]] = 0;
+                }
                 result.category[category.name] += 0.3;
+                result.title[category.mainTexts[i]] += 0.3;
               }
             }
           }
@@ -357,6 +372,9 @@ const request = (mailBase64, names, address, callback) => {
       // po box
       result.poBox = extractPoBox(result.text);
       result.receiver = extractReceiver(result.text);
+      if (result.receiver) {
+        result.title[result.receiver] = 0.1;
+      }
     }
 
     // order categories
@@ -365,6 +383,14 @@ const request = (mailBase64, names, address, callback) => {
       result.categories.push({
         name: category,
         score: result.category[category]
+      });
+    }
+
+    result.titles = [];
+    for (title in result.title) {
+      result.titles.push({
+        name: title,
+        score: result.title[title]
       });
     }
 
@@ -378,6 +404,9 @@ const request = (mailBase64, names, address, callback) => {
     result.categories.sort((a, b) => {
       return b.score - a.score; // desc
     });
+    result.titles.sort((a, b) => {
+      return b.score - a.score; // desc
+    });
 
     if (result.categories.length == 0) {
       result.categories.push({
@@ -385,8 +414,15 @@ const request = (mailBase64, names, address, callback) => {
         score: 1
       });
     }
+    if (result.titles.length == 0) {
+      result.titles.push({
+        name: result.categories[0].name.startsWith('ADs') ? 'Advertisement' : 'Mail',
+        score: 1
+      });
+    }
 
     delete result.category;
+    delete result.title;
 
     return callback(null, result);
   })

@@ -30,6 +30,7 @@
           <th class="single line">ID</th>
           <th>Mail</th>
           <th>Mailbox</th>
+          <th>Title</th>
           <th>Logos</th>
           <th>Categories</th>
           <th>Receiver</th>
@@ -52,6 +53,14 @@
               <a href="/<%= mail.code %>-mailbox.png" target="_blank">
                 <img class="ui tiny image" src="/<%= mail.code %>-mailbox.png">
               </a>
+            </td>
+            <td>
+              <% if (mail.titles) mail.titles.map((title) => {
+                %>
+                <%= title.name %> (<%= title.score %>)
+                <br>
+                <%
+              }) %>
             </td>
             <td>
               <% if (mail.logos) mail.logos.map((logo) => {
@@ -82,9 +91,11 @@
               <%= mail.text %>
             </td>
             <td>
-              <%= mail.reportedCategory ? 'Category: ' + mail.reportedCategory + '<br>' : '' %>
-              <%= mail.reportedPhoto ? 'Incorrect Photo<br>' : '' %>
-              <%= mail.reportedRecognition ? 'Incorrect Recognition' : '' %>
+              <span style="color: red;">
+                <%= mail.reportedCategory ? 'Category: ' + mail.reportedCategory + '' : '' %><br>
+                <%= mail.reportedPhoto ? 'Incorrect Photo' : '' %><br>
+                <%= mail.reportedRecognition ? 'Incorrect Recognition' : '' %>
+              </span>
             </td>
             <td><%= mail.mailboxReceivedAt._i %></td>
           </tr>

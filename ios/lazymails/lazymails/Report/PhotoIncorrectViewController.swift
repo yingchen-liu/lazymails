@@ -46,7 +46,7 @@ class PhotoIncorrectViewController: UITableViewController {
     }
     
     @IBAction func submitButtonTapped(_ sender: Any) {
-        Socket.shared.sendReportPhoto()
+        Socket.shared.sendReportPhoto(id: currentMail!.id)
         navigationController?.popViewController(animated: true)
     }
 

@@ -1,7 +1,17 @@
-// https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
-// http://pm2.keymetrics.io/
-// https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+/**
+ * LazyMails Server-End Applications
+ * 
+ * Attributes:
+ * 
+ * Install MongoDB Community Edition on Ubuntu — MongoDB Manual 3.4
+ *    https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+ * PM2
+ *    http://pm2.keymetrics.io/
+ * Installing Node.js via package manager | Node.js
+ *    https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+ */
 
+ 
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');

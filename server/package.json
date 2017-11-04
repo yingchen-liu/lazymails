@@ -24,9 +24,7 @@
     "monk": "^6.0.4",
     "monk-middleware-debug": "^0.2.0",
     "morgan": "~1.8.1",
-    "mqtt": "^2.13.0",
     "serialize-error": "^2.1.0",
-    "serve-favicon": "~2.4.2",
-    "string-similarity": "^1.2.0"
+    "serve-favicon": "~2.4.2"
   }
 }

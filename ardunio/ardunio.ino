@@ -1,3 +1,11 @@
+//
+// LazyMails Ardunio Nano-End
+//
+// For controlling the light
+//
+
+// Attributes:
+// adafruit/Adafruit_DotStar
 // https://github.com/adafruit/Adafruit_DotStar/
 
 #include <Adafruit_DotStar.h>
@@ -24,7 +32,9 @@ int      serialNotAvailabeTimes = 0;
 
 void loop() {
 
+  // Arduino - Serial
   // https://www.arduino.cc/en/Reference/Serial
+
   if (Serial.available()) {
     serialNotAvailabeTimes = 0;
     inited = true;

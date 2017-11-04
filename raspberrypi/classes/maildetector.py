@@ -13,9 +13,15 @@ import math
 from classes.utils import toBase64
 
 
+"""
+Mail Detector Class
+"""
 class MailDetector:
   
   def __init__(self, app, mailDetected, frameAvailable):
+    """
+    Initialize the mail detector
+    """
     self._app = app
     self._mailDetected = mailDetected
     self._frameAvailable = frameAvailable
@@ -57,6 +63,7 @@ class MailDetector:
     try:
       # capture frames from the camera
       # https://stackoverflow.com/questions/522563/accessing-the-index-in-python-for-loops
+      
       for i, frame in enumerate(camera.capture_continuous(rawCapture, format='bgr', use_video_port=True)):
         
         # grab the raw NumPy array representing the image
@@ -110,11 +117,15 @@ class MailDetector:
     cameraConfig = self._app['config']['recognition']['camera']
     filesConfig = self._app['config']['recognition']['files']
 
+    # datetime - How do I get a string format of the current date time, in python? - Stack Overflow
     # https://stackoverflow.com/questions/3316882/how-do-i-get-a-string-format-of-the-current-date-time-in-python
+
     now = datetime.datetime.now()
     nowStr = now.strftime("%Y-%m-%d %H:%M:%S")
 
+    # 10.  API - picamera.camera Module — Picamera 1.10 documentation
     # http://picamera.readthedocs.io/en/release-1.10/api_camera.html
+
     camera = PiCamera()
     camera.resolution = cameraConfig['mailResolution']
     camera.capture(nowStr + '_' + filesConfig['mailbox'])
@@ -137,12 +148,14 @@ class MailDetector:
 
     # apply the four point tranform to obtain a "birds eye view" of the letter
     # http://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+
     mail = four_point_transform(mailbox, points)
 
     # cv2.imshow('Cropped Letter', letter)
 
     # save the letter
     # http://docs.opencv.org/2.4/doc/tutorials/introduction/load_save_image/load_save_image.html
+
     cv2.imwrite(nowStr + '_(' + repr(points[0][0]) + ',' + repr(points[0][1]) + '),(' + repr(points[1][0]) + ',' + repr(points[1][1]) + '),(' + repr(points[2][0]) + ',' + repr(points[2][1]) + '),(' + repr(points[3][0]) + ',' + repr(points[3][1]) + ')_' + filesConfig['mail'], mail)
     print('Mail saved')
 
@@ -156,9 +169,16 @@ class MailDetector:
     recognitionConfig = self._app['config']['recognition']
 
     # pre-process
+
+    # python - OpenCV BackgroundSubtractor yields poor results on objects with similar color as background color - Stack Overflow
     # https://stackoverflow.com/questions/46000390/opencv-backgroundsubtractor-yields-poor-results-on-objects-with-similar-color-as
+    #
+    # python - Color space conversion with cv2 - Stack Overflow
     # https://stackoverflow.com/questions/15100913/color-space-conversion-with-cv2
+    #
+    # python - Error using cv2.equalizeHist - Stack Overflow
     # https://stackoverflow.com/questions/22153271/error-using-cv2-equalizehist
+
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # image = cv2.equalizeHist(image)
     
@@ -167,7 +187,10 @@ class MailDetector:
     fgmask = substractor.apply(image)
 
     # denoise
+
+    # Remove spurious small islands of noise in an image - Python OpenCV - Stack Overflow
     # https://stackoverflow.com/questions/30369031/remove-spurious-small-islands-of-noise-in-an-image-python-opencv
+
     se1 = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
     mask = cv2.morphologyEx(fgmask, cv2.MORPH_CLOSE, se1)
 
@@ -185,10 +208,19 @@ class MailDetector:
       if nonZeroPixels != None:
         
         # calculate the boundary of the letter
+
+        # opencvpython.blogspot.com.au/2012/06/contours-2-brotherhood.html
         # http://opencvpython.blogspot.com.au/2012/06/contours-2-brotherhood.html
+        #
+        # opencv - How to draw a rectangle around a region of interest in python - Stack Overflow
         # https://stackoverflow.com/questions/23720875/how-to-draw-a-rectangle-around-a-region-of-interest-in-python
+        #
+        # OpenCV: Contour Properties
         # http://docs.opencv.org/trunk/d1/d32/tutorial_py_contour_properties.html
+        #
+        # python - Difference between cv2.findNonZero and Numpy.NonZero - Stack Overflow
         # https://stackoverflow.com/questions/39994831/difference-between-cv2-findnonzero-and-numpy-nonzero
+
         minAreaRect = cv2.minAreaRect(nonZeroPixels)
         minAreaBox = cv2.boxPoints(minAreaRect)
         minAreaBox = np.int0(minAreaBox)

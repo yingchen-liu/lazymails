@@ -1,4 +1,9 @@
 /**
+ * 
+ * MongoDB connection
+ * 
+ * Attributes:
+ * 
  * StackOverflow: MongoDB on Raspbian - Raspberry Pi Stack Exchange
  *    https://raspberrypi.stackexchange.com/questions/29208/mongodb-on-raspbian
  * 

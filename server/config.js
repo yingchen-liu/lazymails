@@ -1,3 +1,7 @@
+/**
+ * Application configuration
+ */
+
 const config = {
   production: {
     apis: {

@@ -1,5 +1,11 @@
-// https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
-
+/**
+ * Network Handler
+ *
+ * Attributes: 
+ * 
+ * TCP Socket Programming in Node.js
+ *    https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
+ */
 const net = require('net');
 const serializeError = require('serialize-error');
 

@@ -61,7 +61,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     override func viewWillAppear(_ animated: Bool) {
         for category in categoryList {
             if category.icon == "" {
-            socket.sendDownloadIconMessage(categoryName: category.name!)
+                socket.sendDownloadIconMessage(categoryName: category.name!)
             }
         }
         tableView.reloadData()
@@ -174,6 +174,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         return 44
     }
     
+
     override func prepare(for segue: UIStoryboardSegue,sender: Any?) {
         if segue.identifier == "showOneCategorySegue" {
             let destination : MailListViewController = segue.destination as! MailListViewController
@@ -184,7 +185,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
                     destination.currentMails = mailUnreadList
                     destination.isUnread = true
                     destination.title = "Unread"
-                }else {
+                } else {
                     destination.currentMails = mailImportantList
                     destination.title = "Important"
                 }
@@ -200,7 +201,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
             
         }
     }
-    
+
     func didRead(mail: Mail) {
         if let index = mailUnreadList.index(of: mail) {
             mailUnreadList.remove(at: index)
@@ -208,6 +209,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         tableView.reloadData()
     }
     
+
     func addImportant(mail: Mail) {
         if !mailImportantList.contains(mail) {
             mailImportantList.append(mail)

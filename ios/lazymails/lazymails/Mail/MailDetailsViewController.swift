@@ -11,15 +11,19 @@ import UIKit
 class MailDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var categoryDetailsTableView: UITableView!
+    
     @IBOutlet weak var letterPhotoImgView: UIImageView!
     
     @IBOutlet weak var receivedAtLabel: UILabel!
     
-    var categoryDetailsList = ["Category:" : "Bills","From:" : "Po Box 6324 WETHERILL PARK NSW 1851","To:" : "MISS QIUXIAN CAI"]
-    var selectedMail : Mail?
+    
+    var selectedMail: Mail?
+    
     var mailContentDictionary: Dictionary<String, String> = [:]
+    
     var filterDictionary: Dictionary<String, String> = [:]
-    var delegate : RemoveMailDelegate?
+    
+    var delegate: RemoveMailDelegate?
     
    
     override func viewDidLoad() {
@@ -38,7 +42,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 filterDictionary[key] = value
             }
             print("\(filterDictionary)")
-        title = selectedMail?.title
+            title = selectedMail?.title
         }
         
         //show mail photo
@@ -139,16 +143,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         return nil
     }
     
-
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "reportSegue" {
             let destination : ReportIssuesViewController = segue.destination as! ReportIssuesViewController

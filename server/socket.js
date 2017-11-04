@@ -1,5 +1,11 @@
-// https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
-
+/**
+ * Network Handler
+ *
+ * Attributes: 
+ * 
+ * TCP Socket Programming in Node.js
+ *    https://www.hacksparrow.com/tcp-socket-programming-in-node-js.html
+ */
 const net = require('net');
 const serializeError = require('serialize-error');
 
@@ -101,6 +107,9 @@ const processMessage = (sock, message) => {
         break;
       case 'report':
         app.report(sock, message, clients);
+        break;
+      case 'heartbeat':
+        sock.sendMessage(message.type, {});
         break;
       default:
         sock.sendError(new Error('Cannot understand the message'));

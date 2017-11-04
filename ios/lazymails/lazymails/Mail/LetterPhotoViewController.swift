@@ -35,7 +35,6 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         
         singleTapGestureRecognizer.require(toFail: imageDoubleTapGestureRecognizer)
         
-        
         //show large photo
         if let data = Data(base64Encoded: imageBase64!, options: .ignoreUnknownCharacters) {
             let image = UIImage(data: data)
@@ -111,15 +110,4 @@ class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

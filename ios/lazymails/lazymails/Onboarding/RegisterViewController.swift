@@ -13,10 +13,7 @@ import AVFoundation
 import QRCodeReader
 import SwiftValidator
 
-
 class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelegate, ValidationDelegate {
-    
-    
     
     @IBOutlet weak var emailField: UITextField!
     
@@ -37,6 +34,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     @IBOutlet weak var nextButton: UIButton!
     
     @IBOutlet weak var loginButton: UIButton!
+    
     @IBOutlet weak var registerButton: UIButton!
     
     let socket = Socket.shared
@@ -67,17 +65,18 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         self.emailErrorLabel.text = ""
         self.psdErrorLabel.text = ""
         self.mailboxIdErrorLabel.text = ""
-     }
+
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
-    
+
     @IBAction func scanButtonTapped(_ sender: Any) {
         readerVC.delegate = self
         
@@ -121,18 +120,18 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
     @IBAction func loginButtonTapped(_ sender: Any) {
         self.reset()
         
-        (sender as! UIButton).backgroundColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1)
+        (sender as! UIButton).backgroundColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         (sender as! UIButton).setTitleColor(UIColor.white, for:.normal)
         
-        self.registerButton.setTitleColor(UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1), for:.normal)
+        self.registerButton.setTitleColor(UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1), for: .normal)
         self.registerButton.backgroundColor = UIColor.white
         // hide mailbox id input
         self.mailboxIdLabel.isHidden = true
         self.mailboxIdErrorLabel.isHidden = true
         self.mailboxIdField.isHidden = true
         self.scanCodeButton.isHidden = true
-        self.nextButton.setTitle( "Login", for: .normal )
-        // unresgiter mailboxIdField
+
+        self.nextButton.setTitle("Login", for: .normal)
         self.validator.unregisterField(mailboxIdField)
         
     }
@@ -146,17 +145,17 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         removeTextfieldBorder(textfield: emailField)
         removeTextfieldBorder(textfield: passwordField)
         removeTextfieldBorder(textfield: mailboxIdField)
-        self.nextButton.backgroundColor = UIColor(red:122/255,green:195/255, blue: 246/255, alpha: 1)
+        self.nextButton.backgroundColor = UIColor(red: 122/255, green: 195/255, blue: 246/255, alpha: 1)
     }
     
+
     /**
      Login and send login message to server and validate
      */
-    func login(){
+    func login() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let email = emailField.text
         let password = passwordField.text
-        let mailboxId = mailboxIdField.text
 
         socket.sendConnectMessage(email: email!, password: password!, callback: { (error, message) in
             guard error == nil else {
@@ -190,7 +189,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         socket.sendRegisterMessage(email: email!, password: password!, mailbox: mailboxId!, callback: { (error, message) in
             guard error == nil else {
                 print("register: \(error!)")
-                if (error?.contains ("Incorrect mailbox ID"))!{
+                if (error?.contains ("Incorrect mailbox ID"))! {
                     self.mailboxIdErrorLabel.text = "Incorrect mailbox ID."
                 }
                 if (error?.contains ("Email already exists"))! {
@@ -198,6 +197,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 }
                 return
             }
+            
             self.setting.inited = true
             self.setting.email = email
             self.setting.password = password
@@ -215,23 +215,23 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
                 self.present(mainBarViewController, animated: true, completion: nil)
             })
             
-            print("registered!")
+//            print("registered!")
         })
     }
     
     // register button clicked
     @IBAction func registerButtonTapped(_ sender: Any) {
         self.reset()
-        (sender as! UIButton).backgroundColor = UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1)
+        (sender as! UIButton).backgroundColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         (sender as! UIButton).setTitleColor(UIColor.white, for:.normal)
         
-        self.loginButton.setTitleColor(UIColor(red:0/255,green:122/255, blue: 255/255, alpha: 1), for:.normal)
+        self.loginButton.setTitleColor(UIColor(red: 0/255,green: 122/255, blue: 255/255, alpha: 1), for: .normal)
         self.loginButton.backgroundColor = UIColor.white
         self.mailboxIdLabel.isHidden = false
         self.mailboxIdErrorLabel.isHidden = false
         self.mailboxIdField.isHidden = false
         self.scanCodeButton.isHidden = false
-        self.nextButton.setTitle( "Register", for: .normal )
+        self.nextButton.setTitle("Register", for: .normal)
         self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
         
     }
@@ -243,9 +243,9 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         reset()
         
         if nextButton.currentTitle == "Login" {
-            // Login
             login()
-        }else {
+
+        } else {
             register()
         }
         return
@@ -256,7 +256,7 @@ class RegisterViewController: UIViewController, QRCodeReaderViewControllerDelega
         validator.validate(self)
         if (sender as! UITextField).text != "" {
             self.validator.registerField(mailboxIdField,errorLabel: mailboxIdErrorLabel, rules: [MinLengthRule(length: 24, message: "ID should be 24 digits")])
-        }else {
+        } else {
             self.validator.unregisterField(mailboxIdField)
         }
     }

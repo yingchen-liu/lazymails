@@ -11,11 +11,14 @@ import UIKit
 class IncorrectRecognitionViewController: UITableViewController {
 
     @IBOutlet weak var checkboxImgView: UIImageView!
+    
     @IBOutlet weak var submitButton: UIButton!
     
+    
     var checked = false
-    var currentMail : Mail?
+    var currentMail: Mail?
     var mainContentDictionary : Dictionary<String, String> = [:]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

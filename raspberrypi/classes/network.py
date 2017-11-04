@@ -4,9 +4,16 @@ import json
 import _thread
 import threading
 
+
+"""
+Network Class
+"""
 class Network:
   
   def __init__(self, app, connected, disconnected, receivedMessage):
+    """
+    Initialize the network
+    """
     self._app = app
     self._sock = None
     self._connected = connected
@@ -16,6 +23,7 @@ class Network:
     self._mutex = threading.Lock()
 
     try:
+      # python - ImportError No module named thread - Raspberry Pi Stack Exchange
       # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
       _thread.start_new_thread(self.receiveMessage, ())
@@ -23,6 +31,9 @@ class Network:
       print('Unable to start thread for receiving message:', e)
 
   def heartbeat(self):
+    """
+    Send a heartbeat to the server
+    """
     while True:
       message = {
         'type': 'heartbeat',
@@ -35,13 +46,18 @@ class Network:
       time.sleep(20)
 
   def sendMessage(self, message):
+    """
+    Send a message to the server
+    """
     if self._mutex.acquire(60):
       print('send message', message['type'])
       
       networkConfig = self._app['config']['network']
 
       try:
+        # python - TypeError: str does not support buffer interface - Stack Overflow
         # https://stackoverflow.com/questions/11781639/typeerror-str-does-not-support-buffer-interface
+
         self._sock.sendall((json.dumps(message) + networkConfig['endSymbol']).encode('utf-8'))
       except Exception as e:
         print('Failed to send the message', e)
@@ -50,7 +66,9 @@ class Network:
       self._mutex.release()
 
   def connect(self):
-    
+    """
+    Connect to the server
+    """
     networkConfig = self._app['config']['network']
 
     print('Connecting ...')
@@ -71,7 +89,9 @@ class Network:
         time.sleep(3)
 
   def receiveMessage(self):
-    
+    """
+    Receive messages from the server
+    """
     networkConfig = self._app['config']['network']
 
     while True:
@@ -87,6 +107,7 @@ class Network:
           if buff:
             data += buff.decode('utf-8')
           else:
+            # How do I reconnect a disconnected socket? - Python
             # http://www.programmingforums.org/post143163.html
             
             self._sock.close()
@@ -102,7 +123,10 @@ class Network:
         self._isConnected = False
         break
       except Exception as e:
+
+        # Python: detect when a socket disconnects for any reason? - Stack Overflow
         # https://stackoverflow.com/questions/17386487/python-detect-when-a-socket-disconnects-for-any-reason
+
         print('Error occurs when receiving message', e)
         self._sock.close()
         self._isConnected = False

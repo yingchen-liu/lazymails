@@ -26,7 +26,7 @@ class Notification: NSObject {
     }
     
     func monitorMail(categoryName: String, mailTitle: String) {
-        let title = "New Mail:\(mailTitle) (\(categoryName))"
+        let title = "New Mail: \(mailTitle) (\(categoryName))"
         let message = ""
         notify(title: title, message: message)
     }
@@ -41,8 +41,4 @@ class Notification: NSObject {
         let murmur = Murmur(title: title)
         Whisper.show(whistle: murmur, action: .show(5))
     }
-    
-    
-    
-    
 }

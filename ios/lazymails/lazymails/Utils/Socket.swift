@@ -52,6 +52,12 @@ class Socket: NSObject, StreamDelegate {
     
     var connected = false
     
+
+    override init() {
+        super.init()
+        Timer.scheduledTimer(timeInterval: 20.0, target: self, selector: #selector(sendHeartbeatMessage), userInfo: nil, repeats: true)
+    }
+    
     /**
      Connect to server
  
@@ -225,6 +231,17 @@ class Socket: NSObject, StreamDelegate {
         sendMessage(message: message)
     }
     
+    /**
+     Send heartbeat message
+     
+     */
+    @objc func sendHeartbeatMessage() {
+        let message = ["end": "app", "type": "heartbeat"]
+        
+        sendMessage(message: message)
+    }
+    
+
     /**
      Send check mails and receive the newest mail when app online
      
@@ -567,7 +584,6 @@ class Socket: NSObject, StreamDelegate {
             var urls = infoDic["urls"] as! NSArray as! Array<String>
             var website = ""
             if urls.count > 1 {
-                
                 for i in 0...urls.count - 1 {
                     let url = urls[i] as String
                     website = website + "\n" + url

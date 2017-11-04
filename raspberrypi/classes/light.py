@@ -4,15 +4,25 @@ import datetime
 import time
 
 
+"""
+Light Control Class
+"""
 class Light:
 
   def __init__(self, app):
+    """
+    Initialize the light
+    """
     self._app = app
     self._light = None
 
     _thread.start_new_thread(self.energySaving, ())
 
   def connect(self):
+    """
+    Connect to the Nano
+    """
+
     # https://stackoverflow.com/questions/41987168/serial-object-has-no-attribute-is-open
 
     if self._light and self._light.isOpen():
@@ -40,6 +50,9 @@ class Light:
       time.sleep(1000)
 
   def switchOn(self):
+    """
+    Switch on the light
+    """
     try:
       self._light.write(b'on\n')
     except Exception as e:
@@ -47,6 +60,9 @@ class Light:
       self.connect()
 
   def switchOff(self):
+    """
+    Switch off the light
+    """
     try:
       self._light.write(b'off\n')
     except Exception as e:
@@ -54,6 +70,9 @@ class Light:
       self.connect()
 
   def energySaving(self):
+    """
+    Monitor the energy saving mode
+    """
     energySavingConfig = self._app['config']['energySaving']
 
     while True:

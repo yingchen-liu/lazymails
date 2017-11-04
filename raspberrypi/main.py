@@ -1,8 +1,28 @@
+#
+# LazyMails Mailbox-End Application
+#
+# For mails extraction and sending them to the server
+#
+
+
+# Attributes:
+# 
+# Install OpenCV and Python on your Raspberry Pi 2 and B+ - PyImageSearch
 # http://www.pyimagesearch.com/2015/02/23/install-opencv-and-python-on-your-raspberry-pi-2-and-b/
+# 
+# Accessing the Raspberry Pi Camera with OpenCV and Python - PyImageSearch
 # http://www.pyimagesearch.com/2015/03/30/accessing-the-raspberry-pi-camera-with-opencv-and-python/
+#
+# Install guide: Raspberry Pi 3 + Raspbian Jessie + OpenCV 3 - PyImageSearch
 # http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
+#
+# Easy Raspberry Pi Camera refocusing - YouTube
 # https://www.youtube.com/watch?v=u6VhRVH3Z6Y
+#
+# novaspirit/rpi_zram: script to enable zram for raspberry pi
 # https://github.com/novaspirit/rpi_zram
+#
+# TCP/IP Client and Server - Python Module of the Week
 # https://pymotw.com/2/socket/tcp.html
 
 import time
@@ -18,6 +38,7 @@ from classes.maildetector import MailDetector
 from classes.utils import toBase64
 
 
+# App settings
 app = {
   'config': {
     'network': {
@@ -65,12 +86,19 @@ app = {
     'lives': {}
   }
 }
+
+
 light = None
 sock = None
 secondSendingKeepTheSameFor = 0
 lastSending = 0
 
+
 def mailSendingMonitor():
+  """
+  This function runs as a thread itself, it is used to monitor the process of sending a mail
+  to the server, it ensures the mail can be sent successuflly, otherwiese, it will send it again.
+  """
   global lastSending
   global secondSendingKeepTheSameFor
 
@@ -78,6 +106,8 @@ def mailSendingMonitor():
 
   while True:
     sending = 0
+
+    # Looking for unsent mails in the folder
     filenames = os.listdir()
     for filename in filenames:
       if filename.endswith(filesConfig['mail']):
@@ -85,6 +115,7 @@ def mailSendingMonitor():
 
     if sending > 0:
       print('mails:', sending, 'time:', secondSendingKeepTheSameFor)
+
     if sending != 0 and secondSendingKeepTheSameFor >= 60:
       secondSendingKeepTheSameFor = 0
       print('Spending too long to send a mail to the server')
@@ -99,6 +130,9 @@ def mailSendingMonitor():
     time.sleep(1)
 
 def sendAllMails():
+  """
+  Get and send all unsent mails to the server
+  """
   global sending
   
   filesConfig = app['config']['recognition']['files']
@@ -111,6 +145,7 @@ def sendAllMails():
     if filename.endswith(filesConfig['mail']):
       print('Sending a mail to the server')
 
+      # 7.1. string — Common string operations — Python 2.7.14 documentation
       # https://docs.python.org/2/library/string.html
 
       # get received time
@@ -124,6 +159,7 @@ def sendAllMails():
         pointStr = cropPointStr.replace('(', '').replace(')', '').split(',')
         cropPoints.append((float(pointStr[0]), float(pointStr[1])))
 
+      # mail for sending
       message = {
         'type': 'mail',
         'end': 'mailbox',
@@ -145,6 +181,9 @@ def sendAllMails():
       
 
 def connected(self):
+  """
+  Callback function called once it connected to the server
+  """
   message = {
     'type': 'connect',
     'id': app['config']['mailbox']['id'],
@@ -161,10 +200,17 @@ def connected(self):
     print('Unable to start thread for sending mails:', e)
 
 def disconnected(self):
+  """
+  Callback function called once it disconnected to the server
+  """
   print('Disconnected')
 
 def processMessage(self, message):
+  """
+  Process a message sent from the server
+  """
   try:
+    # Connection
     if message['type'] == 'connect':
       global light
       light = Light(app)
@@ -172,32 +218,41 @@ def processMessage(self, message):
       light.switchOn()
       print('Connected to server')
       
+    # Update mailbox settings
     elif message['type'] == 'update_settings':
       app['settings'] = message['settings']
       print('Setting updated', app['settings'])
 
+    # Start live to a users
     elif message['type'] == 'start_live':
       app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
       print('Start live to', message['email'])
 
+    # Live heartbeat
     elif message['type'] == 'live_heartbeat':
       app['status']['lives'][message['email']] = app['config']['live']['framesKeepAlive']
       print('Keep live to', message['email'])
 
+    # Stop live to a user
     elif message['type'] == 'stop_live':
       if message['email'] in app['status']['lives']:
         del app['status']['lives'][message['email']]
         print('Stop live to', message['email'])
 
+    # Mail has been received by the server
     elif message['type'] == 'mail':
       filenames = os.listdir()
       for filename in filenames:
         if message['mail']['receivedAt'] in filename:
           os.remove(filename)
+
   except Exception as e:
     print('Unable to process message:', e)
 
 def mailDetected(self):
+  """
+  Callback function called once a mail has been detected in the mailbox
+  """
   try:
     # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
 
@@ -206,7 +261,9 @@ def mailDetected(self):
     print('Unable to start thread for sending mails:', e)
 
 def frameAvailable(self, image, i):
-  
+  """
+  Callback function called once a frame is available from the camera
+  """
   lives = app['status']['lives']
   liveConfig = app['config']['live']
 
@@ -245,20 +302,28 @@ def frameAvailable(self, image, i):
         del lives[email]
 
 
+
+# Initialize the connection
 sock = Network(app, connected, disconnected, processMessage)
 sock.connect()
+
+# Initialize the mail detector
 detector = MailDetector(app, mailDetected, frameAvailable)
+
+# Initialize the mail sending monitor
 try:
   # https://raspberrypi.stackexchange.com/questions/22444/importerror-no-module-named-thread
   _thread.start_new_thread(mailSendingMonitor, ())
 except Exception as e:
   print('Unable to start thread for mail sending monitor:', e)
 
+# Initialize the heartbeat sender
 try:
   _thread.start_new_thread(sock.heartbeat, ())
 except Exception as e:
   print('Unable to start thread for sending heartbeat:', e)
 
+# Main loop
 while True:
   if app['settings']['isEnergySavingOn']:
     energySavingConfig = app['config']['energySaving']

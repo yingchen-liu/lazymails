@@ -109,7 +109,7 @@ class MoveCategoryController: UITableViewController {
             cell.categoryNameLabel.text = filteredCategoryList[indexPath.row].name
             if checked != nil {
                 cell.moveCheckBoxImgView.image = UIImage(named: checked == indexPath.row ? "checkbox-checked" : "checkbox")
-                self.submitButton.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha : 1)
+                self.submitButton.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 82/255, alpha: 1)
                 self.submitButton.isEnabled = true
             } else {
                 self.submitButton.backgroundColor = UIColor.lightGray

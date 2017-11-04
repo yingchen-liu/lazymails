@@ -26,12 +26,16 @@ class IncorrectRecognitionViewController: UITableViewController {
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+        self.submitButton.isEnabled = false
     }
     
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
         checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
         submitButton.backgroundColor = checked ? UIColor(red: 1, green: 102.0/255, blue: 82.0/255, alpha: 1) : UIColor.lightGray
+        if checked {
+            self.submitButton.isEnabled = true
+        }
     }
     
 

@@ -58,6 +58,10 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         Socket.shared.mailCallbacks.append(mailCallback)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     func mailCallback(mail: Mail) {
         mailUnreadList.append(mail)
         if !categoryList.contains(mail.category) {
@@ -365,17 +369,19 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         if let index = mailUnreadList.index(of:mail) {
             mailUnreadList.remove(at: index)
         }
-        
+        tableView.reloadData()
     }
     
     func addImportant (mail : Mail) {
         if !mailImportantList.contains(mail) {
             mailImportantList.append(mail)
         }
+        tableView.reloadData()
     }
     func removeImportant(mail: Mail) {
         if let index = mailImportantList.index(of:mail) {
             mailImportantList.remove(at: index)
         }
+        tableView.reloadData()
     }
 }

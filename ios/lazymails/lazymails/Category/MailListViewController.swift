@@ -91,32 +91,32 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
             cell.imgLabel.text = firstChar(str: mail.title!).uppercased()
             // set image background color
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "AIU")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.10, green:0.74, blue:0.61, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.10, green: 0.74, blue: 0.61, alpha: 1.0)
             }
             
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "BJPV")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.95, green:0.61, blue:0.07, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.95, green: 0.61, blue: 0.07, alpha: 1.0)
             }
             
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "CKQW")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.20, green:0.60, blue:0.86, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.20, green: 0.60, blue: 0.86, alpha:1.0)
             }
             
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "DLRX")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.75, green:0.22, blue:0.17, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.75, green: 0.22, blue: 0.17, alpha: 1.0)
             }
             
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "EMSY")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.61, green:0.35, blue:0.71, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.61, green: 0.35, blue: 0.71, alpha: 1.0)
             }
             
             if (firstChar(str: mail.title!).uppercased().rangeOfCharacter(from: setCharacterRange(str: "FNTZ")) != nil) {
-                cell.letterPhotoImgView.backgroundColor = UIColor(red:0.20, green:0.29, blue:0.37, alpha:1.0)
+                cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.20, green: 0.29, blue: 0.37, alpha: 1.0)
             }
-        }else {
+        } else {
             cell.letterTitleLabel.text = "Others"
             cell.imgLabel.text = "O"
-            cell.letterPhotoImgView.backgroundColor = UIColor(red:0.09, green:0.63, blue:0.52, alpha:1.0)
+            cell.letterPhotoImgView.backgroundColor = UIColor(red: 0.09, green: 0.63, blue: 0.52, alpha: 1.0)
         }
             cell.imgLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
             cell.imgLabel.textColor = UIColor.white
@@ -124,21 +124,19 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         if isDateInToday(date: mail.receivedAt) {
             //print ("receiveeeeeee:\(mail.receivedAt)")
             cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt)
-        }else {
+        } else {
             cell.receiveDateLabel.text = formatDate(date: mail.receivedAt)
         }
         
-        
-        
-            cell.letterDescriptionLabel.text = mail.mainText
-            cell.letterMarkImgView.image =  UIImage(named: mail.isImportant ? "star" : "star-outline")
+        cell.letterDescriptionLabel.text = mail.mainText
+        cell.letterMarkImgView.image =  UIImage(named: mail.isImportant ? "star" : "star-outline")
         
         // set font systle
         if mail.didRead {
             cell.receiveDateLabel.font = UIFont.systemFont(ofSize: 15.0)
             cell.letterTitleLabel.font = UIFont.systemFont(ofSize: 17.0)
             cell.letterDescriptionLabel.font = UIFont.systemFont(ofSize: 15.0)
-        }else {
+        } else {
             cell.receiveDateLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
             cell.letterTitleLabel.font = UIFont.boldSystemFont(ofSize: 17.0)
             cell.letterDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
@@ -146,7 +144,7 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         
         // mark important
         
-        cell.letterMarkImgView.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(tapped(_sender:))))
+        cell.letterMarkImgView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_sender:))))
 
         cell.letterMarkImgView.isUserInteractionEnabled = true
         cell.letterMarkImgView.tag = indexPath.row
@@ -165,10 +163,10 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
     @objc func tapped(_sender : AnyObject ) {
         let index = _sender.view.tag
         let mail = currentMails[index]
-        if !mail.isImportant  {
+        if !mail.isImportant {
             mail.isImportant = true
             mailboxDelegate?.addImportant(mail: mail)
-        }else {
+        } else {
             mail.isImportant = false
             mailboxDelegate?.removeImportant(mail: mail)
         }

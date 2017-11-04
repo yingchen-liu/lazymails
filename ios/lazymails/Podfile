@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'lazymails' do
 	pod 'Whisper'
-	pod 'Toast-Swift', '~> 2.0.0'
+	pod 'Toaster'
 	pod 'QRCodeReader.swift', '~> 8.0.3'
         pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :branch => 'master'
 end

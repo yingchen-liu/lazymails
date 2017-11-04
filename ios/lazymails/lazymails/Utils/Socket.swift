@@ -457,7 +457,6 @@ class Socket: NSObject, StreamDelegate {
             var urls = infoDic["urls"] as! NSArray as! Array<String>
             var website = ""
             if urls.count > 1 {
-                
                 for i in 0...urls.count - 1 {
                     let url = urls[i] as String
                     website = website + "\n" + url

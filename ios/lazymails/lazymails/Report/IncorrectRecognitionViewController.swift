@@ -11,12 +11,17 @@ import UIKit
 class IncorrectRecognitionViewController: UITableViewController {
 
     @IBOutlet weak var checkboxImgView: UIImageView!
+    
     @IBOutlet weak var submitButton: UIButton!
     
     var checked = false
-    var contentList = ["From:": "Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street Unit 5 5 Moodie Street","To:": "Monash University ","Websites:": "http://www.coolmelb.ml"]
-    var currentMail : Mail?
+    
+    var contentList = []
+    
+    var currentMail: Mail?
+    
     var mainContentDictionary : Dictionary<String, String> = [:]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

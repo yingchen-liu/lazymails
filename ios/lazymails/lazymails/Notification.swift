@@ -28,21 +28,20 @@ class Notification: NSObject {
     func monitorMail(id: String, categoryName: String) {
         let identifier = id
         let title = "You got a new Mail in Category \(categoryName)"
-        let message = "iddddddddd"
-        
-        
-        
+        let message = ""
+     
         notify(title: title, message: message, identifier: identifier)
     }
-    func monitorNewCategoryMail (id: String, categoryName: String) {
+    
+    func monitorNewCategoryMail(id: String, categoryName: String) {
         let identifier = id
         let title = "LazyMail has a new Category \(categoryName)"
-        let message = "iddddddddd"
+        let message = ""
+        
         notify(title: title, message: message, identifier: identifier)
     }
     
     func notify(title: String, message: String, identifier: String) {
-        
         // ✴️ Attributes:
         
         // Website: How to Make Local Notifications in iOS 10

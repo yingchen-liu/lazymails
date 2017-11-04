@@ -19,4 +19,38 @@ extension Date{
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter.string(from:self)
     }
+    
+    func convertDateToString() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: self)
+        //        print ("\(str)")
+        return str
+    }
+    
+    func formatDate() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+        formatter.dateFormat = "yyyy-MM-dd"
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: self)
+        //        print ("\(str)")
+        return str
+    }
+    
+    func formatDateAndTime() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+        formatter.dateFormat = "HH:mm"
+        //print ("dateeeeeeeee is \(date)")
+        let str = formatter.string(from: self)
+        //        print ("\(str)")
+        return str
+    }
+    
 }

@@ -123,9 +123,11 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
             //cell.receiveDateLabel.text = convertDateToString(date: mail.receivedAt!)
         if isDateInToday(date: mail.receivedAt) {
             //print ("receiveeeeeee:\(mail.receivedAt)")
-            cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt)
+            cell.receiveDateLabel.text = mail.receivedAt.formatDateAndTime()
+            //cell.receiveDateLabel.text = formatDateAndTime(date: mail.receivedAt)
         } else {
-            cell.receiveDateLabel.text = formatDate(date: mail.receivedAt)
+            //cell.receiveDateLabel.text = formatDate(date: mail.receivedAt)
+            cell.receiveDateLabel.text = mail.receivedAt.formatDate()
         }
         
         cell.letterDescriptionLabel.text = mail.mainText
@@ -185,40 +187,6 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 97
-    }
-    
-    //  
-    
-    func convertDateToString(date : Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = NSLocale.current
-        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        //print ("dateeeeeeeee is \(date)")
-        let str = formatter.string(from: date)
-//        print ("\(str)")
-        return str
-    }
-    
-    func formatDate(date : Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = NSLocale.current
-        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
-        formatter.dateFormat = "yyyy-MM-dd"
-        //print ("dateeeeeeeee is \(date)")
-        let str = formatter.string(from: date)
-//        print ("\(str)")
-        return str
-    }
-    func formatDateAndTime(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = NSLocale.current
-        formatter.timeZone = TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
-        formatter.dateFormat = "HH:mm"
-        //print ("dateeeeeeeee is \(date)")
-        let str = formatter.string(from: date)
-//        print ("\(str)")
-        return str
     }
     
     override func prepare(for segue: UIStoryboardSegue,sender: Any?) {

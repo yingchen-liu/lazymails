@@ -614,7 +614,7 @@ class Socket: NSObject, StreamDelegate {
             var categorySort = "z"
             if categoriesDic.count != 0 {
                 let category = categoriesDic[0] as! Dictionary<String, Any>
-                print(category)
+//                print(category)
                 categoryName = category["name"] as! String
                 categorySort = category["sort"] as! String
             }

@@ -40,6 +40,8 @@ class Setting: NSObject {
     
     var isEnergySavingOn = false
     
+    var isMailboxOnline = false
+    
     
     override init() {
         super.init()

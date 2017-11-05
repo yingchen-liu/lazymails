@@ -16,6 +16,8 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     @IBOutlet weak var receivedAtLabel: UILabel!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     
     var selectedMail: Mail?
     
@@ -34,6 +36,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         categoryDetailsTableView.delegate = self
         categoryDetailsTableView.estimatedRowHeight = 44
         categoryDetailsTableView.rowHeight = UITableViewAutomaticDimension
+        
         // convert mailinfo jsonString to dictionary
         mailContentDictionary = convertToDictionary(text: (selectedMail?.info!)!)!
         
@@ -41,21 +44,25 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             if mailContentDictionary[key] != "" {
                 filterDictionary[key] = value
             }
-            print("\(filterDictionary)")
+//            print("\(filterDictionary)")
             title = selectedMail?.title
         }
         
-        //show mail photo
-        let base64 = selectedMail?.image
+        activityIndicator.isHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // show mail photo
+        
+        let base64 = (selectedMail?.showFullImage)! ? selectedMail?.boxImage : selectedMail?.image
         if let data = Data(base64Encoded: base64!, options: .ignoreUnknownCharacters) {
             let image = UIImage(data: data)
             self.letterPhotoImgView.image = image
         }
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
+        
         categoryDetailsTableView.reloadData()
+        
+        activityIndicator.isHidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,18 +88,16 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         receivedAtLabel.text = convertDateToString(date: (selectedMail?.receivedAt)!)
         // ✴️ Attributes:
         // Stackoverflow: Can't make URL clickable in UITextView
-        //  https://stackoverflow.com/questions/14387024/cant-make-url-clickable-in-uitextview
-        
-        // ✴️ Attributes:
+        //      https://stackoverflow.com/questions/14387024/cant-make-url-clickable-in-uitextview
         // Stackoverflow: how to make UITextView height dynamic according to text length?
-        //  https://stackoverflow.com/questions/38714272/how-to-make-uitextview-height-dynamic-according-to-text-length
+        //      https://stackoverflow.com/questions/38714272/how-to-make-uitextview-height-dynamic-according-to-text-length
         
         cell.detailsValueLabel.translatesAutoresizingMaskIntoConstraints = false
         cell.detailsValueLabel.isScrollEnabled = false
         
         // ✴️ Attributes:
         // Stackoverflow: How to lose margin/padding in UITextView?
-        //  https://stackoverflow.com/questions/746670/how-to-lose-margin-padding-in-uitextview
+        //      https://stackoverflow.com/questions/746670/how-to-lose-margin-padding-in-uitextview
         
         cell.detailsValueLabel.textContainerInset = .zero
         cell.detailsValueLabel.textContainer.lineFragmentPadding = 0
@@ -118,7 +123,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     // ✴️ Attributes:
     // Stackoverflow: How to get a user's time zone?
-    //  https://stackoverflow.com/questions/27053135/how-to-get-a-users-time-zone
+    //      https://stackoverflow.com/questions/27053135/how-to-get-a-users-time-zone
     
     func convertDateToString(date : Date) -> String {
         let formatter = DateFormatter()
@@ -131,7 +136,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     // ✴️ Attributes:
     // Stackoverflow: How to convert a JSON string to a dictionary?
-    //https://stackoverflow.com/questions/30480672/how-to-convert-a-json-string-to-a-dictionary
+    //      https://stackoverflow.com/questions/30480672/how-to-convert-a-json-string-to-a-dictionary
     func convertToDictionary(text: String) -> [String: String]? {
         if let data = text.data(using: .utf8) {
             do {
@@ -155,7 +160,7 @@ class MailDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         
         if segue.identifier == "showLargePhotoSegue" {
             let destination : LetterPhotoViewController = segue.destination as! LetterPhotoViewController
-            destination.imageBase64 = selectedMail?.image
+            destination.imageBase64 = (selectedMail?.showFullImage)! ? selectedMail?.boxImage : selectedMail?.image
             
             
         }

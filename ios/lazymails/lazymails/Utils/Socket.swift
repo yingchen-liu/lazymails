@@ -46,6 +46,8 @@ class Socket: NSObject, StreamDelegate {
     
     var mailCallbacks: [(_ mail: Mail) -> Void] = []
     
+    var onlineStatusCallback: ((_ online: Bool) -> Void)?
+    
     var iconDownloadCallbacks: [() -> Void] = []
     
     var categoryName = ""
@@ -407,9 +409,13 @@ class Socket: NSObject, StreamDelegate {
             data.delete(object: _receiver)
         }
         
-        //print(message)
-        
         let mailbox = message["mailbox"] as! NSDictionary as! Dictionary<String, Any>
+        
+        Setting.shared.isMailboxOnline = mailbox["isOnline"] as! Bool
+        if let onlineStatusCallback = onlineStatusCallback {
+            onlineStatusCallback(Setting.shared.isMailboxOnline)
+        }
+        
         let receivers = mailbox["names"] as! NSArray as! Array<NSDictionary>
         for receiver in receivers {
             let uuid = UUID().uuidString
@@ -510,9 +516,17 @@ class Socket: NSObject, StreamDelegate {
         
         case "mailbox_online":
             Notification.shared.notifyMailboxOnline()
+            
+            if let onlineStatusCallback = onlineStatusCallback {
+                onlineStatusCallback(true)
+            }
             break
         case "mailbox_offline":
             Notification.shared.notifyMailboxOffline()
+            
+            if let onlineStatusCallback = onlineStatusCallback {
+                onlineStatusCallback(false)
+            }
             break
         //process check mails result
         case "check_mails":
@@ -547,21 +561,8 @@ class Socket: NSObject, StreamDelegate {
 //            print ("receivedAtStr : \(receivedAtStr) " )
             let receivedAt = receivedAtStr.toDate()
             
-            //let receivedAt = convertStringToDate(str: receivedAtStr)
+            // let receivedAt = convertStringToDate(str: receivedAtStr)
 //            print ("receivedAt :\(receivedAt)")
-            
-            // get main text
-            var wholeText = ""
-            var text = ""
-            let mainTextArray = infoDic["mainText"] as! NSArray as! Array<NSDictionary>
-            if mainTextArray.count != 0 {
-                for i in 0...mainTextArray.count - 1 {
-                    let eachTextDic = mainTextArray[i] as! Dictionary<String, Any>
-                    text = eachTextDic["text"] as! String
-                    //print("maintext\(i) : \(text) " )
-                    wholeText = wholeText + text
-                }
-            }
             
             // get from
             let poPox = nullToNil(value: infoDic["poBox"] as AnyObject)
@@ -577,8 +578,21 @@ class Socket: NSObject, StreamDelegate {
                 to = receiver as! String
             }
             
-            // get mail info
-//            let mailInfo = infoDic["text"] as! String
+            // get main text
+            var wholeText = "\(to != "" && title != to ? "To " + to + "\n" : "")"
+            var text = ""
+            let mainTextArray = infoDic["mainText"] as! NSArray as! Array<NSDictionary>
+            if mainTextArray.count != 0 {
+                for i in 0...mainTextArray.count - 1 {
+                    let eachTextDic = mainTextArray[i] as! Dictionary<String, Any>
+                    text = eachTextDic["text"] as! String
+                    //print("maintext\(i) : \(text) " )
+                    wholeText = wholeText + text
+                }
+            }
+            
+            // get full text
+            let fullText = infoDic["text"] as! String
             
             // get url
             var urls = infoDic["urls"] as! NSArray as! Array<String>
@@ -589,31 +603,32 @@ class Socket: NSObject, StreamDelegate {
                     website = website + "\n" + url
                 }
                 website.remove(at: website.startIndex)
-            }else if urls.count == 1 {
+            } else if urls.count == 1 {
                 website = urls[0] as String
-            }
-            else  {
+            } else {
                 website = ""
             }
             
-            //get category name
+            // get category name
             let categoriesDic = infoDic["categories"] as! NSArray as! Array<NSDictionary>
-            
+            var categorySort = "z"
             if categoriesDic.count != 0 {
-                let category = categoriesDic[0] as! NSDictionary as! Dictionary<String, Any>
+                let category = categoriesDic[0] as! Dictionary<String, Any>
                 categoryName = category["name"] as! String
+                categorySort = category["sort"] as! String
             }
             
             // store from, to, wholetext, website to info
-            let jsonObj = ["From": from, "To" : to, "Text": wholeText, "Website": website]
+            let jsonObj = ["From": from, "To" : to, "Text": fullText, "Website": website]
             let jsonData = try! JSONSerialization.data(withJSONObject: jsonObj, options: JSONSerialization.WritingOptions())
             let jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
             let info = jsonString
             
             // insert new Mail
-            let newMail = insertNewMail(id: mailId, title: title, mainText: wholeText, info: info, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent)
+            let newMail = Mail.insertNewObject(id: mailId, title: title, mainText: wholeText, info: info, didRead: false, isImportant: false, receivedAt: receivedAt, image: mailContent, boxImage: mailboxContent, showFullImage: false)
+            
             // add new Mail to category
-            addMailToCategory(mail: newMail)
+            addMailToCategory(mail: newMail, categorySort: categorySort)
             
             if !DataManager.shared.categoryList.contains(newMail.category) {
                 DataManager.shared.categoryList.append(newMail.category)
@@ -685,39 +700,23 @@ class Socket: NSObject, StreamDelegate {
             break
         }
     }
-    
-    /**
-     Insert new mail into core data
-     - Parameters:
-         - id: mail id
-         - title: mail title
-         - mainText: mail main text
-         - info: mail detailed information
-         - receivedAt: mail receive date
-         - image: mail photo
-         - boxImage: mailbox photo
-     - Returns: Mail
-     */
-    func insertNewMail(id: String, title: String, mainText: String, info: String, receivedAt: Date, image: String, boxImage: String) -> Mail {
-        let mail = Mail.insertNewObject(id: id, title: title, mainText: mainText, info: info, didRead: false, isImportant: false, receivedAt: receivedAt, image: image, boxImage: boxImage, showFullImage: false)
-        return mail
-    }
-    
+
     /**
      Add mail into category
      - Parameters:
          - mail: Mail
      */
-    func addMailToCategory(mail : Mail){
+    func addMailToCategory(mail: Mail, categorySort: String) {
         let uuid = NSUUID().uuidString
         if categoryName != "" {
             let category = DataManager.shared.fetchCategoryByName(name: categoryName)
             
             if category.count == 0 {
-                print(uuid)
-                let newCategory = Category.insertNewObject(id: uuid, name: categoryName, icon: "")
+//                print(uuid)
+                let newCategory = Category.insertNewObject(id: uuid, name: categoryName, icon: "", sort: categorySort)
                 newCategory.addToMail(mail)
-            }else {
+            } else {
+                category[0].sort = categorySort
                 category[0].addToMail(mail)
             }
         }

@@ -158,13 +158,39 @@
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue" translatesAutoresizingMaskIntoConstraints="NO" id="oAO-ZR-CPH">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
                                 </imageView>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="online" translatesAutoresizingMaskIntoConstraints="NO" id="uW5-dM-pHQ">
+                                    <rect key="frame" x="16" y="114" width="18" height="18"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="18" id="1Ns-Rn-Uzd"/>
+                                        <constraint firstAttribute="width" secondItem="uW5-dM-pHQ" secondAttribute="height" multiplier="1:1" id="smW-Se-ckL"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mailbox Online" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7en-sT-tLH">
+                                    <rect key="frame" x="42" y="115" width="325" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LazyMails" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flE-9I-iUW">
+                                    <rect key="frame" x="129.5" y="55" width="117" height="30"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                    <color key="textColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="oAO-ZR-CPH" secondAttribute="trailing" id="3A6-Q3-IfS"/>
                                 <constraint firstItem="oAO-ZR-CPH" firstAttribute="leading" secondItem="jjx-rf-ktS" secondAttribute="leading" id="G0L-VU-uIj"/>
+                                <constraint firstAttribute="bottom" secondItem="7en-sT-tLH" secondAttribute="bottom" constant="8" id="M29-k0-3z5"/>
+                                <constraint firstItem="uW5-dM-pHQ" firstAttribute="leading" secondItem="jjx-rf-ktS" secondAttribute="leading" constant="16" id="MAV-JA-xbn"/>
                                 <constraint firstAttribute="bottom" secondItem="oAO-ZR-CPH" secondAttribute="bottom" id="YvK-e6-dpk"/>
+                                <constraint firstItem="flE-9I-iUW" firstAttribute="centerY" secondItem="jjx-rf-ktS" secondAttribute="centerY" id="eLM-V7-DwZ"/>
+                                <constraint firstItem="7en-sT-tLH" firstAttribute="leading" secondItem="uW5-dM-pHQ" secondAttribute="trailing" constant="8" id="fNU-7L-cci"/>
                                 <constraint firstItem="oAO-ZR-CPH" firstAttribute="top" secondItem="jjx-rf-ktS" secondAttribute="top" id="hnq-NE-OTQ"/>
+                                <constraint firstAttribute="trailing" secondItem="7en-sT-tLH" secondAttribute="trailing" constant="8" id="lSv-hd-cse"/>
+                                <constraint firstItem="flE-9I-iUW" firstAttribute="centerX" secondItem="jjx-rf-ktS" secondAttribute="centerX" id="nGi-Am-Sy7"/>
+                                <constraint firstAttribute="bottom" secondItem="uW5-dM-pHQ" secondAttribute="bottom" constant="8" id="zyp-pT-p98"/>
                             </constraints>
                         </view>
                         <prototypes>
@@ -282,6 +308,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Mailbox" id="yEN-du-S37"/>
+                    <connections>
+                        <outlet property="onlineImage" destination="uW5-dM-pHQ" id="gzi-7b-ZNe"/>
+                        <outlet property="onlineLabel" destination="7en-sT-tLH" id="nfa-rN-KPg"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FxM-Xn-ohz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -296,13 +326,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="VKP-wE-Dgr">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="510"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="GaK-FC-od5">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="219"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="IFM-Je-I2o">
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IFM-Je-I2o">
                                             <rect key="frame" x="0.0" y="20" width="375" height="170"/>
                                             <gestureRecognizers/>
                                             <connections>
@@ -315,6 +345,10 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GzD-9l-bOq">
+                                            <rect key="frame" x="177" y="99" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -392,6 +426,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="GzD-9l-bOq" id="Fkl-BC-YeL"/>
                         <outlet property="categoryDetailsTableView" destination="VKP-wE-Dgr" id="aW4-IN-9ac"/>
                         <outlet property="letterPhotoImgView" destination="IFM-Je-I2o" id="VBX-GI-Qgl"/>
                         <outlet property="receivedAtLabel" destination="R7G-cI-csy" id="T1f-TK-9Sl"/>
@@ -671,6 +706,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Incorrect Category" id="McT-dW-ctb"/>
                     <connections>
+                        <outlet property="agreementLabel" destination="aLG-dK-hgT" id="6Or-5x-fWY"/>
                         <outlet property="checkboxImgView" destination="Sph-bR-PdE" id="vWx-P1-OSI"/>
                         <outlet property="submitButton" destination="Ti0-GG-6cY" id="8c9-4b-I0q"/>
                     </connections>
@@ -690,7 +726,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CIR-mj-rpR">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mailboxImg" translatesAutoresizingMaskIntoConstraints="NO" id="Ac0-Pl-Ani">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ac0-Pl-Ani">
                                         <rect key="frame" x="0.0" y="10" width="375" height="647"/>
                                     </imageView>
                                 </subviews>
@@ -831,6 +867,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Incorrect Recognition" id="goC-Pt-Goz"/>
                     <connections>
+                        <outlet property="agreementLabel" destination="anT-K5-T5b" id="XNx-mu-KGe"/>
                         <outlet property="checkboxImgView" destination="8Cy-B5-h2o" id="aaD-4S-qZa"/>
                         <outlet property="submitButton" destination="Q8X-cd-C4y" id="c7Z-6e-Zcp"/>
                     </connections>
@@ -931,6 +968,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Photo Incorrect Display" id="exD-YO-hOv"/>
                     <connections>
+                        <outlet property="agreementLabel" destination="pOg-nL-q73" id="mz6-F8-QQW"/>
                         <outlet property="checkboxImgView" destination="UrG-NV-2Mw" id="Ngo-kA-a0i"/>
                         <outlet property="fullImageView" destination="dai-QX-Aq5" id="vuY-Cr-Sx8"/>
                         <outlet property="submitButton" destination="1s3-Mr-Ymz" id="EEh-fp-IdW"/>
@@ -1002,7 +1040,7 @@
                                                 <constraint firstAttribute="width" constant="16" id="hDY-f2-0Cu"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="This is a description of each lettersThis is a description of each letters" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FSS-rS-R5U">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="This is a description of each letters" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FSS-rS-R5U">
                                             <rect key="frame" x="74" y="44.5" width="249" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="36" id="rza-AY-FRj"/>
@@ -1071,7 +1109,20 @@
                             <outlet property="delegate" destination="Jc7-xO-vLp" id="OCv-05-r0Q"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Category" id="t8B-nl-Ct7"/>
+                    <toolbarItems>
+                        <barButtonItem title="Mark as Read" id="xbX-bs-IAx">
+                            <connections>
+                                <action selector="markAsReadButtonTapped:" destination="Jc7-xO-vLp" id="J1U-m1-RgG"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Category" id="RsS-r9-WE3">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="jMv-aG-dMd"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="markAsReadButton" destination="xbX-bs-IAx" id="KVJ-CC-dRb"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VWv-T8-R4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2371,12 +2422,12 @@
         <image name="energy" width="64" height="64"/>
         <image name="info" width="64" height="64"/>
         <image name="mailbox" width="30" height="30"/>
-        <image name="mailboxImg" width="414" height="276"/>
         <image name="next" width="16" height="16"/>
         <image name="notification" width="64" height="64"/>
         <image name="onboarding-0" width="340" height="340"/>
         <image name="onboarding-1" width="340" height="339"/>
         <image name="onboarding-2" width="340" height="340"/>
+        <image name="online" width="64" height="64"/>
         <image name="settings" width="30" height="30"/>
         <image name="star" width="32" height="32"/>
     </resources>

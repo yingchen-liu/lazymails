@@ -10,20 +10,33 @@ const config = require('../config');
 const url = `https://vision.googleapis.com/v1/images:annotate?key=${config.apis.google.apiKey}`;
 // const url = `https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate`
 const categories = [{
+  name: 'Normal Letters',
+  sort: 'a'
+}, {
+  name: 'ADs',
+  sort: 'g'
+}, {
+  name: 'Not for You',
+  sort: 'd'
+}, {
   name: 'ADs - Food',
-  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink']
+  labels: ['dish', 'cuisine', 'food', 'fast food', 'recipe', 'pizza', 'drink', 'soft drink'],
+  sort: 'e'
 }, {
   name: 'ADs - Properties',
   labels: ['house', 'home', 'real estate', 'property', 'architecture', 'facade', 'window'],
-  mainTexts: ['Woodards']
+  mainTexts: ['Woodards'],
+  sort: 'f'
 }, {
   name: 'Bank Statements',
   logos: ['anz', 'commonwealth'],
-  mainTexts: ['ANZ', 'Commonwealth', 'Commonwealth Bank']
+  mainTexts: ['ANZ', 'Commonwealth', 'Commonwealth Bank'],
+  sort: 'c'
 }, {
   name: 'Utility Bills',
   logos: ['vodafone', 'agl', 'tpg'],
-  mainTexts: ['AGL', 'Bill', 'Vodafone', 'Origin', 'Optus', 'Telstra', 'iinet', 'TPG']
+  mainTexts: ['AGL', 'Bill', 'Vodafone', 'Origin', 'Optus', 'Telstra', 'iinet', 'TPG'],
+  sort: 'b'
 }];
 
 const extractPoBox = (fullText) => {
@@ -408,6 +421,20 @@ const request = (mailBase64, names, address, callback) => {
         score: 10
       });
     }
+
+    result.categories.map((category) => {
+      for (var i = 0; i < categories.length; i++) {
+        _category = categories[i];
+        if (_category.name == category.name) {
+          category.sort = _category.sort;
+          break;
+        }
+      }
+
+      if (category.sort) {
+        category.sort = 'zzz';
+      }
+    });
 
     result.categories.sort((a, b) => {
       return b.score - a.score; // desc

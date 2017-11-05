@@ -10,22 +10,38 @@ import UIKit
 import CoreData
 
 protocol mailBoxDelegate {
-    func didRead (mail : Mail)
-    func addImportant (mail : Mail)
-    func removeImportant (mail : Mail)
+    
+    func toggleRead(mail: Mail, read: Bool)
+    
+    func addImportant(mail: Mail)
+    
+    func removeImportant(mail: Mail)
+    
 }
 
 class CategoryViewController: UITableViewController, mailBoxDelegate {
     
+    @IBOutlet weak var onlineImage: UIImageView!
+    
+    @IBOutlet weak var onlineLabel: UILabel!
+    
+    
     var socket = Socket.shared
     
-    var readAndImportantList = ["Unread","Important"]
+    var readAndImportantList = ["Unread", "Important"]
+    
     var categoryList: [Category] = []
+    
     var mailList : [Mail] = []
+    
     var specificMailList : [Mail] = []
+    
     var mailUnreadList : [Mail] = []
+    
     var mailImportantList : [Mail] = []
+    
     var managedObjectContext : NSManagedObjectContext
+    
     
     required init (coder aDecoder: NSCoder) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -38,7 +54,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         DataManager.shared.fetchCategories()
         categoryList = DataManager.shared.categoryList
         categoryList.sort { (a, b) -> Bool in
-            return a.name! > b.name!
+            return a.sort > b.sort
         }
         
         DataManager.shared.fetchMails()
@@ -56,6 +72,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         
         Socket.shared.iconDownloadCallbacks.append(categoryIconReceived)
         Socket.shared.mailCallbacks.append(mailCallback)
+        Socket.shared.onlineStatusCallback = onlineStatusChanged
+        
+        onlineStatusChanged(online: Setting.shared.isMailboxOnline)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,11 +96,21 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
             categoryList.sort { (a, b) -> Bool in
-                return a.name! > b.name!
+                return a.sort > b.sort
             }
         }
         
         tableView.reloadData()
+    }
+    
+    func onlineStatusChanged(online: Bool) {
+        if online {
+            onlineImage.image = UIImage(named: "online")
+            onlineLabel.text = "Mailbox Online"
+        } else {
+            onlineImage.image = UIImage(named: "offline")
+            onlineLabel.text = "Mailbox Offline"
+        }
     }
     
     /**
@@ -208,14 +237,25 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
     }
     
     /**
-     Remove readed mail from unreadlist
+     Remove read mail from unreadlist or add unread mail to unreadlist
      - Parameters:
          - mail: Mail
      */
-    func didRead(mail: Mail) {
-        if let index = mailUnreadList.index(of: mail) {
-            mailUnreadList.remove(at: index)
+    func toggleRead(mail: Mail, read: Bool) {
+        if read {
+            if let index = mailUnreadList.index(of: mail) {
+                mailUnreadList.remove(at: index)
+            }
+        } else {
+            if mailUnreadList.index(of: mail) == nil {
+                mailUnreadList.append(mail)
+            }
         }
+        
+        mailUnreadList.sort { (a, b) -> Bool in
+            return a.receivedAt > b.receivedAt
+        }
+        
         tableView.reloadData()
     }
     

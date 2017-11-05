@@ -16,43 +16,58 @@ class PhotoIncorrectViewController: UITableViewController {
     
     @IBOutlet weak var fullImageView: UIImageView!
     
+    @IBOutlet weak var agreementLabel: UILabel!
+    
+    
     var checked = false
+    
     var currentMail : Mail?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         submitButton.layer.cornerRadius = 5
-        submitButton.backgroundColor = UIColor.lightGray
         
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
         
+        let agreementLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        agreementLabel.isUserInteractionEnabled = true
+        agreementLabel.addGestureRecognizer(agreementLabelTapGestureRecognizer)
+        
         if let data = Data(base64Encoded: (currentMail?.boxImage)!, options: .ignoreUnknownCharacters) {
             let image = UIImage(data: data)
             self.fullImageView.image = image
         }
-        self.submitButton.isEnabled = false
-        
-        
     }
+    
     // report agreement checkbox 
     @objc func checkboxTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         checked = !checked
         checkboxImgView.image = UIImage(named: checked ? "checkbox-checked-small" : "checkbox-small")
-        submitButton.backgroundColor = checked ? UIColor(red: 1, green: 102.0/255, blue: 82.0/255, alpha: 1) : UIColor.lightGray
-        if checked {
-            self.submitButton.isEnabled = true
-        }
-        
+        submitButton.setTitle((checked ? "Show Original and Report" : "Show Original"), for: .normal)
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func submitButtonTapped(_ sender: Any) {
-        Socket.shared.sendReportPhoto(id: currentMail!.id)
+        currentMail?.showFullImage = true
+        
+        do {
+            try DataManager.shared.save()
+        } catch {
+            self.showError(message: "Could not save: \(error)")
+            return
+        }
+        
+        if checked {
+            Socket.shared.sendReportPhoto(id: currentMail!.id)
+        }
+            
+        navigationController?.popViewController(animated: true)
         navigationController?.popViewController(animated: true)
     }
 

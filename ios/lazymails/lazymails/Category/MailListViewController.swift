@@ -11,14 +11,26 @@ import UIKit
 protocol RemoveMailDelegate {
     func removeMail()
 }
+
 class MailListViewController: UITableViewController, RemoveMailDelegate {
+    
+    @IBOutlet weak var markAsReadButton: UIBarButtonItem!
+    
 
     var currentMails : [Mail] = []
+    
     var selectedRow : Int?
+    
     var mailboxDelegate : mailBoxDelegate?
+    
     var indexForCell : Int?
+    
     var category : Category?
+    
     var isUnread = false
+    
+    var firstSelected = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +42,15 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         }
         
         Socket.shared.mailCallbacks.append(newMailArrived)
+        
+        // ✴️ Attributes:
+        // Stackoverflow: ios - How to select multiple rows in UITableView in edit mode? - Stack Overflow
+        //      https://stackoverflow.com/questions/33970807/how-to-select-multiple-rows-in-uitableview-in-edit-mode
+        
+        tableView.allowsMultipleSelectionDuringEditing = true
+        
+        navigationItem.rightBarButtonItems = [editButtonItem]
+        navigationController?.setToolbarHidden(true, animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,34 +66,51 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return currentMails.count
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentMails[selectedRow!].didRead = true
-        mailboxDelegate?.didRead(mail: currentMails[selectedRow!])
-        do {
-            try DataManager.shared.save()
-        } catch {
-            self.showError(message: "Could not save: \(error)")
-            return
+        if !isEditing && !currentMails[selectedRow!].didRead {
+            currentMails[selectedRow!].didRead = true
+            mailboxDelegate?.toggleRead(mail: currentMails[selectedRow!], read: true)
+            do {
+                try DataManager.shared.save()
+            } catch {
+                self.showError(message: "Could not save: \(error)")
+                return
+            }
+        } else {
+            if !firstSelected {
+                firstSelected = true
+                markAsReadButton.isEnabled = true
+                
+                if currentMails[indexPath.row].didRead {
+                    markAsReadButton.title = "Mark as Unread"
+                } else {
+                    markAsReadButton.title = "Mark as Read"
+                }
+            }
         }
-        
-        
-        
     }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let selectedRows = tableView.indexPathsForSelectedRows
+        if selectedRows == nil {
+            markAsReadButton.isEnabled = false
+            firstSelected = false
+            markAsReadButton.title = "Mark as Read"
+        }
+    }
+    
     /**
      get first character of string and return as a string
      - Parameters:
@@ -94,7 +132,6 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         return CharacterSet(charactersIn: str)
     }
     
-    var checked: Int? = nil
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mailCell", for: indexPath) as! MailCell
 
@@ -159,6 +196,8 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
             cell.letterDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
         }
         
+        cell.letterDescriptionLabel.sizeToFit()
+        
         // mark important
         cell.letterMarkImgView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_sender:))))
 
@@ -183,7 +222,7 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
     }
     
     // tap star to mark important
-    @objc func tapped(_sender : AnyObject ) {
+    @objc func tapped(_sender : AnyObject) {
         let index = _sender.view.tag
         let mail = currentMails[index]
         if !mail.isImportant {
@@ -204,10 +243,49 @@ class MailListViewController: UITableViewController, RemoveMailDelegate {
         
     }
     
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+
+        navigationController?.setToolbarHidden(!editing, animated: true)
+        firstSelected = !editing
+        markAsReadButton.isEnabled = false
+        markAsReadButton.title = "Mark as Read"
+    }
+    
+    
+    // tap mark as read/unread in the toolbar
+    @IBAction func markAsReadButtonTapped(_ sender: Any) {
+        if let selectedRows = tableView.indexPathsForSelectedRows {
+            
+            for row in selectedRows {
+                currentMails[row.row].didRead = markAsReadButton.title == "Mark as Read"
+                mailboxDelegate?.toggleRead(mail: currentMails[row.row], read: markAsReadButton.title == "Mark as Read")
+            }
+            
+            do {
+                try DataManager.shared.save()
+            } catch {
+                print("can not save")
+            }
+            
+            tableView.reloadData()
+            
+            firstSelected = false
+            markAsReadButton.isEnabled = false
+            markAsReadButton.title = "Mark as Read"
+        }
+    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 97
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return !isEditing
     }
     
     override func prepare(for segue: UIStoryboardSegue,sender: Any?) {

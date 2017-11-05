@@ -11,13 +11,22 @@ import UIKit
 class MoveCategoryController: UITableViewController {
 
     @IBOutlet weak var checkboxImgView: UIImageView!
+    
     @IBOutlet weak var submitButton: UIButton!
     
+    @IBOutlet weak var agreementLabel: UILabel!
+    
+    
     var reportChecked = false
+    
     var currentMail : Mail?
+    
     var categoryList = DataManager.shared.categoryList
+    
     var filteredCategoryList: [Category] = []
+    
     var delegate: RemoveMailDelegate?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +41,10 @@ class MoveCategoryController: UITableViewController {
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+        
+        let agreementLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        agreementLabel.isUserInteractionEnabled = true
+        agreementLabel.addGestureRecognizer(agreementLabelTapGestureRecognizer)
     
         Socket.shared.mailCallbacks.append(newMailReceived)
         self.submitButton.isEnabled = false
@@ -59,7 +72,7 @@ class MoveCategoryController: UITableViewController {
         reportChecked = !reportChecked
         checkboxImgView.image = UIImage(named: reportChecked ? "checkbox-checked-small" : "checkbox-small")
         
-        submitButton.setTitle((reportChecked ? "Move and Submit" : "Move"), for: .normal)
+        submitButton.setTitle((reportChecked ? "Move and Report" : "Move"), for: .normal)
         
     }
     
@@ -142,6 +155,7 @@ class MoveCategoryController: UITableViewController {
         }
         
         self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     

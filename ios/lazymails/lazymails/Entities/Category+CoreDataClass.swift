@@ -20,12 +20,13 @@ public class Category: NSManagedObject {
          - icon: category icon
      - Returns: Category
      */
-    static func insertNewObject(id: String, name: String, icon: String) -> Category {
+    static func insertNewObject(id: String, name: String, icon: String, sort: String) -> Category {
         let category = NSEntityDescription.insertNewObject(forEntityName: "Category", into: DataManager.shared.managedObjectContext) as! Category
         category.id = id
         category.name = name
         category.icon = icon
         category.notified = true
+        category.sort = sort
         return category
     }
     

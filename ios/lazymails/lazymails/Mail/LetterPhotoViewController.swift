@@ -11,9 +11,11 @@ import UIKit
 class LetterPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet weak var photoImgView: UIImageView!
     
     var imageBase64 : String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

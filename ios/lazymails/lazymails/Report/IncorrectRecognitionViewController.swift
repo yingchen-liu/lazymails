@@ -14,9 +14,13 @@ class IncorrectRecognitionViewController: UITableViewController {
     
     @IBOutlet weak var submitButton: UIButton!
     
+    @IBOutlet weak var agreementLabel: UILabel!
+    
     
     var checked = false
+    
     var currentMail: Mail?
+    
     var mainContentDictionary : Dictionary<String, String> = [:]
     
     
@@ -28,6 +32,11 @@ class IncorrectRecognitionViewController: UITableViewController {
         let checkboxTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
         checkboxImgView.isUserInteractionEnabled = true
         checkboxImgView.addGestureRecognizer(checkboxTapGestureRecognizer)
+        
+        let agreementLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkboxTapped(tapGestureRecognizer:)))
+        agreementLabel.isUserInteractionEnabled = true
+        agreementLabel.addGestureRecognizer(agreementLabelTapGestureRecognizer)
+        
         self.submitButton.isEnabled = false
     }
     
@@ -44,18 +53,15 @@ class IncorrectRecognitionViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return mainContentDictionary.count
     }
 
@@ -79,6 +85,8 @@ class IncorrectRecognitionViewController: UITableViewController {
         if checked {
             Socket.shared.sendReportRecognition(id: currentMail!.id)
         }
+        
+        navigationController?.popViewController(animated: true)
         navigationController?.popViewController(animated: true)
     }
 

@@ -22,6 +22,7 @@ extension Category {
     @NSManaged public var name: String?
     @NSManaged public var notified: Bool
     @NSManaged public var mail: NSSet?
+    @NSManaged public var sort: String
 
 }
 

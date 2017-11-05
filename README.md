@@ -6,6 +6,7 @@ by Yingchen Liu and Qiuxian Cai
 
 ## Deploy the server
 * Install PM2 both localy and on the server
+* Install MongoDB on the server
 * Deploy
 
   ```

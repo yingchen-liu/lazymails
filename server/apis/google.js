@@ -424,21 +424,20 @@ const request = (mailBase64, names, address, callback) => {
 
     // add sort
     result.categories.map((category) => {
-      console.log('ct', category)
       for (var i = 0; i < categories.length; i++) {
         const _category = categories[i];
-        console.log('test', category)
         if (_category.name === category.name) {
-          console.log('found')
           category.sort = _category.sort;
           break;
         }
       }
 
-      if (category.sort) {
+      if (!category.sort) {
         category.sort = 'zzz';
       }
     });
+
+    console.log(result.categories)
 
     result.categories.sort((a, b) => {
       return b.score - a.score; // desc

@@ -422,10 +422,14 @@ const request = (mailBase64, names, address, callback) => {
       });
     }
 
+    // add sort
     result.categories.map((category) => {
+      console.log('ct', category)
       for (var i = 0; i < categories.length; i++) {
-        _category = categories[i];
-        if (_category.name == category.name) {
+        const _category = categories[i];
+        console.log('test', category)
+        if (_category.name === category.name) {
+          console.log('found')
           category.sort = _category.sort;
           break;
         }

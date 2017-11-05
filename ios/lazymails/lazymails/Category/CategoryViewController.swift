@@ -54,8 +54,9 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         DataManager.shared.fetchCategories()
         categoryList = DataManager.shared.categoryList
         categoryList.sort { (a, b) -> Bool in
-            return a.sort > b.sort
+            return a.sort < b.sort
         }
+        print(categoryList)
         
         DataManager.shared.fetchMails()
         mailList = DataManager.shared.mailList
@@ -96,7 +97,7 @@ class CategoryViewController: UITableViewController, mailBoxDelegate {
         if !categoryList.contains(mail.category) {
             categoryList.append(mail.category)
             categoryList.sort { (a, b) -> Bool in
-                return a.sort > b.sort
+                return a.sort < b.sort
             }
         }
         

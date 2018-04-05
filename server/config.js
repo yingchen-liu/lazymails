@@ -6,7 +6,7 @@ const config = {
   production: {
     apis: {
       google: {
-        apiKey: 'AIzaSyAKM6Yq4LxDIjZZ2PNaLyMZNyRgsEE-yb8'
+        apiKey: ''
       }
     },
     db: {
@@ -20,7 +20,7 @@ const config = {
   development: {
     apis: {
       google: {
-        apiKey: 'AIzaSyAKM6Yq4LxDIjZZ2PNaLyMZNyRgsEE-yb8'
+        apiKey: ''
       }
     },
     db: {

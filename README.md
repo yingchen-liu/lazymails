@@ -1,8 +1,4 @@
-# fit5140-lazy-mail
-
-Assignment 3 for FIT5140
-
-by Yingchen Liu and Qiuxian Cai
+# lazy-mail
 
 ## Deploy the server
 * Install PM2 both localy and on the server
